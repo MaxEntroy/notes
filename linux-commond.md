@@ -20,7 +20,7 @@ nohup       :后台执行，终端关闭会继续执行
 [Linux Shell 1>/dev/null 2>&1 含义](https://blog.csdn.net/ithomer/article/details/9288353)
 [nohup ./start.sh> myout.file 2>&1 &](https://simon-9527.iteye.com/blog/2302675)
 
----
+<HR style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)" width="80%" color=#987cb9
 
 #### ln
 - 基本用法
