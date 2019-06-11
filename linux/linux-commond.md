@@ -40,3 +40,31 @@ ln [OPTION]... -t DIRECTORY TARGET...  (4th form)
 
 参考
 [软链接与硬链接的区别](https://blog.csdn.net/netwalk/article/details/38039155)
+
+#### ls
+- 基本用法
+```shell
+ls [OPTION] [FILE]
+
+-l       :long listing format
+-h       :human-readable
+-r       :reverse order when while listing
+-t       :sort by modification time, newest first
+```
+- 格式说明
+<img width="700"  src="img/ll.png"/>
+```shell
+文件类型
+所有者权限
+组用户权限
+其他用户权限
+链接数
+用户名
+组名
+文件大小
+最后修改时间
+文件名
+```
+参考
+[Linux 下 ls -l 命令执行显示结果的每一列含义](https://blog.csdn.net/zhuoya_/article/details/77418413)
+[What do the fields in ls -al output mean?](https://unix.stackexchange.com/questions/103114/what-do-the-fields-in-ls-al-output-mean)
