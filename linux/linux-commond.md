@@ -41,6 +41,8 @@ ln [OPTION]... -t DIRECTORY TARGET...  (4th form)
 参考
 [软链接与硬链接的区别](https://blog.csdn.net/netwalk/article/details/38039155)
 
+---
+
 #### ls
 - 基本用法
 ```shell
@@ -53,6 +55,7 @@ ls [OPTION] [FILE]
 ```
 - 格式说明
 <img width="700"  src="img/ll.png"/>
+
 ```shell
 文件类型
 所有者权限
