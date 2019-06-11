@@ -71,3 +71,17 @@ ls [OPTION] [FILE]
 参考
 [Linux 下 ls -l 命令执行显示结果的每一列含义](https://blog.csdn.net/zhuoya_/article/details/77418413)
 [What do the fields in ls -al output mean?](https://unix.stackexchange.com/questions/103114/what-do-the-fields-in-ls-al-output-mean)
+
+---
+
+### 进程
+
+#### 端口占用
+- 基本用法
+```shell
+lsof -i:port 直接判断某个端口是否被占用
+ps: 该命令只能查询当前用户启动的进程是否占用该端口, 如果查询整个系统，加上sudo选项
+```
+
+参考
+[http://lazybios.com/2015/03/netstat-notes/](http://lazybios.com/2015/03/netstat-notes/)
