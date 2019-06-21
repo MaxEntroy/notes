@@ -20,8 +20,6 @@ nohup       :后台执行，终端关闭会继续执行
 [Linux Shell 1>/dev/null 2>&1 含义](https://blog.csdn.net/ithomer/article/details/9288353)
 [nohup ./start.sh> myout.file 2>&1 &](https://simon-9527.iteye.com/blog/2302675)
 
----
-
 #### ln
 - 基本用法
 ```shell
@@ -40,8 +38,6 @@ ln [OPTION]... -t DIRECTORY TARGET...  (4th form)
 
 参考
 [软链接与硬链接的区别](https://blog.csdn.net/netwalk/article/details/38039155)
-
----
 
 #### ls
 - 基本用法
