@@ -74,7 +74,7 @@ ls [OPTION] [FILE]
 
 ---
 
-### 进程
+### 进程/网络
 
 #### 端口占用
 - 基本用法
@@ -84,4 +84,26 @@ ps: 该命令只能查询当前用户启动的进程是否占用该端口, 如�
 ```
 
 参考
-[http://lazybios.com/2015/03/netstat-notes/](http://lazybios.com/2015/03/netstat-notes/)
+[使用netstat lsof查看端口占用情况](http://lazybios.com/2015/03/netstat-notes/)
+
+#### 判断进程占用端口
+
+- linux
+```shell
+#获得进程号
+ps -ef|grep [process name] 
+#查看pid对应进程占用的端口
+netstat -nlpt|grep pid
+```
+
+- macos
+```shell
+#获得进程号
+ps -ef|grep [process name] 
+#查看pid对应进程占用的端口
+lsof -p pid | grep LISTEN
+```
+ps: macos netstat 功能和linux不完全一样
+
+参考
+[mac oxs 上查看进程监听的端口号 lsof](http://lazybios.com/2015/03/netstat-notes/)
