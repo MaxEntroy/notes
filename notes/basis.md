@@ -30,10 +30,15 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 严格意义上来说，计算机语言的statements对应到机器层面的instructions.
 而，expression是构成诸多statements当中，最主要的一种。
 ```
-
-
 参考
 [Statements and Expressions](http://interactivepython.org/runestone/static/CS152f17/SimplePythonData/StatementsandExpressions.html)
+
+####类型
+
+参考
+[Magic lies here - Statically vs Dynamically Typed Languages](https://android.jlelse.eu/magic-lies-here-statically-typed-vs-dynamically-typed-languages-d151c7f95e2b)
+
+
 
 ## 网络/通信
 
