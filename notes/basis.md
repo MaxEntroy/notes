@@ -33,7 +33,7 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 参考
 [Statements and Expressions](http://interactivepython.org/runestone/static/CS152f17/SimplePythonData/StatementsandExpressions.html)
 
-####类型
+#### 类型
 
 参考
 [Magic lies here - Statically vs Dynamically Typed Languages](https://android.jlelse.eu/magic-lies-here-statically-typed-vs-dynamically-typed-languages-d151c7f95e2b)
