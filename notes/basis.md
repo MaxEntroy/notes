@@ -38,7 +38,12 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 参考
 [Magic lies here - Statically vs Dynamically Typed Languages](https://android.jlelse.eu/magic-lies-here-statically-typed-vs-dynamically-typed-languages-d151c7f95e2b)
 
+#### 回调
 
+参考
+[Callback](https://en.wikipedia.org/wiki/Callback_%28computer_programming%29)
+[回调函数（callback）是什么？](https://www.zhihu.com/question/19801131)
+[如何浅显地解释回调函数](https://bot-man-jl.github.io/articles/?post=2017/Callback-Explained)
 
 ## 网络/通信
 
