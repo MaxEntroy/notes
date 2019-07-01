@@ -45,3 +45,22 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 ## 操作系统
 
 ## 数据库
+
+## 其它
+
+#### 模型(model)
+
+- 定义
+```
+朗文高阶给出的解释
+a simple discription of a system or structure that is used to help people understand similar systems or structures.
+eg: Cival society is a classical economist's model of the free market.
+```
+对于这一版的解释，其实是更通用的。但是，整体的思路是清晰的，对于系统/结构的一种描述，目的是为了更容易的来理解不易理解的系统/结构。
+
+```
+A mathematical model is a description of a system using mathematical concepts and language.
+```
+比如，我们用数学语言来描述，因为数学语言本身是非常精确地，简洁的，所以数学模型是非常直观的。
+
+所以说，到底怎么理解模型，其实就是对复杂系统，或者结构更加**本质的展现**。
