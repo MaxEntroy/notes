@@ -69,6 +69,17 @@ A mathematical model is a description of a system using mathematical concepts an
 比如，我们用数学语言来描述，因为数学语言本身是非常精确地，简洁的，所以数学模型是非常直观的。
 
 所以说，到底怎么理解模型，其实就是对复杂系统，或者结构更加**本质的展现**。
+这其中，又因为数学语言的精确性，与简洁性，数学模型对于本质的展现是相对比较清晰的。
+
+- 怎么理解数学模型
+```
+集合论是一种非常有效的方式来帮我们理解数学模型，因为对于复杂系统/复杂结构，我们可以借助集合去描述它。
+那么，我们必然要抽象集合的构造表达式，或者说是“集合的特征”，这个也就是我们所说的“本质的展现”。
+```
+比如，线性模型，我们一般有如下的表示：
+$$\{(X,Y)|Y=XB+U\}$$
 
 参考
 [Mathematical model](https://en.wikipedia.org/wiki/Mathematical_model)
+[General linear model](https://en.wikipedia.org/wiki/General_linear_model)
+[Set](https://en.wikipedia.org/wiki/Set_(mathematics))
