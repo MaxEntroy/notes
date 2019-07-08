@@ -30,30 +30,30 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 严格意义上来说，计算机语言的statements对应到机器层面的instructions.
 而，expression是构成诸多statements当中，最主要的一种。
 ```
-参考
-[Statements and Expressions](http://interactivepython.org/runestone/static/CS152f17/SimplePythonData/StatementsandExpressions.html)
+参考<br>
+[Statements and Expressions](http://interactivepython.org/runestone/static/CS152f17/SimplePythonData/StatementsandExpressions.html)<br>
 
 #### 类型
 
-参考
-[Magic lies here - Statically vs Dynamically Typed Languages](https://android.jlelse.eu/magic-lies-here-statically-typed-vs-dynamically-typed-languages-d151c7f95e2b)
+参考<br>
+[Magic lies here - Statically vs Dynamically Typed Languages](https://android.jlelse.eu/magic-lies-here-statically-typed-vs-dynamically-typed-languages-d151c7f95e2b)<br>
 
 #### 回调
 
-参考
-[Callback](https://en.wikipedia.org/wiki/Callback_%28computer_programming%29)
-[回调函数（callback）是什么？](https://www.zhihu.com/question/19801131)
-[如何浅显地解释回调函数](https://bot-man-jl.github.io/articles/?post=2017/Callback-Explained)
+参考<br>
+[Callback](https://en.wikipedia.org/wiki/Callback_%28computer_programming%29)<br>
+[回调函数（callback）是什么？](https://www.zhihu.com/question/19801131)<br>
+[如何浅显地解释回调函数](https://bot-man-jl.github.io/articles/?post=2017/Callback-Explained)<br>
 
 ## 网络/通信
 
 #### protobuffer
 
-参考
-[Pb语法](https://developers.google.com/protocol-buffers/docs/proto#scalar) <br>
-[Pb-cpp相关](https://developers.google.com/protocol-buffers/docs/cpptutorial ) <br>
-[Pb-generated code](https://developers.google.com/protocol-buffers/docs/reference/cpp-generated#repeatedmessage) <br>
-[Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor) <br>
+参考<br>
+[Pb语法](https://developers.google.com/protocol-buffers/docs/proto#scalar)<br>
+[Pb-cpp相关](https://developers.google.com/protocol-buffers/docs/cpptutorial )<br>
+[Pb-generated code](https://developers.google.com/protocol-buffers/docs/reference/cpp-generated#repeatedmessage)<br>
+[Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor)<br>
 
 ## 操作系统
 
@@ -87,7 +87,7 @@ A mathematical model is a description of a system using mathematical concepts an
 比如，线性模型，我们一般有如下的表示：
 $$\{(X,Y)|Y=XB+U\}$$
 
-参考
-[Mathematical model](https://en.wikipedia.org/wiki/Mathematical_model)
-[General linear model](https://en.wikipedia.org/wiki/General_linear_model)
-[Set](https://en.wikipedia.org/wiki/Set_(mathematics))
+参考<br>
+[Mathematical model](https://en.wikipedia.org/wiki/Mathematical_model)<br>
+[General linear model](https://en.wikipedia.org/wiki/General_linear_model)<br>
+[Set](https://en.wikipedia.org/wiki/Set_(mathematics))<br>
