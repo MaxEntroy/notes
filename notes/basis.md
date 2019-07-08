@@ -47,6 +47,14 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 
 ## 网络/通信
 
+#### protobuffer
+
+参考
+[Pb语法](https://developers.google.com/protocol-buffers/docs/proto#scalar) <br>
+[Pb-cpp相关](https://developers.google.com/protocol-buffers/docs/cpptutorial ) <br>
+[Pb-generated code](https://developers.google.com/protocol-buffers/docs/reference/cpp-generated#repeatedmessage) <br>
+[Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor) <br>
+
 ## 操作系统
 
 ## 数据库
