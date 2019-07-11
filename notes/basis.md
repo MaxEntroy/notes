@@ -54,6 +54,7 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 [Pb-cpp相关](https://developers.google.com/protocol-buffers/docs/cpptutorial )<br>
 [Pb-generated code](https://developers.google.com/protocol-buffers/docs/reference/cpp-generated#repeatedmessage)<br>
 [Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor)<br>
+[Pb-反射-demo](https://yrczone.com/blog/article/45)<br>
 
 ## 操作系统
 
