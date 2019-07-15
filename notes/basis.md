@@ -45,6 +45,52 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 [回调函数（callback）是什么？](https://www.zhihu.com/question/19801131)<br>
 [如何浅显地解释回调函数](https://bot-man-jl.github.io/articles/?post=2017/Callback-Explained)<br>
 
+## 基础算法
+
+
+#### 启发式算法
+- 定义
+```
+Cambridge Dictionary给出的解释
+heuristic: 
+(of a method of teaching) allowing students to learn by discovering things themselves and learning from their own experiences rather than by telling them things
+
+做一件很有意思的事情，我们替换students为machine
+(of a method of teaching) allowing machine to learn by discovering things themselves and learning from their own experiences rather than by telling them things
+
+再给出朗文高阶(6th)给出的解释
+heuristics: the study of how people user their experience to find answers to questions or to improve performance
+```
+从上面的定义当中，我们先对启发式有了一个基本的认知，关键有2点：
+- learning by themselvs
+- learning form experiences rather than by telling them things.
+
+对应到程序设计算法，我们不难理解，是不是有如下的策略：
+- 不给出解决问题的具体思路，通过经验或者其他途径
+- 通过自身的迭代来解决问题
+
+我们再看来看wikipedia对启发式算法给出的定义
+```
+In computer science, artificial intelligence, and mathematical optimization, a heuristic (from Greek εὑρίσκω "I find, discover") is a
+technique designed for solving a problem more quickly when classic methods are too slow, or for finding an approximate solution 
+when classic methods fail to find any exact solution. 
+This is achieved by trading optimality, completeness, accuracy, or precision for speed. In a way, it can be considered a shortcut.
+```
+从以上的定义中，我们可以看出该定义对启发式这个东西本身是什么，没有好的解释。而是更多的强调了，在经典方法失效的情况下(np问题，算力达不到)，我们采用启发式方法，在效果上做tradeoff，但是可以换来更快的一个近似解，当然前提是这个近似解可以接受。
+
+综上，启发式算法我们可以给出一个自己的解释：
+- 应用场景通常是算力不可解的场景，比如常见的优化类问题，全局解往往是NP-hard问题
+- 具体策略不是告知直观的解决策略(算力不可解)，而是通过给出自学习的策略(目标+经验)进行解决
+- 一般是一个近似解
+
+- AI/ML
+wikipedia多给出了一条启发式算法和AI的关系
+```
+Heuristics underlie the whole field of Artificial Intelligence and the computer simulation of thinking, 
+as they may be used in situations where there are no known algorithms
+```
+显然，机器学习算法均属于启发式算法。因为，机器学习本质就是自学习，给出的目标函数对应的就是自学习的策略。而最优化问题，一般是算力不可解，所以，采用启发式算法来解决。常建的比如有sgd。具体来说，KMeasn算法，N个点给出K个类别，我们可以枚举所有可行解，但是算力不可解。所以，提出目标函数，采用sgd的方法得到了每个质心的坐标
+
 ## 网络/通信
 
 #### protobuffer
