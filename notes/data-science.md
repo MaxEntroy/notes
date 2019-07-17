@@ -42,3 +42,25 @@ red   green   blue
 [One-hot encoding](https://machinelearning.wtf/terms/one-hot-encoding/)<br>
 [Why One-Hot Encode Data in Machine Learning?](https://machinelearningmastery.com/why-one-hot-encode-data-in-machine-learning/)<br>
 [机器学习之one hot encoding详解](https://www.jianshu.com/p/cb344e1c860a)<br>
+
+
+#### embedding
+- word representation
+上述谈到的one-hot encoding有一个很重要的作用，就是可以对词进行编码。
+考虑如下的两句话：
+Have a good day.
+Have a great day.
+```
+ V = {Have, a, good, great, day}.
+
+ Have = [1,0,0,0,0]`; a=[0,1,0,0,0]` ; good=[0,0,1,0,0]` ; great=[0,0,0,1,0]` ; day=[0,0,0,0,1]` (` represents transpose)
+```
+
+- embed是什么意思？
+```
+先给出朗文高阶(6th)的解释
+to put something firmly and deeply into something.
+那么，我们不妨这么说：
+to put word firmly and deeply into vector space.
+所以，word embedding本质是一种word representation.
+```
