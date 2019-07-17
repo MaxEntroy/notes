@@ -59,7 +59,7 @@ heuristic:
 (of a method of teaching) allowing machine to learn by discovering things themselves and learning from their own experiences rather than by telling them things
 
 再给出朗文高阶(6th)给出的解释
-heuristics: the study of how people user their experience to find answers to questions or to improve performance
+heuristics: the study of how people use their experience to find answers to questions or to improve performance
 ```
 从上面的定义当中，我们先对启发式有了一个基本的认知，关键有2点：
 - learning by themselvs
@@ -76,14 +76,14 @@ technique designed for solving a problem more quickly when classic methods are t
 when classic methods fail to find any exact solution. 
 This is achieved by trading optimality, completeness, accuracy, or precision for speed. In a way, it can be considered a shortcut.
 ```
-从以上的定义中，我们可以看出该定义对启发式这个东西本身是什么，没有好的解释。而是更多的强调了，在经典方法失效的情况下(np问题，算力达不到)，我们采用启发式方法，在效果上做tradeoff，但是可以换来更快的一个近似解，当然前提是这个近似解可以接受。
+从以上的定义中，我们可以看出该定义对启发式这个东西本身是什么，没有好的解释。而是更多的强调了，在经典方法失效的情况下(np-hard问题，算力达不到)，我们采用启发式方法，在效果上做tradeoff，但是可以换来更快的一个近似解，当然前提是这个近似解可以接受。
 
 综上，启发式算法我们可以给出一个自己的解释：
 - 应用场景通常是算力不可解的场景，比如常见的优化类问题，全局解往往是NP-hard问题
-- 具体策略不是告知直观的解决策略(算力不可解)，而是通过给出自学习的策略(目标+经验)进行解决
+- 具体策略不是直观的算法(算力不可解)，而是通过给出自学习的策略(目标+经验)进行解决
 - 一般是一个近似解
 
-- AI/ML
+和AI/ML的关系
 wikipedia多给出了一条启发式算法和AI的关系
 ```
 Heuristics underlie the whole field of Artificial Intelligence and the computer simulation of thinking, 
