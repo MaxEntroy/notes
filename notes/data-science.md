@@ -64,3 +64,8 @@ to put something firmly and deeply into something.
 to put word firmly and deeply into vector space.
 所以，word embedding本质是一种word representation.
 ```
+
+参考<br>
+[Introduction to Word Embedding and Word2Vec](https://towardsdatascience.com/introduction-to-word-embedding-and-word2vec-652d0c2060fa)<br>
+[【NLP】 詞嵌入 (word embeddings) 的基本概念](https://www.kesci.com/home/project/5b7a359e31902f000f55152f)<br>
+[What the heck is Word Embedding](https://towardsdatascience.com/what-the-heck-is-word-embedding-b30f67f01c81)<br>
