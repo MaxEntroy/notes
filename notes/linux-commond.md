@@ -103,3 +103,12 @@ ps: macos netstat 功能和linux不完全一样
 
 参考
 [mac oxs 上查看进程监听的端口号 lsof](http://lazybios.com/2015/03/netstat-notes/)
+
+
+## 环境配置
+
+#### sz/rz
+
+ps: rz/sz不是下载就能用，需要配置
+参考<br>
+[mac下rz/sz配置](https://segmentfault.com/a/1190000012166969)<br>
