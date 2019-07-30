@@ -1,8 +1,6 @@
-## 语言
+## lua
 
-#### lua
-
-- local变量个数
+#### local变量个数
 ```
 local变量个数上限200个，使用local变量可以提高效率，但是应该避免滥用
 lua 5.3.0: ttt.lua:202: too many local variables (limit is 200) in function at line 1 near '='
@@ -12,7 +10,7 @@ luajit 2.0.5: ttt.lua:202: function at line 1 has more than 200 local variables
 参考<br>
 [高性能 Lua 技巧（译）](https://segmentfault.com/a/1190000004372649)<br>
 
-- colon and dot
+#### colon and dot
 先看个标准的例子，使用dot传递self参数
 ```lua
 local obc = {
@@ -179,9 +177,9 @@ main()
 ```
 结论是混用是非法的
 
-#### cpp
+## cpp
 
-- 传值/传引用
+#### 传值/传引用
 ```
 c只有传值这一种方式，传指针本质上也只传值。
 cpp引入了传引用这种方式。
