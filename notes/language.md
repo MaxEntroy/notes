@@ -124,6 +124,60 @@ print(ret)
 
 ```
 优点是可以省略对于obj对象的传递
+我们再一个混用的例子：
+```lua
+--mymath.lua
+local cal = {}
+
+function cal:add(left, right)
+    return left + right
+end
+
+function cal:minus(left, right)
+    return left - right
+end
+
+return cal
+```
+```lua
+--mymath1.lua
+local cal1 = {}
+
+function cal1.add(left, right)
+    return left + right
+end
+
+function cal1.minus(left, right)
+    return left - right
+end
+
+return cal1
+```
+```lua
+--client.lua
+local function SetScriptPath(script_path)
+    local lua_package_path = package.path
+    package.path = string.format("%s;%s?.lua;", lua_package_path, script_path)
+end
+
+local function main()
+    local script_path = "/home/kang/tmp/lua-test/module-test"
+    SetScriptPath(script_path)
+
+    local cal = require("mymath")
+    local cal1 = require("mymath1")
+
+    local ret = cal.add(3,4) -- 定义采用colon,调用采用dot,illegal，第1个参数会被当做self.
+    print(ret)
+
+    local ret = cal1:add(3,4) -- 这种调用也不行，具体原因没有深究，看起来这么调用会传递cal1这个table.
+    print(ret)
+
+end
+
+main()
+```
+结论是混用是非法的
 
 #### cpp
 
