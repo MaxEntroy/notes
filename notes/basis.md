@@ -46,9 +46,8 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 [如何浅显地解释回调函数](https://bot-man-jl.github.io/articles/?post=2017/Callback-Explained)<br>
 
 #### 热更新
-以lua语言作为例子进行诠释
-
 >你可以在不中断进程运行的情况下，把修改过的代码加载到进程中，让随后的过程运行新版本的代码。by cloud wu
+相信代码参考[lua热更新](https://github.com/MaxEntroy/notes/blob/master/notes/language.md)
 
 参考<br>
 [如何让lua做尽量正确的更新](https://blog.codingnow.com/2016/11/lua_update.html)

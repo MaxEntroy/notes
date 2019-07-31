@@ -177,6 +177,61 @@ main()
 ```
 结论是混用是非法的
 
+#### lua热更新
+热更新的概念不说了，basis当中有提到的。下面主要说下在lua当中进行热更新时，碰到的一些问题。
+先看一个基本的例子
+```lua
+-- test.lua
+local cal = {}
+
+function cal:add(left, right)
+    return left + right
+end
+
+function cal:minus(left, right)
+    return left - right
+end
+
+return cal
+```
+```lua
+-- main.lua
+local function SetScriptPath(script_path)
+    local lua_package_path = package.path
+    package.path = string.format("%s;%s?.lua;", lua_package_path, script_path)
+end
+
+local function Sleep(n)
+    os.execute("sleep " .. n)
+end
+
+local function DoServer()
+    local ret = 0
+    local left = 3
+    local right = 3
+
+    while true do
+        if package.loaded["test"] then
+            package.loaded["test"] = nil
+        end
+        local cal = require "test"
+        ret = cal:add(left, right)
+        print("ret = "..ret)
+
+        Sleep(1);
+    end
+end
+
+local function main()
+    local script_path = "/home/kang/tmp/lua-test/hot-update-test"
+    SetScriptPath(script_path)
+
+    DoServer()
+end
+
+main()
+```
+
 ## cpp
 
 #### 传值/传引用
