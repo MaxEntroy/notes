@@ -288,3 +288,9 @@ print的写法：
 - 综上，使用指针作为参数，如果关注的是指针所指向的变量，没必要用引
 
 ps：这个问题的背景是，google的cpp-style要求传入参数必须是引用。如果这个变量是指针呢？自己觉得不是非常必要。
+
+
+#### 类型转换
+
+参考<br>
+[强制转换运算符](https://docs.microsoft.com/zh-cn/cpp/cpp/casting-operators?view=vs-2019)
