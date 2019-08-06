@@ -127,6 +127,18 @@ as they may be used in situations where there are no known algorithms
     - 采用http文档格式
     - 使用url
 
+尹圣雨给的解释，我觉得非常赞,后者对web server的定义
+- 基于http协议
+- 在服务端找到client端请求的url对应的文件
+- 将url对应的文件发送给client端
+所以，这个解释非常清楚的说明白了几个东西
+1.应用层采用什么协议 2.client端请求的是什么 3.server端发送什么结果回去
+
+他进一步给出了作为一个初学者，应该如何理解web server
+- 理解hypertext
+- 理解http
+- web服务器端是以http协议为基础传输hyptertext的服务器端
+
 参考<br>
 [Web service是什么](http://www.ruanyifeng.com/blog/2009/08/what_is_web_service.html)<br>
 [web服务器与ftp服务器的区别](https://blog.csdn.net/w252064/article/details/77581691)<br>
