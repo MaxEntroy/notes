@@ -102,6 +102,36 @@ as they may be used in situations where there are no known algorithms
 
 ## 网络/通信
 
+#### webservice
+先来看一看阮一峰对这个概念的阐述：
+- 什么是service
+>通俗地说，"服务"就是计算机可以提供的某一种功能。
+- 本地服务 or 网络服务
+>根据来源不同，服务又分为2种。一种是"本地服务"（使用同一台机器提供的服务，不需要网络），另一种是"网络服务"（使用另一台计算机提供的服务，必须通过网络才能完成）。
+**"网络服务"（Web Service）的本质，就是通过网络调用其他网站的资源。** by ruanyifeng
+
+- why webserivce?
+>Web Service架构的基本思想，就是尽量把非核心功能交给其他人去做，自己全力开发核心功能。比如，如果你要开发一个相册软件，完全可以使用Flickr的网络服务，把相片都储存到它上面，你只要全力做好相册本身就可以了。总体上看，凡是不属于你核心竞争力的功能，都应该把它"外包"出去。
+
+- 个人理解
+本人觉得，上面的解释有一点点问题。我觉得网络服务应该是包含web service，因为网络服务有很多种。ssh server, ftp server，都是网络服务。不是只有web server.
+也可能是阮一峰说的web有泛指Internet的作用。
+
+- 网络服务之间的区别？
+像上文所说，web service不代表所有网络服务。但是，web service的使用是最多的，因为人类使用最多的就是浏览器去浏览各种页面来获得信息。这也是Internet最大的贡献。
+其实各种网络行为，也就关联了各种网络服务。比如，浏览行为关联了web service，下载行为关联了ftp service。
+
+具体来说，web service具有如下特性
+- web service特性
+    - 应用层使用http协议
+    - 采用http文档格式
+    - 使用url
+
+参考<br>
+[Web service是什么](http://www.ruanyifeng.com/blog/2009/08/what_is_web_service.html)<br>
+[web服务器与ftp服务器的区别](https://blog.csdn.net/w252064/article/details/77581691)<br>
+[Web service](https://en.wikipedia.org/wiki/Web_service)<br>
+
 #### protobuffer
 
 参考<br>
