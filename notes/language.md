@@ -114,15 +114,22 @@ end
 local ret = 0
 local bias = 0.01
 
-ret = obc.add(obc, bias)
+ret = obc:add(bias)
 print(ret)
 
-ret = obc.minus(obc, bias)
+ret = obc:minus(bias)
 print(ret)
+
+-- 下面混用的写法正确
+-- ret = obc.add(obc, bias)
+-- print(ret)
+
+-- ret = obc.minus(obc, bias)
+-- print(ret)
 
 ```
 优点是可以省略对于obj对象的传递
-我们再一个混用的例子：
+我们再进一步看下混用的例子：
 ```lua
 --mymath.lua
 local cal = {}
@@ -158,24 +165,72 @@ local function SetScriptPath(script_path)
     package.path = string.format("%s;%s?.lua;", lua_package_path, script_path)
 end
 
-local function main()
+local function Test1()
     local script_path = "/home/kang/tmp/lua-test/module-test"
     SetScriptPath(script_path)
 
     local cal = require("mymath")
-    local cal1 = require("mymath1")
-
-    local ret = cal.add(3,4) -- 定义采用colon,调用采用dot,illegal，第1个参数会被当做self.
+    local ret = cal:add(3,4)
     print(ret)
 
-    local ret = cal1:add(3,4) -- 这种调用也不行，具体原因没有深究，看起来这么调用会传递cal1这个table.
+    ret = cal.add(cal, 3, 4)
     print(ret)
-
 end
 
-main()
+local function Test2()
+    local script_path = "/home/kang/tmp/lua-test/module-test"
+    SetScriptPath(script_path)
+
+    local cal = require("mymath1")
+    local ret = cal.add(3,4)
+    print(ret)
+
+    ret = cal:add(3,4) -- !!!非法
+    print(ret)
+end
+
+Test1()
+Test2()
+
 ```
-结论是混用是非法的
+总结下，混用很容易出错。我不做区分，我只给出本质性的描述
+- 定义
+```lua
+local cal = {}
+
+function cal:add(left, right)
+    return left + right
+end
+
+function cal:minus(left, right)
+    return left - right
+end
+
+return cal
+-- 上面这种定义，和下面等价
+-- 上面定义其实就是省略了self参数
+local cal1 = {}
+
+function cal1.add(self, left, right)
+    return left + right
+end
+
+function cal1.minus(self, left, right)
+    return left - right
+end
+
+return cal1
+
+```
+- 调用
+```lua
+cal:add(3,4)
+-- 这种调用，和下面等价
+cal.add(cal, 3, 4)
+```
+所以，混用出错，主要就是参数对不上。这种要结合定义和调用的形式来看。
+比如用colon定义，但是用dot调用。把colon定义转换成dot定义即可。
+用dot定义，但是colon调用，把dot定义转换成colon定义即可。对于不带self的dot定义，没有办法，从调用的角度来看就好。
 
 #### lua热更新
 热更新的概念不说了，basis当中有提到的。下面主要说下在lua当中进行热更新时，碰到的一些问题。
