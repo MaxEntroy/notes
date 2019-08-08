@@ -153,6 +153,77 @@ as they may be used in situations where there are no known algorithms
 [Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor)<br>
 [Pb-反射-demo](https://yrczone.com/blog/article/45)<br>
 
+#### 同步/异步
+这个概念是一对比较容易混淆的概念，主要在于这一对概念应用的场景比较多。区别不同的场景，就容易理解。
+- 原始定义
+参照longman 6th给出的解释
+```
+syn-chro-nize: 
+1. to happen at exactly the same time, or arrange for two or more actions to happen at exactly the same time.
+eg: The show was designed so that the lights synchronized with the music.
+基本概念还是强调一个同时，其实内在的逻辑没有说明白。
+同步，本质还是保持内在一个“一样”的状态，即一致性的状态
+```
+
+还是同步本身，我们来看wikipedia的定义
+```
+Synchronization is the coordination of events to operate a system in unison. The conductor of an orchestra keeps the orchestra synchronized or in time. Systems that operate with all parts in synchrony are said to be synchronous or in sync—and those that are not are asynchronous.
+这个定义和上面基本一直，同步就是对不同事件的协调，使得他们在某一个指标上(声音是否整齐)保持一致。
+```
+- 通信当中的同步
+下面讲到比较熟需的一个场景，通信当中的一致。和时序电路一个意思。
+```
+In electrical engineering terms, for digital logic and data transfer, a synchronous circuit requires a clock signal. However, the use of the word "clock" in this sense is different from the typical sense of a clock as a device that keeps track of time-of-day; the clock signal simply signals the start and/or end of some time period, often very minute (measured in microseconds or nanoseconds), that has an arbitrary relationship to sidereal, solar, or lunar time, or to any other system of measurement of the passage of minutes, hours, and days.
+```
+
+- synchronization of processes(computer science)
+```
+Process synchronization refers to the idea that multiple processes are to join up or handshake at a certain point, in order to reach an agreement or commit to a certain sequence of action.
+这个定义的内在也是强调了某种程度的一致性，比如哲学家进餐问题，如果不按照同步序列进行操作，大家都吃不了饭。如果按照同步序列，大家处于“都能吃到饭”的一致性状态
+```
+
+- synchronization of data(computer science)
+```
+keeping multiple copies of a dataset in coherence with one another, or to maintain data integrity.
+这个概念也是非常清晰的，就是保持多份副本数据的一致性
+```
+**说下异步**，上面讲了几个常用的同步场景。基本定义，通信当中的同步，计算机科学当中的同步。显然，异步的定义也简单。不是同步的就是异步。
+- 本质定义
+```
+同步需要维护不同事件之间，内在的某种状态的一致性。比如，交响乐团，每个人的声音需要保持一致，才能齐奏。
+异步，不需要维护不同事件之前，内在状态的一致性。即，不同事件之间，内在的状态是不一致的。
+```
+
+在wiki上，异步的定义很多。我们直接说重点，其实我们一般些程序讨论的同步/异步，主要是指同步io/异步io
+在这个背景下，我们再继续讨论，会牵扯阻塞和非阻塞进来。
+
+- 同步调用/异步调用
+>
+同步：在发出一个同步调用时，在没有得到结果之前，该调用就不返回。
+异步：在发出一个异步调用后，调用者不会立刻得到结果，该调用就返回了。
+同步调用和异步调用，强调的是一个调用是否立即返回。和进程和线程的状态没有关系。
+
+- 阻塞调用/非阻塞调用
+>一个线程/进程经历的5个状态， 创建，就绪，运行，阻塞，终止
+阻塞调用是指调用结果返回之前，调用者会进入阻塞状态等待。只有在得到结果之后才会返回。
+非阻塞调用是指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。
+所以，阻塞调用和非阻塞调用是指进程/线程的状态，和调用是否立即返回没有关系
+
+上面两组概念，就有4种组合。
+
+>
+同步阻塞调用：得不到结果不返回，线程进入阻塞态等待。
+同步非阻塞调用：得不到结果不返回，线程不阻塞一直在CPU运行。
+异步阻塞调用：去到别的线程，让别的线程阻塞起来等待结果，自己不阻塞。
+异步非阻塞调用：去到别的线程，别的线程一直在运行，直到得出结果。
+
+
+参考<br>
+[Asynchronous I/O](https://en.wikipedia.org/wiki/Asynchronous_I/O)<br>
+[Synchronous and Asynchronous I/O](https://docs.microsoft.com/en-us/windows/win32/fileio/synchronous-and-asynchronous-i-o)<br>
+[同步，异步，阻塞，非阻塞等关系轻松理解 ](https://github.com/calidion/calidion.github.io/issues/40)<br>
+
+
 ## 操作系统
 
 ## 数据库
