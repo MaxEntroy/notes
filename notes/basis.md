@@ -232,6 +232,41 @@ url靠位置来表明一个资源,urn靠名称来表明一个资源。
 参考<br>
 [HTTP 协议中 URI 和 URL 有什么区别](https://www.zhihu.com/question/21950864)
 
+#### HTTP
+
+- http怎么来的
+
+- http现在都怎么用
+
+- http的过程
+    - 数据请求(client)
+        - 建立TCP连接(TCP,TCP,TCP)
+        - 发送http请求(HTTP)
+    - 数据响应(server)
+        - 发送http响应(TCP,HTTP)
+    - 断开连接(server)
+        - server主动断开(TCP,TCP)
+
+特别注意，
+1.其实数据请求和数据响应，都是要维护TCP的，因为TCP和HTTP不在同一个层次。
+发送HTTP肯定得有TCP状态才可以。数据请求这里只不过单独拿出来说下。
+2.server发送响应之后主动断开连接，所以没有四次挥手。
+- http协议
+协议主要就是说些彼此之间约定的数据发送格式
+    - http_request
+        - 请求行
+        - 消息头
+        - 空行
+        - 消息体
+    - http_response
+        - 状态行
+        - 消息头
+        - 空行
+        - 消息体
+
+- GET/POST
+
+
 ## 操作系统
 
 ## 数据库
