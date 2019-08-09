@@ -100,7 +100,7 @@ as they may be used in situations where there are no known algorithms
 ```
 显然，机器学习算法均属于启发式算法。因为，机器学习本质就是自学习，给出的目标函数对应的就是自学习的策略。而最优化问题，一般是算力不可解，所以，采用启发式算法来解决。常建的比如有sgd。具体来说，KMeasn算法，N个点给出K个类别，我们可以枚举所有可行解，但是算力不可解。所以，提出目标函数，采用sgd的方法得到了每个质心的坐标
 
-## 网络/通信
+## 网络/通信/协议
 
 #### webservice
 先来看一看阮一峰对这个概念的阐述：
@@ -223,6 +223,14 @@ keeping multiple copies of a dataset in coherence with one another, or to mainta
 [Synchronous and Asynchronous I/O](https://docs.microsoft.com/en-us/windows/win32/fileio/synchronous-and-asynchronous-i-o)<br>
 [同步，异步，阻塞，非阻塞等关系轻松理解 ](https://github.com/calidion/calidion.github.io/issues/40)<br>
 
+#### uri/url/urn
+这是3个非常容易混淆的概念，但是理解的层次其实非常容易。
+uri是抽象类，告诉我们，网络上的资源同样需要唯一的标识。这件事是重要的，但是怎么实现，没有说。
+url和urn分别是两种实现。
+url靠位置来表明一个资源,urn靠名称来表明一个资源。
+
+参考<br>
+[HTTP 协议中 URI 和 URL 有什么区别](https://www.zhihu.com/question/21950864)
 
 ## 操作系统
 
