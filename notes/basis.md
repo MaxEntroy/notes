@@ -303,3 +303,22 @@ $$\{(X,Y)|Y=XB+U\}$$
 [Mathematical model](https://en.wikipedia.org/wiki/Mathematical_model)<br>
 [General linear model](https://en.wikipedia.org/wiki/General_linear_model)<br>
 [Set](https://en.wikipedia.org/wiki/Set_(mathematics))<br>
+
+
+## 工具
+
+#### git
+- git修改上次提交
+主要说下，怎么修改username和email
+```c
+git commit --amend --author="userName <userEmail>"
+```
+
+参考<br>
+[git中 修改已提交的commit的用户名邮箱](https://www.jianshu.com/p/7def4f387e9f)
+
+- merge/rebase
+先说下merge，merge比较简单，就是分叉的分支，进行一次三路合并。第3路是最近common ancestor.
+需要注意的一点是，commit message会写在同一列。但是commit符号(*)并不在一起。我以前总看错
+
+#### wireshark
