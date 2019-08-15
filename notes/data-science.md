@@ -69,3 +69,19 @@ to put word firmly and deeply into vector space.
 [Introduction to Word Embedding and Word2Vec](https://towardsdatascience.com/introduction-to-word-embedding-and-word2vec-652d0c2060fa)<br>
 [【NLP】 詞嵌入 (word embeddings) 的基本概念](https://www.kesci.com/home/project/5b7a359e31902f000f55152f)<br>
 [What the heck is Word Embedding](https://towardsdatascience.com/what-the-heck-is-word-embedding-b30f67f01c81)<br>
+
+## 业务场景
+
+#### Feed流
+
+参考知乎杨亮的答案，写的比较合理
+>是一种呈现内容给用户并持续更新的方式
+我理解的feed，呈现内容给用户，这个过程，好比feed过程，把用户感兴趣的内容呈现(feed)给用户。
+流又怎么理解呢?持续更新，持续的feed，这种时间上的连续性，我理解为流。因为flow这个概念本身就是有事件连续性的。
+
+下面是水球泡的解释，我觉得也好，对于feed的理解大同小异。主要说下flow
+>第二个词，流，就是他的呈现形式，就是这个信息怎么呈现的，大多数的都是用时间排列的形式呈现的，就是上面有人回答timeline形式，还有其他的呈现形式，就不多做赘述了。
+和上面的描述类似，持续更新，即timeline的形式，呈现内容。这个叫做flow.
+
+参考<br>
+[什么叫feed流？](https://www.zhihu.com/question/20690652)
