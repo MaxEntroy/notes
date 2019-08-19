@@ -153,6 +153,19 @@ as they may be used in situations where there are no known algorithms
 [Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor)<br>
 [Pb-反射-demo](https://yrczone.com/blog/article/45)<br>
 
+
+#### 坑
+
+- pb字段没对对齐
+```
+问题背景：约定好协议，进行联调
+问题表现：接收端看到可以收到数据，字段a和字段b的值明显是有的。但是，在debug pb的时候，发现没有Key.比如a,b,c,d,e5个field，c,d,e
+都能打印出相应的key和value，但是a和b只能打印出value，没有key，只有数字5和6
+问题解决：上游同学没有以来pb 的debug string，而是手动把key和value进行解析，打印。返现确实a,b没有key.没有置位。但是，value也是有。
+后来发现，这个数字5和6是index.至于为什么是5和6，对照了Pb的field，暂时觉得不会是这2个值。
+总之：如果出现类似情形。就是字段没有对其。
+```
+
 #### 同步/异步
 这个概念是一对比较容易混淆的概念，主要在于这一对概念应用的场景比较多。区别不同的场景，就容易理解。
 - 原始定义
