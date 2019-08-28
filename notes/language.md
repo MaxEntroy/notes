@@ -1,6 +1,6 @@
 ## lua
 
-#### local变量个数
+### local变量个数
 ```
 local变量个数上限200个，使用local变量可以提高效率，但是应该避免滥用
 lua 5.3.0: ttt.lua:202: too many local variables (limit is 200) in function at line 1 near '='
@@ -10,7 +10,7 @@ luajit 2.0.5: ttt.lua:202: function at line 1 has more than 200 local variables
 参考<br>
 [高性能 Lua 技巧（译）](https://segmentfault.com/a/1190000004372649)<br>
 
-#### colon and dot
+### colon and dot
 先看个标准的例子，使用dot传递self参数
 ```lua
 local obc = {
@@ -237,7 +237,7 @@ cal.add(cal, 3, 4)
 2.cpp调用table当中的lua函数时，也需要小心。如果是colon定义，需要```lua_getglobal();```把table拿进来，当做函数的第一个参数
 3.所以，目前代码写的少，这块没有特别多的经验。只能说我目前有认识到，如果c要调用lua，还是写成dot好
 
-#### lua热更新
+### lua热更新
 热更新的概念不说了，basis当中有提到的。下面主要说下在lua当中进行热更新时，碰到的一些问题。
 先看一个基本的例子
 ```lua
@@ -294,7 +294,7 @@ main()
 
 ## cpp
 
-#### 传值/传引用
+### 传值/传引用
 ```
 c只有传值这一种方式，传指针本质上也只传值。
 cpp引入了传引用这种方式。
@@ -350,7 +350,66 @@ print的写法：
 ps：这个问题的背景是，google的cpp-style要求传入参数必须是引用。如果这个变量是指针呢？自己觉得不是非常必要。
 
 
-#### 类型转换
+### 类型转换
 
 参考<br>
 [强制转换运算符](https://docs.microsoft.com/zh-cn/cpp/cpp/casting-operators?view=vs-2019)
+
+## c
+
+### 缓冲区/fflush用法
+- 清空stdin的正确做法
+
+先看一段程序
+```c
+#include <stdio.h>
+
+int main(void) {
+    int val = 0;
+
+    for(;;) {
+        scanf("%d", &val);
+        printf("%d\n", val);
+    }
+    return 0;
+}
+/*
+输入3.2或者非整型数据
+程序进入死循环无限输出
+*/
+```
+>这是因为 scanf("%d", &i); 只能接受整数，如果用户输入了字母，则这个字母会遗留在“输入缓冲区”中。
+因为缓冲中有数据，故而 scanf 函数不会等待用户输入，直接就去缓冲中读取，可是缓冲中的却是字母，
+这个字母再次被遗留在缓冲中，如此反复
+
+即，缓冲区的数据没有被清理。
+
+问题的关键在于fflush(stdin)的做法是否可行？
+直接给出结论，不行。因为这个操作不是标准c支持的，如果需要程序可移植，则不能这么做。
+
+修复
+```c
+#include <stdio.h>
+
+int main(void) {
+    int val = 0;
+    char c;
+
+    for(;;) {
+        scanf("%d", &val);
+
+        if(feof(stdin) || ferror(stdin)) break;
+
+        while( (c=getchar()) != '\n' && c != EOF );
+
+        printf("%d\n", val);
+    }
+    return 0;
+}
+/*
+eof和\n不用丢弃的原因是，scanf对这个2个字符本身有处理能力
+*/
+```
+
+参考<br>
+[关于fflush(stdin)清空输入缓存流(C/C++) ](https://my.oschina.net/deanzhao/blog/79790)
