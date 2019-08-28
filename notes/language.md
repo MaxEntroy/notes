@@ -414,8 +414,9 @@ eof和\n不用丢弃的原因是，scanf对这个2个字符本身有处理能力
 参考<br>
 [关于fflush(stdin)清空输入缓存流(C/C++) ](https://my.oschina.net/deanzhao/blog/79790)<br>
 
-- fflush使用时机
-1.对于输入/输出流，需要使用fflush。此时，读写共用一个fd(FILE*)，关联同一个文件，自然而然使用同一个缓冲区。
+- 清空stdout
+
+对于输入/输出流，需要使用fflush。此时，读写共用一个fd(FILE*)，关联同一个文件，自然而然使用同一个缓冲区。
 ```c
 /* fflush example */
 #include <stdio.h>
@@ -464,7 +465,7 @@ int main()
 所以这个版本，我理解清空缓冲区的目的是，写完成，让文件处于可读状态，即文件指针归位。
 
 我们再看一个例子：
-```
+```c
 #include<stdio.h>
 #include<unistd.h>//unix环境
 int main()
