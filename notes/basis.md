@@ -53,6 +53,23 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 [如何让lua做尽量正确的更新](https://blog.codingnow.com/2016/11/lua_update.html)
 [Lua热更新](http://asqbtcupid.github.io/hotupdte-implement/)
 
+### 流(stream)
+这个概念所涉及的领域比较多，我只说程序设计语言当中流的概念。我们先看wikipedia给的定义
+>In computer science, a stream is a sequence of data elements made available over time. A stream can be thought of as items on a conveyor belt being processed one at a time rather than in large batches.
+我觉得这段定义强调2个东西：
+- 序列
+- 个体
+序列是想说，这段data item的逻辑组成关系，线性关系，一个挨着一个。所以，是有序的。这点重要。其次，它不是一个整体，是一个一个有序的个体。强调每次只处理一个个体。
+
+下面我们再来看程序设计语言当中的一段定义
+>On Unix and related systems based on the C language, a stream is a source or sink of data, usually individual bytes or characters. Streams are an abstraction used when reading or writing files, or communicating over network sockets. The standard streams are three streams made available to all programs.
+上面这段话说了2件事，一是流的定义，二是流这么定义的抽象来源是什么。先说定义，本质上还是数据序列，但这里强调了方向性，进行流入或者流出的数据，把它称作流。或者直接这么说，**c程序当中进行IO的数据就是流**。
+其实后面的抽象，印证了我的总结，程序当中进行文件或者socket的读写数据，就是流。一个程序进行IO除了文件，就是网络。
+
+有了上面对于个体的理解，bit stream和byte stream就很容易理解了。前者的处理个体是bit，后者是byte.
+
+参考<br>
+[Stream (computing)](https://en.wikipedia.org/wiki/Stream_(computing))<br>
 
 ## 基础算法
 
