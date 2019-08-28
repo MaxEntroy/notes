@@ -33,19 +33,19 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 参考<br>
 [Statements and Expressions](http://interactivepython.org/runestone/static/CS152f17/SimplePythonData/StatementsandExpressions.html)<br>
 
-#### 类型
+### 类型
 
 参考<br>
 [Magic lies here - Statically vs Dynamically Typed Languages](https://android.jlelse.eu/magic-lies-here-statically-typed-vs-dynamically-typed-languages-d151c7f95e2b)<br>
 
-#### 回调
+### 回调
 
 参考<br>
 [Callback](https://en.wikipedia.org/wiki/Callback_%28computer_programming%29)<br>
 [回调函数（callback）是什么？](https://www.zhihu.com/question/19801131)<br>
 [如何浅显地解释回调函数](https://bot-man-jl.github.io/articles/?post=2017/Callback-Explained)<br>
 
-#### 热更新
+### 热更新
 >你可以在不中断进程运行的情况下，把修改过的代码加载到进程中，让随后的过程运行新版本的代码。by cloud wu
 相信代码参考[lua热更新](https://github.com/MaxEntroy/notes/blob/master/notes/language.md)
 
@@ -57,7 +57,7 @@ expression，是做数值，逻辑，关系的计算。对于这些计算，有�
 ## 基础算法
 
 
-#### 启发式算法
+### 启发式算法
 - 定义
 ```
 Cambridge Dictionary给出的解释
@@ -102,7 +102,7 @@ as they may be used in situations where there are no known algorithms
 
 ## 网络/通信/协议
 
-#### webservice
+### webservice
 先来看一看阮一峰对这个概念的阐述：
 - 什么是service
 >通俗地说，"服务"就是计算机可以提供的某一种功能。
@@ -144,7 +144,7 @@ as they may be used in situations where there are no known algorithms
 [web服务器与ftp服务器的区别](https://blog.csdn.net/w252064/article/details/77581691)<br>
 [Web service](https://en.wikipedia.org/wiki/Web_service)<br>
 
-#### protobuffer
+### protobuffer
 
 参考<br>
 [Pb语法](https://developers.google.com/protocol-buffers/docs/proto#scalar)<br>
@@ -153,8 +153,6 @@ as they may be used in situations where there are no known algorithms
 [Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor)<br>
 [Pb-反射-demo](https://yrczone.com/blog/article/45)<br>
 
-
-#### 坑
 
 - pb字段没对对齐
 ```
@@ -166,7 +164,7 @@ as they may be used in situations where there are no known algorithms
 总之：如果出现类似情形。就是字段没有对其。
 ```
 
-#### 同步/异步
+### 同步/异步
 这个概念是一对比较容易混淆的概念，主要在于这一对概念应用的场景比较多。区别不同的场景，就容易理解。
 - 原始定义
 参照longman 6th给出的解释
@@ -236,7 +234,7 @@ keeping multiple copies of a dataset in coherence with one another, or to mainta
 [Synchronous and Asynchronous I/O](https://docs.microsoft.com/en-us/windows/win32/fileio/synchronous-and-asynchronous-i-o)<br>
 [同步，异步，阻塞，非阻塞等关系轻松理解 ](https://github.com/calidion/calidion.github.io/issues/40)<br>
 
-#### uri/url/urn
+### uri/url/urn
 这是3个非常容易混淆的概念，但是理解的层次其实非常容易。
 uri是抽象类，告诉我们，网络上的资源同样需要唯一的标识。这件事是重要的，但是怎么实现，没有说。
 url和urn分别是两种实现。
@@ -245,7 +243,7 @@ url靠位置来表明一个资源,urn靠名称来表明一个资源。
 参考<br>
 [HTTP 协议中 URI 和 URL 有什么区别](https://www.zhihu.com/question/21950864)
 
-#### HTTP
+### HTTP
 
 - http怎么来的
 
@@ -286,7 +284,7 @@ url靠位置来表明一个资源,urn靠名称来表明一个资源。
 
 ## 其它
 
-#### 模型(model)
+### 模型(model)
 
 - 定义
 ```
@@ -320,7 +318,7 @@ $$\{(X,Y)|Y=XB+U\}$$
 
 ## 工具
 
-#### git
+### git
 - git修改上次提交
 主要说下，怎么修改username和email
 ```c
@@ -334,4 +332,4 @@ git commit --amend --author="userName <userEmail>"
 先说下merge，merge比较简单，就是分叉的分支，进行一次三路合并。第3路是最近common ancestor.
 需要注意的一点是，commit message会写在同一列。但是commit符号(*)并不在一起。我以前总看错
 
-#### wireshark
+### wireshark
