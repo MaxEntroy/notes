@@ -415,7 +415,7 @@ eof和\n不用丢弃的原因是，scanf对这个2个字符本身有处理能力
 [关于fflush(stdin)清空输入缓存流(C/C++) ](https://my.oschina.net/deanzhao/blog/79790)<br>
 
 - fflush使用时机
-1.对于输入/输出流，我理解是需要考虑fflush时机。虽然，我不确定这种流输入和输出使用的是同一个缓冲区。但是，看了有代码是这么考虑的。
+1.对于输入/输出流，需要使用fflush。此时，读写共用一个fd(FILE*)，关联同一个文件，自然而然使用同一个缓冲区。
 ```c
 /* fflush example */
 #include <stdio.h>
@@ -435,8 +435,92 @@ int main()
   }
 }
 ```
-上面这段代码的感觉是，输入/输出共用的是一个缓冲区，如果不清除输出缓冲区，数据会被输入获取。
-因为清除缓冲区的时机是操作系统确定的，所以如果希望人为确定，还是主动fflush操作。
+上面这段代码先写，此时文件指针位于文件尾。如果此时读取，什么都读不到。
+fflush感觉的作用是，可以调整文件指针位置。gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.4) 这个版本不行。
+
+尝试下面的写法，是可以的。
+```c
+/* fflush example */
+#include <stdio.h>
+char mybuffer[80];
+int main()
+{
+   FILE * pFile;
+   pFile = fopen ("example.txt","r+");
+   if (pFile == NULL) perror ("Error opening file");
+   else {
+     fputs ("test",pFile);
+     //fflush (pFile);    // flushing or repositioning required
+     fseek(pFile, 0, SEEK_SET);
+     fgets (mybuffer,80,pFile);
+     puts (mybuffer);
+     fclose (pFile);
+     return 0;
+  }
+}
+```
+
+至于为什么不行，显然是移植性导致的。各自版本的实现，我暂时不细追。知道结论，如何使用即可。
+所以这个版本，我理解清空缓冲区的目的是，写完成，让文件处于可读状态，即文件指针归位。
+
+我们再看一个例子：
+```
+#include<stdio.h>
+#include<unistd.h>//unix环境
+int main()
+{
+    printf("hello: ");
+    //fflush(stdout);
+    pid_t pid = fork();
+    if(pid != 0) {
+        printf("father\n");
+    }
+    else {
+        printf("child\n");
+    }
+    return 0;
+}
+/*
+期望的结果：
+hello: father
+child
+或者
+hello: child
+father
+总之，"hello: "的输出在创建进程前，肯定只能有父进程能输出。
+
+实际结果：
+hello: father
+hello: child
+*/
+```
+分析上面的结果，父进程先输出"hello: "，但是所谓的输出，只是把他放到了stdout的缓冲区，没有实际落终端。这个时机是在os控制。
+然后，子进程copy了一份父进程，缓冲区自然也copy,最后程序结束的时候，os进行缓冲区的刷新。
+
+我们进行修复：
+```c
+#include<stdio.h>
+#include<unistd.h>//unix环境
+int main()
+{
+    printf("hello: ");
+    fflush(stdout);
+    pid_t pid = fork();
+    if(pid != 0) {
+        printf("father\n");
+    }
+    else {
+        printf("child\n");
+    }
+    return 0;
+}
+/*
+无论如何，只会输出一个hello.
+*/
+```
+这是个非常好的例子，在设计多进程/线程程序时，缓冲区是否共享，是否需要及时刷新，是需要特别考虑的。
+
 
 参考<br>
 [fflush](http://www.cplusplus.com/reference/cstdio/fflush/?kw=fflush)<br>
+[一些 C 函数，痛苦的移植性](https://tnie.github.io/2017/03/07/portability-about-C-functions/)<br>
