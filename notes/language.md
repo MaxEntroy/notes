@@ -387,7 +387,7 @@ int main(void) {
 问题的关键在于fflush(stdin)的做法是否可行？
 直接给出结论，不行。因为这个操作不是标准c支持的，如果需要程序可移植，则不能这么做。
 
-修复
+正确的做法
 ```c
 #include <stdio.h>
 
@@ -412,4 +412,31 @@ eof和\n不用丢弃的原因是，scanf对这个2个字符本身有处理能力
 ```
 
 参考<br>
-[关于fflush(stdin)清空输入缓存流(C/C++) ](https://my.oschina.net/deanzhao/blog/79790)
+[关于fflush(stdin)清空输入缓存流(C/C++) ](https://my.oschina.net/deanzhao/blog/79790)<br>
+
+- fflush使用时机
+1.对于输入/输出流，我理解是需要考虑fflush时机。虽然，我不确定这种流输入和输出使用的是同一个缓冲区。但是，看了有代码是这么考虑的。
+```c
+/* fflush example */
+#include <stdio.h>
+char mybuffer[80];
+int main()
+{
+   FILE * pFile;
+   pFile = fopen ("example.txt","r+");
+   if (pFile == NULL) perror ("Error opening file");
+   else {
+     fputs ("test",pFile);
+     fflush (pFile);    // flushing or repositioning required
+     fgets (mybuffer,80,pFile);
+     puts (mybuffer);
+     fclose (pFile);
+     return 0;
+  }
+}
+```
+上面这段代码的感觉是，输入/输出共用的是一个缓冲区，如果不清除输出缓冲区，数据会被输入获取。
+因为清除缓冲区的时机是操作系统确定的，所以如果希望人为确定，还是主动fflush操作。
+
+参考<br>
+[fflush](http://www.cplusplus.com/reference/cstdio/fflush/?kw=fflush)<br>
