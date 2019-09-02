@@ -79,6 +79,12 @@ int fflush ( FILE * stream );
 参考<br>
 [Stream (computing)](https://en.wikipedia.org/wiki/Stream_(computing))<br>
 
+
+### 幂等(idempotent)
+我们先来看在程序设计当中的定义
+>在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同.幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数
+核心点在于，这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。比如http get接口就是幂等的。
+
 ## 基础算法
 
 
@@ -151,11 +157,13 @@ as they may be used in situations where there are no known algorithms
     - 应用层使用http协议
     - 采用http文档格式
     - 使用url
+    - 客户端使用浏览器(这个是显而易见的，浏览器就是为浏览而生，没人愿意在terminal当中浏览)
 
 尹圣雨给的解释，我觉得非常赞,后者对web server的定义
 - 基于http协议
-- 在服务端找到client端请求的url对应的文件
 - 将url对应的文件发送给client端
+- 在服务端找到client端请求的url对应的文件
+
 所以，这个解释非常清楚的说明白了几个东西
 1.应用层采用什么协议 2.client端请求的是什么 3.server端发送什么结果回去
 
@@ -273,6 +281,19 @@ url靠位置来表明一个资源,urn靠名称来表明一个资源。
 - http怎么来的
 
 - http现在都怎么用
+这个感觉需要特别说下，和我们平时使用息息相关。先说直观体验，我理解http为浏览器而生，但是它又大量应用在我们的服务交互当中，所以我不是很理解这是怎么回事。
+直到看到知乎上给了一个好的解释
+
+>HTTP最早被用来做浏览器与服务器之间交互HTML和表单的通讯协议；后来又被被广泛的扩充到接口格式的定义上;
+所以在讨论GET和POST区别的时候，需要现确定下到底是浏览器使用的GET/POST还是用HTTP作为接口传输协议的场景。
+
+从上面这个定义当中，很容易得到http的2种用法。目前工作当中是用作第二种，即用http作为接口定义。
+这又会带来另一个问题，为什么要有接口定义。回想我以前写的echo server，socket连接之后，就直接在socket上进行read/write。说下我自己的理解啊，如果服务简单，
+这么写到没事。如果服务复杂，比如一个Server可能提供多种子服务，如果还是之前的方式，不清晰。我们自己看brpc搭建http/h2服务，通过proto来暴露对外接口，客户端通过
+http_client或者curl进行请求，语义上非常清晰。
+
+参考<br>
+[GET 和 POST 到底有什么区别？](https://www.zhihu.com/question/28586791/answer/767316172?hb_wx_block=1&utm_source=wechat_session&utm_medium=social&utm_oi=658626377876639744)
 
 - http的过程
     - 数据请求(client)
@@ -302,6 +323,15 @@ url靠位置来表明一个资源,urn靠名称来表明一个资源。
 
 - GET/POST
 
+### RPC
+
+说一下我的这个简单理解，socket和http都比较好理解，是很具体的东西。
+socket就是os提供的进行网络交互的handle，至于应用层什么协议使用，和socket本身没有关系。http底层用socket，ftp底层也使用socket，所以这点很清晰。
+http也好理解，应用层协议，应用程序之间约定好**业务数据**的协议以及一些细节。http主要是web service这类业务进行的应用层协议，当然http我在上面也提到了，也可以被当做接口传输协议场景。
+rpc我理解，不是一个非常具体的概念。是在基础网络基础上，抽象出来的高级逻辑。不仅有网络通信，还有服务发现，服务治理等这些东西。
+
+参考<br>
+[RPC、HTTP、Socket区别](https://zhuanlan.zhihu.com/p/48760074)
 
 ## 操作系统
 
