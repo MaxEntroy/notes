@@ -396,6 +396,6 @@ git commit --amend --author="userName <userEmail>"
 TEX: 一种排版语言
 Latex: 基于TEX实现的一个宏集，自然也是一种排版语言
 >
-Tex Live: TEX/TEX based 语言编译器的发行版，如g++, visual c++
+Tex Live: TEX/TEX based 语言编译器的发行版，如g++, visual c++。目前使用的CTEX = Tex live + 中文支持
 >
 Tex Studio: IDE
