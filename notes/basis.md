@@ -388,3 +388,14 @@ git commit --amend --author="userName <userEmail>"
 需要注意的一点是，commit message会写在同一列。但是commit符号(*)并不在一起。我以前总看错
 
 ### wireshark
+
+### Tex
+
+对几个概念先进行简单描述：
+>
+TEX: 一种排版语言
+Latex: 基于TEX实现的一个宏集，自然也是一种排版语言
+>
+Tex Live: TEX/TEX based 语言编译器的发行版，如g++, visual c++
+>
+Tex Studio: IDE
