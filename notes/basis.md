@@ -556,11 +556,20 @@ q:有了.a为什么还要.so
 1..so是在run time才进行load，所以，client binary当中并没有.so副本，这样，不同的client binary可以共享同一个.so，从而减轻了.a重复占用空间带来的空间浪费的问题，即.so在内存中只有一份副本。
 2..so由于不在client binary当中，相当于是和client binary解耦。.so的更新，不会影响到client binary，因此不用重新编译，也不用重新上线。
 
+补充：
+1..o和.a在link阶段可以链接到一个binary当中，证明他们有类似的elf格式，即.a和.o都属于可重定位文件。2..out自然是可执行文件。3..so就是共享目标文件
+
 参考<br>
 [高级语言的编译：链接及装载过程介绍](https://tech.meituan.com/2015/01/22/linker.html?from=timeline&isappinstalled=0)<br>
 [Linux elf格式](http://www.iloveandroid.net/2015/11/17/studyElf/)<br>
 [ELF(Executable and Linkable Format)](https://www.cnblogs.com/littlehann/p/3871092.html)<br>
 [Linux 中的动态链接库和静态链接库是干什么的？](https://www.zhihu.com/question/20484931)
+
+### linux elf格式
+
+- 引言
+
+- 分类
 
 
 ## 数据库
