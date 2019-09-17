@@ -350,7 +350,7 @@ q:vm或者interpeter在client和os的层次上，处于一种什么样的关系
 - cpu体系结构
 
 q:当我们说cpu体系结构的时候，我们在说什么？
->有一个确定的方面，就是指令集。指令集有cisc和risc区分，x86_64属于cisc指令集，ibm的power pc系列则是risc.指令集显然会涉及到指令的做成，即computing set由哪些instruction组成，毕竟任何代码最终
+>有一个确定的方面，就是指令集。指令集有cisc和risc区分，x86_64属于cisc指令集，ibm的power pc系列则是risc.指令集显然会涉及到指令的组成，即computing set由哪些instruction组成，毕竟任何代码最终
 还是转换到computing set当中的一条条instruction，然后cpu进行执行，显然，cpu的设计也是基于指令集的，因为不同指令集的指令长度以及基本组成都可能不同。
 
 q:我们在一种cpu体系结构的编译产物可以在另一种cpu体系结构下运行吗？
@@ -362,7 +362,7 @@ q:我们在一种cpu体系结构的编译产物可以在另一种cpu体系结构
 q:不同os的编译产物，可以在彼此系统上运行吗？
 >不行。编译产物，是二进制可执行程序。不同os对于binary的文件格式不同。比如，linux下是elf，win下是exe.那么，这个**binary文件格式**又是什么呢？
 说一个我的简单理解，elf里面规定了程序的入口地址，以及text,bss段的地址，即一个binary装入内存之后，我们怎么能知道入口在哪里？程序需要的变量和函数又去哪里找？elf就是告诉我们这些内容。
-当然，Linux进程空间的布局，我理解应该就是elf规定的。所以，linux生成的binary，在windows下肯定找不到，因为入口地址，大家规定的不一行，linux binary当中，elf指定一个入口地址。
+当然，Linux进程空间的布局，我理解应该就是elf规定的。所以，linux生成的binary，在windows下肯定找不到，因为入口地址，大家规定的不一样，linux binary当中，elf会指定一个入口地址。
 类似的，win下相关格式也会指定一个入口地址，既然大家不是一种格式，这个入口地址没有协议保证一样，肯定无法执行正确。
 
 - c源文件
@@ -560,7 +560,7 @@ q:有了.a为什么还要.so
 [高级语言的编译：链接及装载过程介绍](https://tech.meituan.com/2015/01/22/linker.html?from=timeline&isappinstalled=0)<br>
 [Linux elf格式](http://www.iloveandroid.net/2015/11/17/studyElf/)<br>
 [ELF(Executable and Linkable Format)](https://www.cnblogs.com/littlehann/p/3871092.html)<br>
-[https://www.zhihu.com/question/20484931](https://www.zhihu.com/question/20484931)
+[Linux 中的动态链接库和静态链接库是干什么的？](https://www.zhihu.com/question/20484931)
 
 
 ## 数据库
