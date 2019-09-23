@@ -1,6 +1,40 @@
+## 基本概念
+
+### 模型(model)
+
+- 定义
+```
+朗文高阶给出的解释
+a simple discription of a system or structure that is used to help people understand similar systems or structures.
+eg: Cival society is a classical economist's model of the free market.
+```
+对于这一版的解释，其实是更通用的。但是，整体的思路是清晰的，对于系统/结构的一种描述，目的是为了更容易的来理解不易理解的系统/结构。
+
+```
+A mathematical model is a description of a system using mathematical concepts and language.
+```
+比如，我们用数学语言来描述，因为数学语言本身是非常精确地，简洁的，所以数学模型是非常直观的。
+
+所以说，到底怎么理解模型，其实就是对复杂系统，或者结构更加**本质的展现**。
+这其中，又因为数学语言的精确性，与简洁性，数学模型对于本质的展现是相对比较清晰的。
+
+- 怎么理解数学模型
+```
+集合论是一种非常有效的方式来帮我们理解数学模型，因为对于复杂系统/复杂结构，我们可以借助集合去描述它。
+那么，我们必然要抽象集合的构造表达式，或者说是“集合的特征”，这个也就是我们所说的“本质的展现”。
+```
+比如，线性模型，我们一般有如下的表示：
+$$\{(X,Y)|Y=XB+U\}$$
+
+参考<br>
+[Mathematical model](https://en.wikipedia.org/wiki/Mathematical_model)<br>
+[General linear model](https://en.wikipedia.org/wiki/General_linear_model)<br>
+[Set](https://en.wikipedia.org/wiki/Set_(mathematics))<br>
+
+
 ## 数据预处理
 
-#### one hot encoding
+### one hot encoding
 - 定义
 ```
 One-hot encoding refers to a way of transforming data into vectors where all components are 0, except for one component with a value of 1.
@@ -44,7 +78,7 @@ red   green   blue
 [机器学习之one hot encoding详解](https://www.jianshu.com/p/cb344e1c860a)<br>
 
 
-#### embedding
+### embedding
 - word representation
 上述谈到的one-hot encoding有一个很重要的作用，就是可以对词进行编码。
 考虑如下的两句话：
@@ -72,7 +106,7 @@ to put word firmly and deeply into vector space.
 
 ## 业务场景
 
-#### Feed流
+### Feed流
 
 参考知乎杨亮的答案，写的比较合理
 >是一种呈现内容给用户并持续更新的方式
