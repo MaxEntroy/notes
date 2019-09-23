@@ -574,40 +574,6 @@ q:有了.a为什么还要.so
 
 ## 数据库
 
-## 其它
-
-### 模型(model)
-
-- 定义
-```
-朗文高阶给出的解释
-a simple discription of a system or structure that is used to help people understand similar systems or structures.
-eg: Cival society is a classical economist's model of the free market.
-```
-对于这一版的解释，其实是更通用的。但是，整体的思路是清晰的，对于系统/结构的一种描述，目的是为了更容易的来理解不易理解的系统/结构。
-
-```
-A mathematical model is a description of a system using mathematical concepts and language.
-```
-比如，我们用数学语言来描述，因为数学语言本身是非常精确地，简洁的，所以数学模型是非常直观的。
-
-所以说，到底怎么理解模型，其实就是对复杂系统，或者结构更加**本质的展现**。
-这其中，又因为数学语言的精确性，与简洁性，数学模型对于本质的展现是相对比较清晰的。
-
-- 怎么理解数学模型
-```
-集合论是一种非常有效的方式来帮我们理解数学模型，因为对于复杂系统/复杂结构，我们可以借助集合去描述它。
-那么，我们必然要抽象集合的构造表达式，或者说是“集合的特征”，这个也就是我们所说的“本质的展现”。
-```
-比如，线性模型，我们一般有如下的表示：
-$$\{(X,Y)|Y=XB+U\}$$
-
-参考<br>
-[Mathematical model](https://en.wikipedia.org/wiki/Mathematical_model)<br>
-[General linear model](https://en.wikipedia.org/wiki/General_linear_model)<br>
-[Set](https://en.wikipedia.org/wiki/Set_(mathematics))<br>
-
-
 ## 工具
 
 ### git
@@ -636,3 +602,32 @@ Latex: 基于TEX实现的一个宏集，自然也是一种排版语言
 Tex Live: TEX/TEX based 语言编译器的发行版，如g++, visual c++。目前使用的CTEX = Tex live + 中文支持
 >
 Tex Studio: IDE
+
+## 其它
+
+### 编译问题集锦
+
+- 动态库链接静态库
+
+```
+问题描述：
+g++ -fPIC -shared -o other.so other_lib.cc
+编译没问题，但是run time找不到定义.
+排查：run time找不到定义，即没有objs，所以.so当中没有包括相应的内容。
+
+g++ -fPIC -shared -o other.so other_lib.cc /usr/local/thirdparty/lua5.3/lib/liblua.a
+但是这么编译又过不去：
+kang@ubuntu:~/workspace/myspace/git-personal/lua-best-practise/chapter21/demo-08/thirdparty/Other/src(master)$ g++ -fPIC -shared -o other.so other_lib.cc /usr/local/thirdparty/lua5.3/lib/liblua.a
+/usr/bin/ld: /usr/local/thirdparty/lua5.3/lib/liblua.a(lapi.o): relocation R_X86_64_32 against `luaO_nilobject_' can not be used when making a shared object; recompile with -fPIC
+/usr/local/thirdparty/lua5.3/lib/liblua.a: error adding symbols: 错误的值
+collect2: error: ld returned 1 exit status
+这个问题，进一步追查，直接根据错误信息进行google，得知，.so链接的.a，后者并不是fPIC代码，所以，需要对.a进行重新编译
+第2篇参考文献，告诉我们如何判断一个.a是不是fPIC代码。
+
+在对liblua.a的Makefile进行学习当中，又碰到问题，不理解Makefile底层没有commands，此时又进行排查，得知有一些Makefile的隐含规则。在对Makefile的学习过程中，参考了阮一峰写的Makefile入门概述，感觉特别好。
+```
+
+参考<br>
+[动态库(.so)链接静态库(.a)的情况总结](https://www.cnblogs.com/nobugtodebug/archive/2012/11/07/e6cd72c67b3dd843f40d7ce919f7336a.html)
+[linux编译问题集锦（持续更新中）](https://www.cnblogs.com/octave/p/4824584.html)
+[how-to-write-makefile/implicit_rules](https://seisman.github.io/how-to-write-makefile/implicit_rules.html)
