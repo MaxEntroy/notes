@@ -101,6 +101,15 @@ lsof -p pid | grep LISTEN
 ```
 ps: macos netstat 功能和linux不完全一样
 
+结合lsof，我自己又想出一种快捷的查询某个进程监听端口的办法
+```
+1.查询进程的pid
+ps -ef|grep proname
+
+2. 打开Pid关联的进程，打开的所有ipv4 socket
+lsof -a pid -i 4
+```
+
 参考
 [mac oxs 上查看进程监听的端口号 lsof](http://lazybios.com/2015/03/netstat-notes/)
 
