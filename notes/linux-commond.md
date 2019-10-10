@@ -104,6 +104,46 @@ ps: macos netstat 功能和linux不完全一样
 参考
 [mac oxs 上查看进程监听的端口号 lsof](http://lazybios.com/2015/03/netstat-notes/)
 
+#### lsof
+这个命令的学习背景是如何查看一个进程占用的端口，但是发现和以前的认知有区别，有如下心得
+- linux当中,everything is a file. 所以，socket，以及fd关联的文件，统统看做fd
+- lsof这个命令本质是查看open files，本质其实就是通过fd信息，来查看关联的进程信息
+- COMMAND,PID,USER是关联文件的应用程序信息，其余的是文件信息
+- 这个命令，最重要的两个功能
+    - 一个应用程序，打开了哪些文件
+    - 一个文件，被哪些应用程序打开了
+
+考虑如下场景，我用code打开了linux-comand.md
+```
+kang@ubuntu:~/workspace/myspace/git-personal/notes/notes(master)$ lsof -a -p 27626 -d cwd
+COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF     NODE NAME
+code    27626 kang  cwd    DIR    8,1     4096 13762658 /home/kang/workspace/myspace/git-personal/notes/notes
+
+FD: 标识打开文件的fd,wd 值表示应用程序的当前工作目录,txt 类型的文件是程序代码,最后，数值表示应用程序的文件描述符，这是打开该文件时返回的一个整数
+TYPE: 标识打开文件的类型，根据具体操作系统的不同，您会发现将文件和目录称为 REG 和 DIR，分别表示字符和块设备。UNIX、FIFO 和 IPv4标识网络设备
+```
+
+对于查找网络链接，参考当中给了特别好的例子，我们看下
+```
+kang@ubuntu:~$ lsof -i:xxxxx
+COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+ssh     8778 kang    3u  IPv4  82495      0t0  TCP 000.000.000.000:xxxxx->11.111.111.111:yyyyy (ESTABLISHED)
+注意，这个lsof -i:port,只是把网络链接当中port匹配的opening files找出来。
+上面我们可以看到xxxxx出现的位置，8778这个进程是处于client的地位，是接受者。yyyyy是server port
+
+[1.2.3.4@whoareyou /data/service]# lsof -i:xxxxx
+COMMAND      PID USER   FD   TYPE     DEVICE SIZE/OFF NODE NAME
+zzzzz 203771 root    106u  IPv4 11111111      0t0  TCP *:xxxxx (LISTEN)
+我们来看xxxxx出现的位置，203771这个进程，是处于servingd的地位，标识203711这个进程在xxxxx这个端口进行listening，对于我来说重要的一点是。这个端口已经被一个服务给占了。所以别的服务不能开到这个端口上。
+```
+
+总结，这个命令的主要作用是，**显示打开的文件和控制它们的进程之间的关系**
+
+
+
+参考<br>
+[使用 lsof 查找打开的文件](https://www.ibm.com/developerworks/cn/aix/library/au-lsof.html#listing2)<br>
+[ lsof 一切皆文件](https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/lsof.html)
 
 ### 环境配置
 
