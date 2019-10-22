@@ -495,8 +495,8 @@ q:lua_cpcall废弃前后Lua CAPI的正确写法是什么？
 q:注意lua-5.1.5和lua-5.2.0在返回值设计上的区别。
 >lua-5.1.5的设计非常好理解，pmain内部，能发现的错误，证明已经被捕获了。返回0标识lua运行状态没问题，内部逻辑错误由s->status标识即可。如果pmain运行错误，此时的错误码被lua_cpcall捕获到。
 
-参考
-[[Lua C API 的正确用法]](https://blog.codingnow.com/2015/05/lua_c_api.html)
+参考<br>
+[Lua C API 的正确用法](https://blog.codingnow.com/2015/05/lua_c_api.html)
 
 ## cpp
 
