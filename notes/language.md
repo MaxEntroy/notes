@@ -359,10 +359,8 @@ int main (int argc, char **argv) {
   return (result && status == LUA_OK) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 ```
-从上面，我们可以看出，主业务逻辑都被封装在pmain当中，这个函数里面有大量Lua CAPI
+从上面，我们可以看出，主业务逻辑都被封装在pmain当中，这个函数里面有大量Lua CAPI。并且，我们可以看到，直接通过lua_pushcfunction把pmain入栈，然后再通过lua_pushxx传入参数。这个需要我们对比lua-5.1.5和lua-5.2.0的代码才可以看出其中的区别。
 
-q:lua_cpcall废弃的原因是什么？
->从lua-5.2.0当中的代码，我们可以看到，直接通过lua_pushcfunction把pmain入栈，然后再通过lua_pushxx传入参数。这个需要我们对比lua-5.1.5和lua-5.2.0的代码才可以看出其中的区别。
 ```c
 // lua-5.1.5
 #define lua_pushcfunction(L,f)	lua_pushcclosure(L, (f), 0)
