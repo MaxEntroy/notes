@@ -293,8 +293,6 @@ main()
 ```
 
 ### Lua CAPI的正确用法/lua_cpcall
-讲这一小节的目的是对于云风的这篇文章[[Lua C API 的正确用法]](https://blog.codingnow.com/2015/05/lua_c_api.html)，提到以前使用lua_cpcall的原因就是为了保证
-对于capi的正确使用。但是这个函数现在废弃了，所以希望了结废弃的原因是什么？以及废弃前和废弃后正确的写法分别是什么？
 
 q:Lua CAPI的正确用法是什么？
 >云风已经讲的很清楚了，分两种情况。其一，如果c编写lua库，此时Lua CAPI都是直接或间接被lua调用的，此时的异常肯定可以被lua_pcall捕获。其二，在调用lua之前，此时分布在宿主程序当中的Lua CAPI，对于这部分接口，没有一个捕获异常的逻辑。所以，云风的建议是，对于其二当中的情形，把主要业务逻辑写到一个lua_cfunction当中，然后用lua_pcall调用。
@@ -363,8 +361,8 @@ int main (int argc, char **argv) {
 ```
 从上面，我们可以看出，主业务逻辑都被封装在pmain当中，这个函数里面有大量Lua CAPI
 
-q:lua_cpall废弃的原因是什么？
->从lua-5.2.0当中的代码，我们可以看到，参数直接通过lua_pushcfunction把pmain这样的函数入栈，然后再通过lua_pushxx传入参数。这个需要我们对比lua-5.1.5和lua-5.2.0的代码才可以看出其中的区别。
+q:lua_cpcall废弃的原因是什么？
+>从lua-5.2.0当中的代码，我们可以看到，直接通过lua_pushcfunction把pmain入栈，然后再通过lua_pushxx传入参数。这个需要我们对比lua-5.1.5和lua-5.2.0的代码才可以看出其中的区别。
 ```c
 // lua-5.1.5
 #define lua_pushcfunction(L,f)	lua_pushcclosure(L, (f), 0)
@@ -411,16 +409,17 @@ LUA_API void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n) {
 
 ```
 通过代码对比，我们可以发现一些区别，以及一些api设计上的原因：
-1.lua语言支持了closure，function也算作一种特殊的closure.
-2.c语言不支持closure，只支持function
-3.当lua和c交互时，存在两种语言数据类型不一致的情形，需要在交互时解决这个问题。具体，lua是这么解决的:
-3.1.提供lua_pushcclosure来支持lua语言当中的closure
-3.2.提供lua_pushcfunction来帮助c function转换成lua当中的closure
-3.3.基于3.1和3.2的考虑，我们发现Lua CAPI在设计的时候，对于3.1有直接的支持，而3.2则是间接地支持
-3.4.对于lua_pushcfunction的实现，因为c function就是closure without upvalue，所以，lua_pushcclosure的最后一个参数肯定是0，这个是由c function和closure本身的关系决定的。 
+- lua_pushcfunction的实现都是一样的
+- lua语言支持了closure，function也算作一种特殊的closure.
+- c语言不支持closure，只支持function
+- 当lua和c交互时，存在两种语言数据类型不一致的情形，需要在交互时解决这个问题。具体，lua是这么解决的:
+  - 提供lua_pushcclosure来支持lua语言当中的closure
+  - 提供lua_pushcfunction来帮助c function转换成lua当中的closure
+  - 基于前两点，我们发现Lua CAPI在设计的时候，对于第一点是直接进行支持，而第二点则是间接地支持
+  - 对于lua_pushcfunction的实现，因为c function就是closure without upvalue，所以，lua_pushcclosure的最后一个参数肯定是0，这个是由c function和closure本身的关系决定的。 
 
 紧接着，我们发现lua-5.1.5和lua-5.2.0在lua_pushcclosure实现上的区别，导致前者lua_pushcfunction有gc的开销，但是后者没有。
-所以，当我们在lua-5.1.5这样的环境时，采用```lua_pushcfunction(L, &pmain);```这种写法，会由lua_pushcfunction带来额外的开销。而lua_cpall则可以用来解决这个问题。
+所以，当我们在lua-5.1.5这样的环境时，采用```lua_pushcfunction(L, &pmain);```这种写法，会由lua_pushcfunction带来额外的开销。而lua_cpcall则可以用来解决这个问题。
 
 云风是这么说的：
 >这就是为什么，之前版本的 Lua 都提供了一个叫 lua_cpcall 的 C API 的缘故。而在 Lua 5.2 支持了 light c function 后，对于无 upvalue 的 C function 都可以无额外成本的通过 lua_pushcfunction 传入 lua vm ，所以就不再需要一个单独的 lua_cpcall 了。
@@ -487,7 +486,7 @@ int main (int argc, char **argv) {
 ```
 
 q:lua_cpall废弃的原因是什么？
->现在我们可以很清晰的知道，lua-5.2.0开始以及之后的版本废弃lua_cpcall的原因是因为，对应的lua版本在lua_pushcclosure支持了无upvalue的写法，使得对于无 upvalue 的 C function 都可以无额外成本的通过 lua_pushcfunction 传入 lua vm
+>lua-5.2.0开始以及之后的版本废弃lua_cpcall的原因是因为，对应的lua版本在lua_pushcclosure支持了无upvalue的写法，使得对于无 upvalue 的 C function 都可以无额外成本的通过 lua_pushcfunction 传入 lua vm
 
 
 q:lua_cpcall废弃前后Lua CAPI的正确写法是什么？
@@ -495,6 +494,9 @@ q:lua_cpcall废弃前后Lua CAPI的正确写法是什么？
 
 q:注意lua-5.1.5和lua-5.2.0在返回值设计上的区别。
 >lua-5.1.5的设计非常好理解，pmain内部，能发现的错误，证明已经被捕获了。返回0标识lua运行状态没问题，内部逻辑错误由s->status标识即可。如果pmain运行错误，此时的错误码被lua_cpcall捕获到。
+
+参考
+[[Lua C API 的正确用法]](https://blog.codingnow.com/2015/05/lua_c_api.html)
 
 ## cpp
 
