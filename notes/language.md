@@ -493,6 +493,16 @@ q:lua_cpcall废弃前后Lua CAPI的正确写法是什么？
 q:注意lua-5.1.5和lua-5.2.0在返回值设计上的区别。
 >lua-5.1.5的设计非常好理解，pmain内部，能发现的错误，证明已经被捕获了。返回0标识lua运行状态没问题，内部逻辑错误由s->status标识即可。如果pmain运行错误，此时的错误码被lua_cpcall捕获到。
 
+q:lua_pcall和lua_cpcall在使用上有何区别？
+>文档说，lua_cpcall的func即pmain，开始的时候，只有一个参数在func的栈里面。那就是ud即s
+pmain是lua_CFunction，本质是lua调用c函数的形式，只不过由c发起。
+pmain的特点就是有一个private stack，只用来跟lua交互
+真正想表达的事，对于lua-5.2.x开始的版本：
+1.func不用显示入栈
+2.ud不用显示入栈
+3.后续版本需要lua_pushcfunction and lua_pushlightuserdata
+4.原理我暂时不深究，知道这么用就好
+
 参考<br>
 [Lua C API 的正确用法](https://blog.codingnow.com/2015/05/lua_c_api.html)
 
