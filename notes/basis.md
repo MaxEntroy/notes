@@ -335,6 +335,33 @@ rpc我理解，不是一个非常具体的概念。是在基础网络基础上�
 
 ## 操作系统(Linux)
 
+### 编译问题集锦
+
+- 动态库链接静态库
+
+```
+问题描述：
+g++ -fPIC -shared -o other.so other_lib.cc
+编译没问题，但是run time找不到定义.
+排查：run time找不到定义，即没有objs，所以.so当中没有包括相应的内容。
+
+g++ -fPIC -shared -o other.so other_lib.cc /usr/local/thirdparty/lua5.3/lib/liblua.a
+但是这么编译又过不去：
+kang@ubuntu:~/workspace/myspace/git-personal/lua-best-practise/chapter21/demo-08/thirdparty/Other/src(master)$ g++ -fPIC -shared -o other.so other_lib.cc /usr/local/thirdparty/lua5.3/lib/liblua.a
+/usr/bin/ld: /usr/local/thirdparty/lua5.3/lib/liblua.a(lapi.o): relocation R_X86_64_32 against `luaO_nilobject_' can not be used when making a shared object; recompile with -fPIC
+/usr/local/thirdparty/lua5.3/lib/liblua.a: error adding symbols: 错误的值
+collect2: error: ld returned 1 exit status
+这个问题，进一步追查，直接根据错误信息进行google，得知，.so链接的.a，后者并不是fPIC代码，所以，需要对.a进行重新编译
+第2篇参考文献，告诉我们如何判断一个.a是不是fPIC代码。
+
+在对liblua.a的Makefile进行学习当中，又碰到问题，不理解Makefile底层没有commands，此时又进行排查，得知有一些Makefile的隐含规则。在对Makefile的学习过程中，参考了阮一峰写的Makefile入门概述，感觉特别好。
+```
+
+参考<br>
+[动态库(.so)链接静态库(.a)的情况总结](https://www.cnblogs.com/nobugtodebug/archive/2012/11/07/e6cd72c67b3dd843f40d7ce919f7336a.html)
+[linux编译问题集锦（持续更新中）](https://www.cnblogs.com/octave/p/4824584.html)
+[how-to-write-makefile/implicit_rules](https://seisman.github.io/how-to-write-makefile/implicit_rules.html)
+
 ### 高级语言的compile/link/load
 这一小节主要写一篇读书笔记，总结一些linux下的基本概念
 
@@ -602,50 +629,3 @@ Latex: 基于TEX实现的一个宏集，自然也是一种排版语言
 Tex Live: TEX/TEX based 语言编译器的发行版，如g++, visual c++。目前使用的CTEX = Tex live + 中文支持
 >
 Tex Studio: IDE
-
-## 其它
-
-### 推荐系统
-
-- 引擎(Engine)
-我们先来看剑桥英文字典给的定义，
->a machine that uses the energy from liquid fuel or steam to produce movement.
-这个解释很直观了，把燃料变成热能，促进物体运动的机器，就是发动机。这也是最基本的定义
-
-我们再来看一个引申的定义，
->something that provides power, often economic power, for other things
-提供动力的部分。
-
-我们结合系统来看，对于推荐系统而言，推荐引擎又是什么呢？综合以上两个结论，我们可以知道，推荐引擎是为推荐系统提供动力的部分，即驱动推荐系统工作的部分。
-那么，当我们说一个系统当中的引擎时，我们其实说的是，为这个系统提供动力，驱动系统工作的部分。比如，汽车系统的引擎就是发动机。
-
-再说回我们的推荐系统，推荐引擎具体是什么呢？又或者说，任何一个系统，它的引擎又具体是什么呢？上文我们说了，是驱动整个系统工作的部分，落地到代码层面，其实就是这个系统的整体**框架设计**部分代码，因为这一部分代码是驱动整个系统工作的部分。它并不描述每个部分应该怎样工作，而是描述这些部分组合到一起是怎样工作的，即整个系统的各个部分，是在怎样的组织设计下，被驱动工作的。这是引擎的真正含义。
-
-总结，从逻辑上来说，推荐引擎是推荐系统的核心，承担的是驱动推荐系统工作的部分。物理上来说，推荐引擎是推荐系统整个框架设计部分的代码，它并不描述每个部分是怎样工作的，而是描述每个部分是在怎样的组织设计下，被驱动工作的。
-
-### 编译问题集锦
-
-- 动态库链接静态库
-
-```
-问题描述：
-g++ -fPIC -shared -o other.so other_lib.cc
-编译没问题，但是run time找不到定义.
-排查：run time找不到定义，即没有objs，所以.so当中没有包括相应的内容。
-
-g++ -fPIC -shared -o other.so other_lib.cc /usr/local/thirdparty/lua5.3/lib/liblua.a
-但是这么编译又过不去：
-kang@ubuntu:~/workspace/myspace/git-personal/lua-best-practise/chapter21/demo-08/thirdparty/Other/src(master)$ g++ -fPIC -shared -o other.so other_lib.cc /usr/local/thirdparty/lua5.3/lib/liblua.a
-/usr/bin/ld: /usr/local/thirdparty/lua5.3/lib/liblua.a(lapi.o): relocation R_X86_64_32 against `luaO_nilobject_' can not be used when making a shared object; recompile with -fPIC
-/usr/local/thirdparty/lua5.3/lib/liblua.a: error adding symbols: 错误的值
-collect2: error: ld returned 1 exit status
-这个问题，进一步追查，直接根据错误信息进行google，得知，.so链接的.a，后者并不是fPIC代码，所以，需要对.a进行重新编译
-第2篇参考文献，告诉我们如何判断一个.a是不是fPIC代码。
-
-在对liblua.a的Makefile进行学习当中，又碰到问题，不理解Makefile底层没有commands，此时又进行排查，得知有一些Makefile的隐含规则。在对Makefile的学习过程中，参考了阮一峰写的Makefile入门概述，感觉特别好。
-```
-
-参考<br>
-[动态库(.so)链接静态库(.a)的情况总结](https://www.cnblogs.com/nobugtodebug/archive/2012/11/07/e6cd72c67b3dd843f40d7ce919f7336a.html)
-[linux编译问题集锦（持续更新中）](https://www.cnblogs.com/octave/p/4824584.html)
-[how-to-write-makefile/implicit_rules](https://seisman.github.io/how-to-write-makefile/implicit_rules.html)
