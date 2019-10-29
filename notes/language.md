@@ -11,125 +11,17 @@ luajit 2.0.5: ttt.lua:202: function at line 1 has more than 200 local variables
 [高性能 Lua 技巧（译）](https://segmentfault.com/a/1190000004372649)<br>
 
 ### colon and dot
-先看个标准的例子，使用dot传递self参数
-```lua
-local obc = {
-    x = 10,
-    y = 20,
-}
+q:混用是需要注意什么？
+对于colon，Lua程序设计p228给了本质性描述
+- 方法定义时，增加一个额外的形参
+- 方法调用时，增加一个额外的实参
 
-function obc.add(self, bias)
-    self.x = self.x + bias
-    self.y = self.y + bias
-    return self.x + self.y
-end
+如果进行混用，主要就是判断，**调用时和定义时的参数是否对的上**即可。
 
-function obc.minus(self, bias)
-    self.x = self.x + bias
-    self.y = self.y + bias
-    return self.x - self.y
-end
+q:c-lua交互时需要注意什么？
+> cpp调用table当中的lua函数时，也需要小心。如果是colon定义，需要lua_getglobal()把table拿进来，当做函数的第一个参数
 
-local ret = 0
-local bias = 0.01
-
-ret = obc.add(obc, bias)
-print(ret)
-
-ret = obc.minus(obc, bias)
-print(ret)
-```
-是否一定要传递self参数，看情况而定。如果函数不需要访问member，则没有必要
-下面这种写法就是wrapper，这种多提供给别的client使用
-```lua
-local caculator = {}
-
-function caculator.add(left, right)
-    return left + right
-end
-
-function caculator.minus(left, right)
-    return left - right
-end
-
-local r = 0
-r = caculator.add(10, 20)
-print(r)
-
-r = caculator.minus(10, 20)
-print(r)
-```
-我们再来看一种不是那么“规范”的写法
-下面这种，也有实际成员，但是不传递参数。也可以
-```lua
-local obc = {
-    x = 10,
-    y = 20,
-}
-
-function obc.add(bias)
-    obc.x = obc.x + bias
-    obc.y = obc.y + bias
-    return obc.x + obc.y
-end
-
-function obc.minus(bias)
-    obc.x = obc.x + bias
-    obc.y = obc.y + bias
-    return obc.x - obc.y
-end
-
-local ret = 0
-local bias = 0.01
-
-ret = obc.add(bias)
-print(ret)
-
-ret = obc.minus(bias)
-print(ret)
-```
->dot的写法，是显示成员变量的写法，一般在用lua进行基于oo的编程时，考虑这么做。
-这3种写法，对于第2种，有显著的用途，这好理解。第1种和第3种，我觉得第1种更好一点，但是实际中，没有这么用，因为这种是基于oo的写法，但是这么写没有泛化能力。
-lua是一门很灵活的语言，没有太多的语法限制，这点要时刻清楚
-
-下面我们来看colon的写法，这是lua语法提供的一种syntatic sugar的写法
-```lua
-local obc = {
-    x = 10,
-    y = 20,
-}
-
-function obc:add(bias)
-    self.x = self.x + bias
-    self.y = self.y + bias
-    return self.x + self.y
-end
-
-function obc:minus(bias)
-    self.x = self.x + bias
-    self.y = self.y + bias
-    return self.x - self.y
-end
-
-local ret = 0
-local bias = 0.01
-
-ret = obc:add(bias)
-print(ret)
-
-ret = obc:minus(bias)
-print(ret)
-
--- 下面混用的写法正确
--- ret = obc.add(obc, bias)
--- print(ret)
-
--- ret = obc.minus(obc, bias)
--- print(ret)
-
-```
-优点是可以省略对于obj对象的传递
-我们再进一步看下混用的例子：
+我们来看一个例子
 ```lua
 --mymath.lua
 local cal = {}
@@ -158,6 +50,7 @@ end
 
 return cal1
 ```
+
 ```lua
 --client.lua
 local function SetScriptPath(script_path)
@@ -191,55 +84,10 @@ end
 
 Test1()
 Test2()
-
 ```
-总结下，混用很容易出错。我不做区分，我只给出本质性的描述
-- 定义
-```lua
-local cal = {}
 
-function cal:add(left, right)
-    return left + right
-end
-
-function cal:minus(left, right)
-    return left - right
-end
-
-return cal
--- 上面这种定义，和下面等价
--- 上面定义其实就是省略了self参数
-local cal1 = {}
-
-function cal1.add(self, left, right)
-    return left + right
-end
-
-function cal1.minus(self, left, right)
-    return left - right
-end
-
-return cal1
-
-```
-- 调用
-```lua
-cal:add(3,4)
--- 这种调用，和下面等价
-cal.add(cal, 3, 4)
-```
-所以，混用出错，主要就是参数对不上。这种要结合定义和调用的形式来看。
-比如用colon定义，但是用dot调用。把colon定义转换成dot定义即可。
-用dot定义，但是colon调用，把dot定义转换成colon定义即可。对于不带self的dot定义，没有办法，从调用的角度来看就好。
-
-- 备注
-1.colon定义时，调用要特别小心。因为，默认会把第一个参数，传递给self.因为colon定义，是显示的省略了self，但是self本身是存在的
-2.cpp调用table当中的lua函数时，也需要小心。如果是colon定义，需要```lua_getglobal();```把table拿进来，当做函数的第一个参数
-3.所以，目前代码写的少，这块没有特别多的经验。只能说我目前有认识到，如果c要调用lua，还是写成dot好
-
-对于colon，Lua程序设计p228给了本质性描述
-- 方法定义时，增加一个额外的形参
-- 方法调用时，增加一个额外的实参
+q:colon和dot使用时机是什么？
+>如果函数中需要用到self，那么定义时采用colon，调用时采用colon。因为这么做可以避免显示的定义一个参数。如果函数中不用到self，采用dot定义，因为如果用colon定义，增加一个形参没有用，调用时采用dot，如果colon会多传一个实参，导致参数个数不匹配
 
 ### lua热更新
 热更新的概念不说了，basis当中有提到的。下面主要说下在lua当中进行热更新时，碰到的一些问题。
