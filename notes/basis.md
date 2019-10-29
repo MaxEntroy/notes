@@ -335,6 +335,9 @@ rpc我理解，不是一个非常具体的概念。是在基础网络基础上�
 
 ### brpc
 
+参考
+[brpc学习 ParallelChannel的使用](https://www.twblogs.net/a/5c00fc12bd9eee7aed339fe4/zh-cn)
+
 ### Json
 
 参考阮一峰对于json的理解，对于数据格式和json都有更进一步的理解。
@@ -357,9 +360,6 @@ q:json的规则是什么？
 
 参考<br>
 [数据类型和Json格式](http://www.ruanyifeng.com/blog/2009/05/data_types_and_json.html)<br>
-
-参考
-[brpc学习 ParallelChannel的使用](https://www.twblogs.net/a/5c00fc12bd9eee7aed339fe4/zh-cn)
 
 ## 操作系统(Linux)
 
