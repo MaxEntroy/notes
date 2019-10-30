@@ -157,6 +157,30 @@ as they may be used in situations where there are no known algorithms
 ```
 显然，机器学习算法均属于启发式算法。因为，机器学习本质就是自学习，给出的目标函数对应的就是自学习的策略。而最优化问题，一般是算力不可解，所以，采用启发式算法来解决。常建的比如有sgd。具体来说，KMeasn算法，N个点给出K个类别，我们可以枚举所有可行解，但是算力不可解。所以，提出目标函数，采用sgd的方法得到了每个质心的坐标
 
+## 编程范式
+### 基础
+q:什么是编程范式?
+>A style of building the structure and elements of computer programs
+
+q:有那些编程范式？
+>Common programming paradigms include:
+imperative in which the programmer instructs the machine how to change its state,(imperative programming)
+declarative in which the programmer merely declares properties of the desired result, but not how to compute it(declarative programming)
+
+### 函数式编程
+
+q:如何理解函数式编程
+>显然，根据上面的划分，函数式编程属于declarative programming的一种。具体来说，
+1.treats computation as the evaluation of mathematical functions 
+2.avoids changing-state and mutable data. 
+用我自己的话来说，以lamda calculus作为思想的语言范式，就是函数式编程。具体来说，支持function abstraction and function application.
+
+参考<br>
+[Functional_programming](https://en.wikipedia.org/wiki/Functional_programming)<br>
+[Programming_paradigm](https://en.wikipedia.org/wiki/Programming_paradigm)<br>
+
+## 设计模式
+
 ## 网络/通信/协议
 
 ### webservice
