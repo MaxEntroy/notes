@@ -168,3 +168,9 @@ ps: rz/sz不是下载就能用，需要配置
 
 参考<br>
 [multiple Lua VMs detected](https://blog.csdn.net/u010144805/article/details/80776802)
+
+### vim
+
+#### 纵向操作
+
+[技巧：Vim 的纵向编辑模式](https://www.ibm.com/developerworks/cn/linux/l-cn-vimcolumn/index.html)
