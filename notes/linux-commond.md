@@ -143,7 +143,8 @@ ssh     8778 kang    3u  IPv4  82495      0t0  TCP 000.000.000.000:xxxxx->11.111
 [1.2.3.4@whoareyou /data/service]# lsof -i:xxxxx
 COMMAND      PID USER   FD   TYPE     DEVICE SIZE/OFF NODE NAME
 zzzzz 203771 root    106u  IPv4 11111111      0t0  TCP *:xxxxx (LISTEN)
-我们来看xxxxx出现的位置，203771这个进程，是处于servingd的地位，标识203711这个进程在xxxxx这个端口进行listening，对于我来说重要的一点是。这个端口已经被一个服务给占了。所以别的服务不能开到这个端口上。
+我们来看xxxxx出现的位置，203771这个进程，是处于serving的地位，标识203711这个进程在xxxxx这个端口进行listening.
+对于我来说重要的一点是。这个端口已经被一个服务给占了。所以别的服务不能开到这个端口上。
 ```
 
 总结，这个命令的主要作用是，**显示打开的文件和控制它们的进程之间的关系**
