@@ -409,6 +409,63 @@ q:闭包和upvalue的关系？
 - 同时返回的多个闭包，共享一个upvalue，修改其中一个，会影响其它
 - 不同次返回的闭包，状态独立
 
+### 环境
+q:required chunk运行在什么环境？
+>默认是全局环境(A required chunk runs in global environment by default.)
+
+q:环境这个东西怎么理解？
+>pil有过清晰的解释，起因是为了避免全局变量的滥用引入的。我今天在排查问题的时候，有了新的认知。闭包 = lua chunk + upvalue + env
+因为我之前不理解的是，require的lua chunk，和宿主用的不是同一个env，在看过云风的一篇lua require扩展性为的文章后才知道，require的时候，会运行lua chunk，此时肯定需要一个env.
+这个env是default env，云风要做的就是，在宿主当中，绑定env给到required lua chunk
+
+```lua
+-- client.lua
+local function foo()
+    local print = print
+    local require = require
+    
+    _ENV = {}
+    _G = {}
+
+    print("foo:")
+    print(_ENV)
+    print(_G)
+
+    local cal = require("cal")
+    cal:add(3,4)
+end
+
+foo()
+
+local cal = {}
+
+function cal:add(left, right)
+    print("cal: ")
+    print(_ENV)
+    print(_G)
+    return left + right
+end
+
+function cal:minus(left, right)
+    return left - right
+end
+
+return cal
+--[[
+  foo:
+table: 0x1955410
+table: 0x1954ce0
+cal: 
+table: 0x194e5f0
+table: 0x194e5f0
+]]
+```
+
+参考<br>
+[Lua require chunk environment](https://stackoverflow.com/questions/28502827/lua-require-chunk-environment)<br>
+[扩展lua require的行为](https://blog.codingnow.com/2015/10/lua_require_env.html)<br>
+[以自定义方式加载 lua 模块](https://blog.codingnow.com/2007/04/user_define_lua_loader.html)<br>
+
 ## cpp
 
 ### 传值/传引用
