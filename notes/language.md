@@ -764,3 +764,57 @@ int main()
 参考<br>
 [fflush](http://www.cplusplus.com/reference/cstdio/fflush/?kw=fflush)<br>
 [一些 C 函数，痛苦的移植性](https://tnie.github.io/2017/03/07/portability-about-C-functions/)<br>
+
+### 全局变量/keyword extern
+q:什么是全局变量?
+>External variables are also known as global variables.These variables are defined outside the function. 
+
+q:全局变量的scope?lifetime?default value?
+>scope: They are not bound by any function. They are everywhere in the program i.e. global.(说的更详细一点，定义在函数之外，没有被static修饰的变量，作用于是全局的。否则就是文件级别)
+lifetime: Till the end of the execution of the program.
+default value: Default initialized value of global variables are Zero.
+
+q:extern的作用是什么？
+>“extern” keyword is used to declare and define the external variables.(严格来说，gcc-4.8.4extern只用来声明全局变量，定义时使用extern会报一个warning)
+
+q:extern在c中有哪些注意点？
+- External variables can be declared number of times but defined only once.
+- “extern” keyword is used to extend the visibility of function or variable.
+extern最主要的作用，**通过声明全局变量，来扩展全局变量的作用域**。
+- By default the functions are visible throughout the program, there is no need to declare or define extern functions. It just increase the redundancy.
+- Variables with “extern” keyword are only declared not defined.(定义时，使用extern也行，只是不建议)
+注意，定义在函数之外的变量(全局变量)，默认是extern，定义是无须再使用extern，只有声明一个全局变量时才使用。
+- Initialization of extern variable is considered as the definition of the extern variable.
+
+```c
+#include <stdio.h>
+extern int g_a = 1; // D 定义全局变量 有初始值 extern 没必要
+extern int g_b;     // 声明全局变量
+
+int g_c = 2;        // D 定义全局变量 有初始值
+int g_d;            // C 定义全局变量 无初始值
+
+static int g_e = 3; // d 定义全局变量 有初始值 文件级别
+static int g_f;     // b 定义全局变量 无初始值 文件级别
+
+int main(void) {
+    printf("g_a: %d\n", g_a);
+    printf("g_c: %d\n", g_c);
+    printf("g_d: %d\n", g_d);
+    printf("g_e: %d\n", g_e);
+    printf("g_f: %d\n", g_f);
+    return 0;
+}
+/*
+0000000000000000 D g_a
+0000000000000004 D g_c
+0000000000000004 C g_d
+0000000000000008 d g_e
+0000000000000000 b g_f
+0000000000000000 T main
+                 U printf
+*/
+```
+
+参考<br>
+[“extern” keyword in C](https://www.tutorialspoint.com/extern-keyword-in-c)
