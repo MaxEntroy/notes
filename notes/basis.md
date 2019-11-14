@@ -473,7 +473,7 @@ q:当我们说cpu体系结构的时候，我们在说什么？
 还是转换到computing set当中的一条条instruction，然后cpu进行执行，显然，cpu的设计也是基于指令集的，因为不同指令集的指令长度以及基本组成都可能不同。
 
 q:我们在一种cpu体系结构的编译产物可以在另一种cpu体系结构下运行吗？
->显然不行，假设os一样，虽然源代码一样，但是编译产物最终是该cpu体系结构下的computing set当中的instruction，上文已经提到，不同cpu体系接口个，computing set不同，instruction不同。
+>显然不行，假设os一样，虽然源代码一样，但是编译产物最终是该cpu体系结构下的computing set当中的instruction，上文已经提到，不同cpu体系computing set不同，instruction不同。
 某一个平台的instruction显然无法在另一个平台执行。
 
 - os
