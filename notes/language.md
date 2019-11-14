@@ -780,10 +780,14 @@ q:extern的作用是什么？
 q:extern在c中有哪些注意点？
 - External variables can be declared number of times but defined only once.
 - “extern” keyword is used to extend the visibility of function or variable.
+
 extern最主要的作用，**通过声明全局变量，来扩展全局变量的作用域**。
+
 - By default the functions are visible throughout the program, there is no need to declare or define extern functions. It just increase the redundancy.
 - Variables with “extern” keyword are only declared not defined.(定义时，使用extern也行，只是不建议)
+
 注意，定义在函数之外的变量(全局变量)，默认是extern，定义是无须再使用extern，只有声明一个全局变量时才使用。
+
 - Initialization of extern variable is considered as the definition of the extern variable.
 
 ```c
@@ -817,4 +821,5 @@ int main(void) {
 ```
 
 参考<br>
-[“extern” keyword in C](https://www.tutorialspoint.com/extern-keyword-in-c)
+[“extern” keyword in C](https://www.tutorialspoint.com/extern-keyword-in-c)<br>
+[warning in extern declaration](https://stackoverflow.com/questions/4268589/warning-in-extern-declaration)
