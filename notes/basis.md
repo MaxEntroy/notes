@@ -171,6 +171,14 @@ q:stack and heap区分的考虑除了上文语义上的，还有那些考虑？
 [数据类型与垃圾回收](https://blog.csdn.net/zhuhuiby/article/details/6832091)<br>
 [堆、栈的地址高低？ 栈的增长方向？](https://www.zhihu.com/question/36103513)<br>
 
+### 重构
+
+- if/else嵌套优化
+
+参考<br>
+[6个实例详解如何把if-else代码重构成高质量代码](https://blog.csdn.net/qq_35440678/article/details/77939999)
+
+
 ## 基础算法
 
 ### 启发式算法
