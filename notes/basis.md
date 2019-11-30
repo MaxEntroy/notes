@@ -53,7 +53,7 @@ q:什么是值类型(value type)和引用类型(reference type/object type)?
 
 q:数据类型与stack and heap的关系
 >参看下文stack and heap，我们知道stack对应执行逻辑，heap对应数据存储。由于stack存储的都是一些辅助运行逻辑的数据，所以这部分数据不应该较大，且不具备动态增长能力。而堆就是用来存储数据，所以大块数据以及具有动态增长能力的数据都存储在堆中。
-具体到语言中，java值类型都是存储在栈中。对象的引用也存储在栈中。原因就是，值类型本身非常基础(number, string)，占用空间不大。切不会出现动态增长的情形，所以放在栈里。对于引用类型，通常关联的是一个对象(java中arr，或者像cpp当中的vector, list, map这类容器)，后者数据较大且具备动态增长的能力,存储在堆中。
+具体到语言中，java值类型都是存储在栈中。对象的引用也存储在栈中。原因就是，值类型本身非常基础(number, string)，占用空间不大。且不会出现动态增长的情形，所以放在栈里。对于引用类型，通常关联的是一个对象(java中arr，或者像cpp当中的vector, list, map这类容器)，后者数据较大且具备动态增长的能力,存储在堆中。
 
 q:存储在stack and heap当中的数据在操作上有什么区别？
 >上文总结到，value type(basic type)通常存储在栈中。reference type(object type)通常存储在堆中。我们以Lua语言为例，lua当中有8种数据类型，nil, boolean, string, number为type value, table, function, thread, userdata位reference type(object type)。他们在操作上的区别是：
