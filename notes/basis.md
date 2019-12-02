@@ -328,13 +328,18 @@ eg: The show was designed so that the lights synchronized with the music.
 
 还是同步本身，我们来看wikipedia的定义
 ```
-Synchronization is the coordination of events to operate a system in unison. The conductor of an orchestra keeps the orchestra synchronized or in time. Systems that operate with all parts in synchrony are said to be synchronous or in sync—and those that are not are asynchronous.
+Synchronization is the coordination of events to operate a system in unison. 
+The conductor of an orchestra keeps the orchestra synchronized or in time. 
+Systems that operate with all parts in synchrony are said to be synchronous or in sync and those that are not are asynchronous.
 这个定义和上面基本一直，同步就是对不同事件的协调，使得他们在某一个指标上(声音是否整齐)保持一致。
 ```
 - 通信当中的同步
 下面讲到比较熟需的一个场景，通信当中的一致。和时序电路一个意思。
 ```
-In electrical engineering terms, for digital logic and data transfer, a synchronous circuit requires a clock signal. However, the use of the word "clock" in this sense is different from the typical sense of a clock as a device that keeps track of time-of-day; the clock signal simply signals the start and/or end of some time period, often very minute (measured in microseconds or nanoseconds), that has an arbitrary relationship to sidereal, solar, or lunar time, or to any other system of measurement of the passage of minutes, hours, and days.
+In electrical engineering terms, for digital logic and data transfer, a synchronous circuit requires a clock signal. 
+However, the use of the word "clock" in this sense is different from the typical sense of a clock as a device that keeps track of time-of-day; 
+the clock signal simply signals the start and/or end of some time period, often very minute (measured in microseconds or nanoseconds), that has an arbitrary relationship to sidereal, solar, or lunar time, or to any other system of measurement of the passage of minutes, hours, and days.
+举个例子，打一下拍子，开始；再打一下拍子，停止。
 ```
 
 - synchronization of processes(computer science)
@@ -360,7 +365,7 @@ keeping multiple copies of a dataset in coherence with one another, or to mainta
 
 - 同步调用/异步调用
 >
-同步：在发出一个同步调用时，在没有得到结果之前，该调用就不返回。
+同步：在发出一个同步调用时，在没有得到结果之前，该调用就不返回。(这里的理解和os当中进程同步一致，属于直接限制)
 异步：在发出一个异步调用后，调用者不会立刻得到结果，该调用就返回了。
 同步调用和异步调用，强调的是一个调用是否立即返回。和进程和线程的状态没有关系。
 
