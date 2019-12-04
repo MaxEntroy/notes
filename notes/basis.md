@@ -53,7 +53,7 @@ q:什么是值类型(value type)和引用类型(reference type/object type)?
 
 q:数据类型与stack and heap的关系
 >参看下文stack and heap，我们知道stack对应执行逻辑，heap对应数据存储。由于stack存储的都是一些辅助运行逻辑的数据，所以这部分数据不应该较大，且不具备动态增长能力。而堆就是用来存储数据，所以大块数据以及具有动态增长能力的数据都存储在堆中。
-具体到语言中，java值类型都是存储在栈中。对象的引用也存储在栈中。原因就是，值类型本身非常基础(number, string)，占用空间不大。切不会出现动态增长的情形，所以放在栈里。对于引用类型，通常关联的是一个对象(java中arr，或者像cpp当中的vector, list, map这类容器)，后者数据较大且具备动态增长的能力,存储在堆中。
+具体到语言中，java值类型都是存储在栈中。对象的引用也存储在栈中。原因就是，值类型本身非常基础(number, string)，占用空间不大。且不会出现动态增长的情形，所以放在栈里。对于引用类型，通常关联的是一个对象(java中arr，或者像cpp当中的vector, list, map这类容器)，后者数据较大且具备动态增长的能力,存储在堆中。
 
 q:存储在stack and heap当中的数据在操作上有什么区别？
 >上文总结到，value type(basic type)通常存储在栈中。reference type(object type)通常存储在堆中。我们以Lua语言为例，lua当中有8种数据类型，nil, boolean, string, number为type value, table, function, thread, userdata位reference type(object type)。他们在操作上的区别是：
@@ -357,13 +357,18 @@ eg: The show was designed so that the lights synchronized with the music.
 
 还是同步本身，我们来看wikipedia的定义
 ```
-Synchronization is the coordination of events to operate a system in unison. The conductor of an orchestra keeps the orchestra synchronized or in time. Systems that operate with all parts in synchrony are said to be synchronous or in sync—and those that are not are asynchronous.
+Synchronization is the coordination of events to operate a system in unison. 
+The conductor of an orchestra keeps the orchestra synchronized or in time. 
+Systems that operate with all parts in synchrony are said to be synchronous or in sync and those that are not are asynchronous.
 这个定义和上面基本一直，同步就是对不同事件的协调，使得他们在某一个指标上(声音是否整齐)保持一致。
 ```
 - 通信当中的同步
 下面讲到比较熟需的一个场景，通信当中的一致。和时序电路一个意思。
 ```
-In electrical engineering terms, for digital logic and data transfer, a synchronous circuit requires a clock signal. However, the use of the word "clock" in this sense is different from the typical sense of a clock as a device that keeps track of time-of-day; the clock signal simply signals the start and/or end of some time period, often very minute (measured in microseconds or nanoseconds), that has an arbitrary relationship to sidereal, solar, or lunar time, or to any other system of measurement of the passage of minutes, hours, and days.
+In electrical engineering terms, for digital logic and data transfer, a synchronous circuit requires a clock signal. 
+However, the use of the word "clock" in this sense is different from the typical sense of a clock as a device that keeps track of time-of-day; 
+the clock signal simply signals the start and/or end of some time period, often very minute (measured in microseconds or nanoseconds), that has an arbitrary relationship to sidereal, solar, or lunar time, or to any other system of measurement of the passage of minutes, hours, and days.
+举个例子，打一下拍子，开始；再打一下拍子，停止。
 ```
 
 - synchronization of processes(computer science)
@@ -389,7 +394,7 @@ keeping multiple copies of a dataset in coherence with one another, or to mainta
 
 - 同步调用/异步调用
 >
-同步：在发出一个同步调用时，在没有得到结果之前，该调用就不返回。
+同步：在发出一个同步调用时，在没有得到结果之前，该调用就不返回。(这里的理解和os当中进程同步一致，属于直接限制)根据日常经验，大部分调用都属于同步调用。比如，int a = add(a,b)，显然通常情况下这是一个同步调用，该函数一经调用，当前函数stack frame进行相关信息保存，新的函数stack frame入栈。只有调用函数执行完成，才会恢复调用函数。
 异步：在发出一个异步调用后，调用者不会立刻得到结果，该调用就返回了。
 同步调用和异步调用，强调的是一个调用是否立即返回。和进程和线程的状态没有关系。
 
@@ -400,6 +405,11 @@ keeping multiple copies of a dataset in coherence with one another, or to mainta
 所以，阻塞调用和非阻塞调用是指进程/线程的状态，和调用是否立即返回没有关系
 
 上面两组概念，就有4种组合。
+
+这里需要特别强调一点的是，只有当一个调用涉及到io的时候，我们才考虑同步调用/异步调用，阻塞调用/非阻塞调用，这类事情才有意义。试想主函数调用一些四则运算函数，考虑同步\异步，阻塞\非阻塞没什么意义。
+都是cpu计算，很快。通常情况下，caller发出一个调用，必然是对结果有依赖，所以同步是很正常的理解。因为只有依赖你的结果，才需要发生调用。同步很正常。前面也说道，cpu计算很块，没有必要还切换上下文，同步非阻塞就够了。
+
+但是，如果一个调用(函数)，牵扯到io，会非常慢。比如，调用标准输入，标准输出这样的函数。与其等用户缓慢的数据，不如先把处理机释放掉。
 
 >
 同步阻塞调用：得不到结果不返回，线程进入阻塞态等待。大家一般都认为同步调用是阻塞，那是因为同步io通常很慢，比如同步调用一个函数，但是这个函数会请求一个io，那么当前进程/线程可以进入阻塞状态。
