@@ -179,6 +179,35 @@ q:stack and heap区分的考虑除了上文语义上的，还有那些考虑？
 [6个实例详解如何把if-else代码重构成高质量代码](https://blog.csdn.net/qq_35440678/article/details/77939999)
 
 
+### 个人实践
+
+q:异常处理写到什么地步?
+>最近在给lua写单测，发现代码需要处理的异常逻辑很多。但是，我看lua源码的时候，发现它对于底层一些辅助函数的设计，根本不考虑异常处理。后来从君哥那得知，这种设计需要上层保证调用的正确。否则，底层的逻辑太臃肿。
+那么需要我们异常处理的时候，尽量克制。我有一些原则：
+1.编译期期间能发现的，不做处理。比如保证参数的个数
+2.预发布期间能发现的，不做处理。
+
+看下面这段代码，首先就没有异常处理。这是一个问题。那么怎么设计异常处理。对于policy，group_reason_list这样的变量，如果nil。显然会异常。
+但是不进行判断，因为如果异常，预发布就过不去。因此不需要处理。
+```lua
+for reason, conf in pairs(self.policy) do
+    if self.group[reason] then
+        local group_reason_list = self.group[reason]
+        for _, subreason in ipairs(group_reason_list) do
+            if conf[subreason] and conf[subreason].order then
+                TableSetValue(self.order_mapping, subreason, conf[subreason].order)
+            else
+                TableSetValue(self.order_mapping, subreason, conf.order)
+            end
+        end
+    else
+        if conf.order then
+            TableSetValue(self.order_mapping, reason, conf.order)
+        end
+    end
+end
+```
+
 ## 基础算法
 
 ### 启发式算法
