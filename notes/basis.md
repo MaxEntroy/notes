@@ -859,5 +859,21 @@ q:各种os的方案是什么？
 q:这个问题会导致实践的什么问题？
 >由于不同os对于回车换行不同的处理，这就意味着如果你将一个文件从一个系统转移到另一个系统，就面临着回车换行的问题
 
+```lua
+kang@ubuntu:/mnt/hgfs/f-ubuntu-shared-folder$ cat -A test-crlf-copy.txt 
+this is a testfile.^M$
+let's see crlf.^M$
+-- 上面是一个win下的文件，放到linux下面，换行是\r\n(crlf)(^M$)
+
+
+kang@ubuntu:/mnt/hgfs/f-ubuntu-shared-folder$ vim test-crlf-copy.txt 
+kang@ubuntu:/mnt/hgfs/f-ubuntu-shared-folder$ cat -A  test-crlf-copy.txt 
+this is a testfile.$
+let's see crlf.$
+-- 通过vim 进行set ff = unix设置，将文件格式从dos转到unix，我们再看换行，变成了\n($)
+```
+
+注意，对于不同os下的文件，可以先用```cat -A```来查看源文件的格式
+
 参考<br>
 [vi下显示回车换行符等特殊符号](https://blog.csdn.net/chenxy02/article/details/53407677)
