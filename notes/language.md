@@ -1,5 +1,21 @@
 ## lua
 
+### lua table用法注意
+
+q:lua table对于元素的方式有几种？
+>线性表(数组)只有一种，使用下标运算符[]; 对于哈希表，则有两种，dot and subscript.
+
+q:lua table做哈希表时，对于元素的访问有哪些注意？
+>lua table做哈希表时，key可以是任何除了nil之外的任意元素。对于访问时，要特别注意dot的方式，这本质是一种grammar sugar.
+
+```
+local tb = {}
+tb.name = "kungli" -- tb["name"] = kungli
+
+local key = "age"
+tb.key = 18 -- tb["key"] = 18 dot方式把key直接扩展成字符串常量充当key
+```
+
 ### local变量个数
 ```
 local变量个数上限200个，使用local变量可以提高效率，但是应该避免滥用
