@@ -839,6 +839,17 @@ git commit --amend --author="userName <userEmail>"
 
 ### wireshark
 
+### 编译/链接
+- make
+
+q:.PHONY的作用是什么？
+>目标除了可以是文件名，还可以是一个操作。当一个目标是一个操作时，我们称这个目标是一个伪目标。但是，如果一个Makefile存在两个同名目标，前者是文件，后者是操作。此时，操作就不会生效，因为存在一个文件。此时，如果用.PHONY对这个目标进行声明，make就不会检查是否存在这个名称的文件，把这个目标就当做一个操作。
+
+参考<br>
+[Make 命令教程](http://www.ruanyifeng.com/blog/2015/02/make.html)
+
+- blade
+
 ### Tex
 
 对几个概念先进行简单描述：
