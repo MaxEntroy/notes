@@ -823,9 +823,13 @@ q:有了.a为什么还要.so
 
 ## 工具
 
-### git
-- git修改上次提交
-主要说下，怎么修改username和email
+### 版本控制
+
+- git
+
+
+q:git修改上次提交?
+>主要说下，怎么修改username和email
 ```c
 git commit --amend --author="userName <userEmail>"
 ```
@@ -833,17 +837,42 @@ git commit --amend --author="userName <userEmail>"
 参考<br>
 [git中 修改已提交的commit的用户名邮箱](https://www.jianshu.com/p/7def4f387e9f)
 
-- merge/rebase
-先说下merge，merge比较简单，就是分叉的分支，进行一次三路合并。第3路是最近common ancestor.
+q: merge/rebase的区别
+>先说下merge，merge比较简单，就是分叉的分支，进行一次三路合并。第3路是最近common ancestor.
 需要注意的一点是，commit message会写在同一列。但是commit符号(*)并不在一起。我以前总看错
 
-### wireshark
+### 网络服务
 
-### 编译/链接
+- wireshark
+
+### 构建(编译)
+
+q:什么是构建？
+>我们先来看阮一峰的解释：代码变成可执行文件，叫做编译（compile）；先编译这个，还是先编译那个（即编译的安排），叫做构建（build）；本质来说，就是关联到把源文件编译成可执行文件的过程，我们叫做构建。
+我们再来看wiki给的解释：Historically, build has often referred either to the process of converting source code files into standalone software artifact(s) that can be run on a computer, or the result of doing so. 简单来说，就是把源文件转换成机器可执行文件的过程，我们叫做构建。
+
+q:编译和构建什么关系？
+>构建是把源文件转化成机器可执行程序的过程，编译是构建当中最重要的一步。对于gnu gcc/g++来说，整个构建的过程由proprocessing, compilation, assembly, and linking.
+
+
+参考<br>
+[Make命令教程](http://www.ruanyifeng.com/blog/2015/02/make.html)
+
 - make
 
+q: makefile的基本规则是什么？
+>makefile的逻辑特别简单，指定输入，输出，以及输入>输出的过程(规则)
+```makefile
+<target> : <prerequisites> 
+[tab]  <commands>
+```
+
 q:.PHONY的作用是什么？
->目标除了可以是文件名，还可以是一个操作。当一个目标是一个操作时，我们称这个目标是一个伪目标。但是，如果一个Makefile存在两个同名目标，前者是文件，后者是操作。此时，操作就不会生效，因为存在一个文件。此时，如果用.PHONY对这个目标进行声明，make就不会检查是否存在这个名称的文件，把这个目标就当做一个操作。
+>目标除了可以是文件名，还可以是一个操作。当一个目标是一个操作时，我们称这个目标是一个伪目标。但是，如果一个Makefile存在两个同名目标，前者是文件，后者是操作。此时，操作就不会生效，因为存在一个文件。此时，如果用.PHONY对这个目标进行声明，make就不会检查是否存在这个名称的文件，把这个目标就当做一个操作。简言之，对于伪目标对象，不进行构建，只执行操作。
+
+q:如果前置条件的某个文件进行了更新，make是否能感知到，进行重新构建？
+>可以。make会做如下检查：如果前置文件的last-modification时间戳比目标的时间戳新，目标就需要重新构建
+
 
 参考<br>
 [Make 命令教程](http://www.ruanyifeng.com/blog/2015/02/make.html)
