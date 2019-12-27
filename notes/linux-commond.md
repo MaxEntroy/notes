@@ -68,6 +68,15 @@ ls [OPTION] [FILE]
 [Linux 下 ls -l 命令执行显示结果的每一列含义](https://blog.csdn.net/zhuoya_/article/details/77418413)
 [What do the fields in ls -al output mean?](https://unix.stackexchange.com/questions/103114/what-do-the-fields-in-ls-al-output-mean)
 
+#### install
+
+q:install命令有什么作用？
+>install命令的作用是安装或升级软件或备份数据，它的使用权限是所有用户。install命令和cp命令类似，都可以将文件/目录拷贝到指定的地点。但是，install允许你控制目标文件的属性。install通常用于程序的makefile，使用它来将程序拷贝到目标（安装）目录。
+
+参考<br>
+[install命令](https://man.linuxde.net/install)
+[linux里install命令和cp命令](https://lingxiankong.github.io/2014-01-06-linux-install.html)
+
 ---
 
 ### 进程/网络
