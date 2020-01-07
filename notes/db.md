@@ -13,6 +13,9 @@ q:基础数据结构有哪些？
 q:如何指定密码登录
 >redis-cli -a mypassword
 
+q:客户端登录
+>redis-cli -h xx.xx.xx.xx -p myport -a mypwd
+
 ### hiredis
 
 参考<br>
