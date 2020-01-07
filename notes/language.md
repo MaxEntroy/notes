@@ -950,3 +950,47 @@ int main(void) {
 参考<br>
 [“extern” keyword in C](https://www.tutorialspoint.com/extern-keyword-in-c)<br>
 [warning in extern declaration](https://stackoverflow.com/questions/4268589/warning-in-extern-declaration)
+
+### 低维信息用高维表示
+
+```c
+#include <stdio.h>
+#include <stdint.h>
+
+int main() {
+  uint32_t val11 = 0xffffffff;
+  uint32_t val12 = -1;
+
+  printf("%#x\n", val11);
+  printf("%#x\n", val12);
+
+  if(val11 == val12) {
+    printf("val11 == val12\n");
+  }
+  else {
+    printf("val11 != val12");
+  }
+
+  uint64_t val21 = 0xffffffff;
+  uint64_t val22 = -1;
+
+  printf("%#lx\n", val21);
+  printf("%#lx\n", val22);
+
+  if(val21 == val22) {
+    printf("val21 == val22\n");
+  }
+  else {
+    printf("val21 != val22\n");
+  }
+  return 0;
+}
+/*
+0xffffffff
+0xffffffff
+val11 == val12
+0xffffffff
+0xffffffffffffffff
+val21 != val22
+*/
+```
