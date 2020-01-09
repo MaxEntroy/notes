@@ -582,6 +582,77 @@ collect2: error: ld returned 1 exit status
 [linux编译问题集锦（持续更新中）](https://www.cnblogs.com/octave/p/4824584.html)
 [how-to-write-makefile/implicit_rules](https://seisman.github.io/how-to-write-makefile/implicit_rules.html)
 
+
+- 动态库run time找不到
+
+q:现象是什么?
+>./main: error while loading shared libraries: libzlog.so.1.2: cannot open shared object file: No such file or directory
+即，编译通过，但是运行时告诉我libzlog找不到。问题就是，编译时能找到，但是运行时找不到
+
+q:背景信息？
+>1.zlog安装在/usr/local/thirdparty下面,lib,include,bin常见目录
+2.没有更新ld.so.conf，没有执行ldconfig，也没有配置zlog的环境变量
+3.Makefile写法如下
+
+```
+CC= gcc -std=gnu99
+CFLAGS= -Wall -Wextra $(MYCFLAGS)
+LDFLAGS= $(MYLDFLAGS)
+LIBS= $(MYLIBS)
+
+RM= rm -f
+
+ROOT= /usr/local/thirdparty/zlog-1.2
+
+MYCFLAGS= -I$(ROOT)/include
+MYLDFLAGS= -L$(ROOT)/lib
+MYLIBS= -lzlog -lpthread
+
+MAIN_T= main
+MAIN_O= main.o
+
+# Targets start here
+t: $(MAIN_T)
+
+$(MAIN_T): $(MAIN_O)
+	$(CC) -o $@ $(LDFLAGS) $(MAIN_O) $(LIBS)
+
+
+echo:
+	@echo "CC= $(CC)"
+	@echo "CFLAGS= $(CFLAGS)"
+	@echo "LDFLAGS= $(LDFLAGS)"
+	@echo "LIBS= $(LIBS)"
+	@echo "RM= $(RM)"
+
+clean:
+	$(RM) $(MAIN_T) $(MAIN_O)
+
+.PHONY: t echo clean
+
+main.o: main.c
+```
+
+q:原因？
+>run time期间，libzlog.so的路径没有指定
+
+q:解决？
+>1.Makefile当中指定run time时，libzlog的路径(-Wl， -rpath指定动态搜索的路径)
+2.LD_LIBRARY_PAH指定
+
+q:更一般的解决办法是什么?
+>dynamic loader负责在程序运行期间，加载.so。它依赖如下两个文件和一个命令：
+1.ld.so.conf(动态库配置文件，给出动态库的目录)
+2.ls.so.cache(动态库缓存文件，给出动态链接库名字列表)
+3.ldconfing根据ld.so.conf指定的.so目录以及/lib /usr/lib，创建动态库链接库缓存文件，本质是动态链接库名字。
+4.ld.so.cache的作用，也就是为了高速的查找，根据ld.so.conf指定的目录查找相对较慢
+
+参考<br>
+["error while loading shared libraries: xxx.so.x" 错误的原因和解决办法](https://blog.csdn.net/sahusoft/article/details/7388617)<br>
+[LIBRARY_PATH和LD_LIBRARY_PATH环境变量的区别](https://www.cnblogs.com/panfeng412/archive/2011/10/20/library_path-and-ld_library_path.html)<br>
+[Relationship between ldconfig and ld.so.cache](https://unix.stackexchange.com/questions/256893/relationship-between-ldconfig-and-ld-so-cache/317526)
+
+
 ### 高级语言的compile/link/load
 这一小节主要写一篇读书笔记，总结一些linux下的基本概念
 
