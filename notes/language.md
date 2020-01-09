@@ -724,6 +724,7 @@ make: *** [main.o] 错误 1
 [C语言的头文件是必须的吗？](https://blog.csdn.net/blow_jj/article/details/42219709)
 
 ### 缓冲区/fflush用法
+
 - 清空stdin的正确做法
 
 先看一段程序
@@ -891,6 +892,48 @@ int main()
 参考<br>
 [fflush](http://www.cplusplus.com/reference/cstdio/fflush/?kw=fflush)<br>
 [一些 C 函数，痛苦的移植性](https://tnie.github.io/2017/03/07/portability-about-C-functions/)<br>
+
+- 缓冲区总结
+先看下面这段代码，想想运行结果
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+#define TRUE 1
+
+int main(void) {
+  while(TRUE) {
+    printf("buffer test.");
+    sleep(1);
+  }
+  return 0;
+}
+/*
+结果是，刚开始运行，什么都不会输出
+*/
+```
+
+q:缓冲区理解？
+>在高速CPU和低速IO之间做缓冲。低速IO主要是磁盘IO和网络IO。linux中，soket也被视作文件，所以都可以暂时理解为磁盘IO
+
+q:缓冲区分类？
+>特别注意，每一个设备对应一个独立的缓冲区。每一个设备指的是磁盘IO的每一个独立的设备。主要是以下三类
+- 全缓冲:磁盘文件
+- 行缓冲: stdin stdout这两个设备
+- 不带缓冲: stderr
+
+q:刷新缓冲区的时机？
+>这个取决于具体的设备
+- 全缓冲:磁盘缓冲区满
+- 行缓冲:磁盘缓冲区慢 or 遇到换行符
+- 不带缓冲:没有缓冲区，为了使得错误信息可以尽快输出
+除了以上默认的刷新时机，还有其他办法：
+1.关闭文件
+2.使用特定函数刷新缓冲区
+
+参考<br>
+[c语言 - 缓冲区详解](https://www.zfl9.com/c-buffer.html)
+
 
 ### 全局变量/keyword extern
 q:什么是全局变量?
