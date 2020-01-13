@@ -557,6 +557,83 @@ q:json的规则是什么？
 
 ### 编译问题集锦
 
+- compile time符号找不到
+
+文件结构如下
+```c
+├── log.c
+├── log.h
+├── main.c
+├── Makefile
+└── test_hello.conf
+```
+
+Makefile文件如下
+```makefile
+CC= gcc -std=gnu99
+CFLAGS= -Wall -Wextra $(MYCFLAGS)
+LDFLAGS= $(MYLDFLAGS)
+LIBS= $(MYLIBS)
+
+DYNAMIC_ROOT= /usr/local/thirdparty/zlog-1.2
+STATIC_ROOT= .
+
+MYCFLAGS= -I$(DYNAMIC_ROOT)/include
+MYLDFLAGS= -L$(DYNAMIC_ROOT)/lib -Wl,-rpath=$(DYNAMIC_ROOT)/lib
+MYLIBS= -lzlog -lpthread
+
+AR= ar rcu
+RANLIB= ranlib
+RM= rm -f
+
+MAIN_A= libmain.a
+BASE_O= log.o
+
+MAIN_T= main
+MAIN_O= main.o
+
+# Targets start here
+a: $(MAIN_A)
+
+t: $(MAIN_T)
+
+$(MAIN_A): $(BASE_O)
+	$(AR) $@ $(BASE_O)
+	$(RANLIB) $@
+
+$(MAIN_T): $(MAIN_O) $(MAIN_A)
+	$(CC) -o $@ $(LDFLAGS) $(MAIN_O) $(MAIN_A) $(LIBS)
+
+echo:
+	@echo "CC= $(CC)"
+	@echo "CFLAGS= $(CFLAGS)"
+	@echo "LDFLAGS= $(LDFLAGS)"
+	@echo "LIBS= $(LIBS)"
+	@echo "AR= $(AR)"
+	@echo "RANLIB= $(RANLIB)"
+	@echo "RM= $(RM)"
+
+clean:
+	$(RM) $(MAIN_A) $(BASE_O) $(MAIN_T) $(MAIN_O)
+
+.PHONY: a t echo clean
+
+main.o: main.c log.h
+log.o: log.c log.h
+```
+
+q:代码是如何组织的？
+>这种写法是按照lua-5.3.0的Makefile写法。对于所有文件，除了main.c之外，其余文件编译时打成一个.a
+最后，main.o main.a一起编译。
+
+q:本次的特点是什么?
+>本次的main.a用到了一个.so，所以，
+正常.a的写法，应该是想办法把.so->.a，装入到main.a当中。对于client代码来说，第三方库的依赖对我应该是透明的，不应该关心。这是正常的写法。
+但是，这里特殊的在于，我只是用了把其他.c/.cc打成.a的形式，提供给main.o，即这个第三方库肯定是client作者打成的，他能知道.a的依赖，所以，可以直接链.so
+
+总结，compile time符号一般找不到的原因就是，.h和.c当中的实现没对上。所以，.h提供的符号，在.c->.o(.a/.so)当中，找不到。
+
+
 - 动态库链接静态库
 
 ```
