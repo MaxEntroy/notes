@@ -355,7 +355,27 @@ q:如何理解函数式编程
 [web服务器与ftp服务器的区别](https://blog.csdn.net/w252064/article/details/77581691)<br>
 [Web service](https://en.wikipedia.org/wiki/Web_service)<br>
 
-### protobuffer
+### proto buffer
+
+- pb初识
+
+q:什么是pb?
+>Protocol buffers are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
+按照英文的描述，pb只是一种机制，这种机制可以用来序列化结构化数据，并且这种机制是跨语言，跨平台，可扩展的。
+跨语言，跨平台，可扩展；三大特性把握好.
+
+q:pb对比json,xml的定义上，有什么区别?
+>从上文看，pb是一种机制，但是这种描述，我以为是强调它在序列化时的能力较好，对于更好的把握这个概念，并不好。
+我们来看看json的定义：
+JavaScript Object Notation is an open-standard file format or data interchange format that uses human-readable text to transmit data objects consisting of attribute–value pairs and array data types
+json的这个定义就好多了，显然pb在使用上，也是好json是一样的，作为一种跨语言，跨平台，可扩展的数据交换格式。只不过,json显然没有提供序列化的能力，但是pb提供了。
+>
+>xml的定义如下：
+Extensible Markup Language (XML) is a markup language that defines a set of rules for encoding documents in a format that is both human-readable and machine-readable. 
+
+q:pb自己的理解?
+>1.跨语言，跨平台，可扩展的数据交换格式(当然，叫protocal也没毛病)
+2.支持序列化(json就不支持)
 
 参考<br>
 [Pb语法](https://developers.google.com/protocol-buffers/docs/proto#scalar)<br>
@@ -363,6 +383,21 @@ q:如何理解函数式编程
 [Pb-generated code](https://developers.google.com/protocol-buffers/docs/reference/cpp-generated#repeatedmessage)<br>
 [Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor)<br>
 [Pb-反射-demo](https://yrczone.com/blog/article/45)<br>
+
+- pb 语法(proto2)
+
+q:how to defining a message?
+>1.Specifying Field Types
+2.Assigning Field Numbers
+3.Specifying Field Rules
+>
+>需要注意的点:
+1.required字段慎用，pb2里面，必须有定义。但是，如果这个字段在语义上废弃，并不能像optional那样不填即可，还是要写。
+
+q:What's Generated From Your .proto?
+>the compiler generates the code, mainly include:
+1.getting and setting field values
+2.serializing your messages to an output stream, and parsing your messages from an input stream.
 
 
 - pb字段没对对齐
