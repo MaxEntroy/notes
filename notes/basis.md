@@ -410,6 +410,56 @@ q:What's Generated From Your .proto?
 总之：如果出现类似情形。就是字段没有对其。
 ```
 
+### 序列化(Serialization)
+
+q:序列化的概念是什么?
+>Serialization is the process of converting an object into a stream of bytes to store the object or transmit it to memory, a database, or a file.
+简单来说，就是把对象专户为字节流进行传输的过程.
+
+q:序列化为什么一定要把对象转化为字节流？直接发送binary structures不行吗?
+>考虑unp 5.18 data format的例子，如果直接发送结构体会导致如下问题：
+1.字节序的问题，会导致对于binary numbers(binary structures)有不同的解释,大端小端，导致接受到的数据出错。
+2.不同平台导致的类型解释不一致。比如有些平台，整型4 bytes，有些是2 bytes，导致接受到的数据出错。
+3.结构体对齐不一致，导致对于binary numbers(binary structures)有不同的解释，导致接受到的数据出错
+>
+>下面给出英文的解释：
+1.Different implementations store binary numbers in different formats.
+2.Different implementations can store the same C datatype differently.
+3.Different implementations pack structures differently
+>导致这一问题的根本原因是，发送的是binary structures，接收端会直接解释binary structures.
+>
+>比如，int a = 3;write(sfd, &a, sizoef(a)); 直接直接这么发送，发送了4个字节。但是对端是16 bit int，那么肯定会接受错误。包括字节序的问题。
+>所以，正是因为不能直接发送binary structures，才是我们需要序列化的原因
+
+q:是不是只有序列化这一种方法才能解决上述问题呢?
+>unp 给了一些建议：
+1.passing all numering data as text strings.
+2.Explicitly define the binary formats of the supported datatypes (number of bits, bigor
+little-endian) and pass all data between the client and server in this format. RPC
+packages normally use this technique.
+>
+>先来解释第一种，第一种方法可行的原因在于，利用char进行发送，相当于用ascii对于binary structure的numeric data进行编码，当然，也只能是singular data，结构体还是不行。
+因为，char类型就占一个字节，不存在不同平台解释不一致的原因，也没有字节序的问题。
+第二种，我不知道是不是现在pb的做法。
+
+q:序列化的目的是什么?
+>通过上面的讨论，我们知道如果直接发送对象(binary structures)，其实会破坏对象的状态，因为接收端无法得到正确的对象。
+所以，序列化这个过程是希望在进行对象传输的时候，可以把对象的状态进行正确保存，然后再进行发送。在接收端再恢复对象的状态。
+Its main purpose is to save the state of an object in order to be able to recreate it when needed. The reverse process is called deserialization.
+>
+>整个过程有点类似于快递的过程，比如快递要给你发一张桌子，他不可能直接把拼好的桌子发送给你，这样运输的流程中，这个对象肯定会遭到破坏。发送方会先把桌子拆了，然后给出安装图纸。把桌子和图纸，一起通过快递
+发送给客户。客户拿到图纸和被拆了的桌子，根据图纸进行重新拼接，然后恢复。
+
+q:序列化的过程都有哪些操作?
+>1.拆桌子，肯定需要把对象转化为字节流
+2.画图纸，给出字节序，大小端，可能也有结构对其，即从字节流重新构造这个对象的信息。
+The object is serialized to a stream that carries the data. 
+The stream may also have information about the object's type, such as its version, culture, and assembly name. From that stream, the object can be stored in a database, a file, or memory.
+
+参考<br>
+[Serialization ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/serialization/)
+
+
 ### 同步/异步
 这个概念是一对比较容易混淆的概念，主要在于这一对概念应用的场景比较多。区别不同的场景，就容易理解。
 - 原始定义
