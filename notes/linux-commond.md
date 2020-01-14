@@ -81,6 +81,53 @@ q:install命令有什么作用？
 
 ### 进程/网络
 
+### gdb
+
+- 初识
+
+q:gdb需要准备什么?
+> -g选项需要加入。这个是在compile time当中的compilation阶段，其实在linking阶段，没什么用。这也让我对Makefile的写法有了更进一步的理解
+
+q:gdb调试core需要注意什么?
+>设置unlimit
+gdb bin corefile
+
+参考<br>
+[gdb 调试利器](https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/gdb.html)<br>
+
+- 实践
+
+q:对于tcp-ip-socket-programming/chapter05/demo-05/client是如何调试的?
+>现象是，不知道挂在哪了？并且修改的是一个未调用的函数。所以，先判断挂哪了。
+按照下文设置main断点，判断是否能进入main函数。
+结果发现，没有进入main就挂了
+>
+>分析：
+1.do_io_event函数并未调用，但是是否构造pb对象，会造成程序core.不合理，毕竟没有调用。
+2.通过gdb确认了这一点，在main函数之前就已经core了，证明和1提到的逻辑没有关系。是否core和调用没有关系。
+3.猜测编译器做了如下操作，检查text segment中的代码，如果有pb的构造(虽说没有执行构造)，编译器会做一些其他的工作，这些工作导致程序core
+4.进一步发现，少链接了lphread库。补充后完善
+>
+>通过gdb的引入，验证了我的思想，即都没有执行main，就已经挂了。所以，是否core和是否调用io_event没有关系。原因是3中的猜测。
+
+总结，我们对于编译器的了解很少。
+
+```c
+(gdb) b main
+Breakpoint 1 at 0x40305c: file echo_client.cc, line 24.
+(gdb) info b
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x000000000040305c in main(int, char**) at echo_client.cc:24
+(gdb) run
+Starting program: /home/kang/workspace/myspace/git-personal/tcp-ip-socket-programming/chapter05/demo-05/client/echo_client 
+terminate called after throwing an instance of 'std::system_error'
+  what():  Unknown error -1
+
+Program received signal SIGABRT, Aborted.
+0x00007ffff7096c37 in __GI_raise (sig=sig@entry=6) at ../nptl/sysdeps/unix/sysv/linux/raise.c:56
+56	../nptl/sysdeps/unix/sysv/linux/raise.c: 没有那个文件或目录.
+```
+
 #### ulimit
 q:ulimit什么作用?
 >ulimit 用于限制 shell 启动进程所占用的资源
