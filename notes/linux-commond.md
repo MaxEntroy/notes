@@ -74,12 +74,34 @@ q:install命令有什么作用？
 >install命令的作用是安装或升级软件或备份数据，它的使用权限是所有用户。install命令和cp命令类似，都可以将文件/目录拷贝到指定的地点。但是，install允许你控制目标文件的属性。install通常用于程序的makefile，使用它来将程序拷贝到目标（安装）目录。
 
 参考<br>
-[install命令](https://man.linuxde.net/install)
-[linux里install命令和cp命令](https://lingxiankong.github.io/2014-01-06-linux-install.html)
+[install命令](https://man.linuxde.net/install)<br>
+[linux里install命令和cp命令](https://lingxiankong.github.io/2014-01-06-linux-install.html)<br>
 
 ---
 
 ### 进程/网络
+
+#### ulimit
+q:ulimit什么作用?
+>ulimit 用于限制 shell 启动进程所占用的资源
+
+q:ulimit -c有什么用?
+>-c <core文件上限>：设定core文件的最大值，单位为区块；(K)
+
+q:hard limit 和 soft limit有什么区别?
+>-H 设置硬资源限制;-S 设置软资源限制
+There are two types of ulimit settings:
+The hard limit is the maximum value that is allowed for the soft limit. Any changes to the hard limit require root access.
+The soft limit is the value that Linux uses to limit the system resources for running processes. The soft limit cannot be greater than the hard limit.
+>
+>eg: 比如core文件大小的hard limit是10k, 这个是系统级别的。但是对于进程级别，可以设置soft limit为4K
+
+参考
+[ulimit](https://wangchujiang.com/linux-command/c/ulimit.html)<br>
+[Linux ulimit Command](https://linuxhint.com/linux_ulimit_command/)<br>
+[Linux Note – 通过ulimit和PAM来限制资源](https://blog.csdn.net/tianyue168/article/details/41896921)<br>
+[Guidelines for configuring Linux ulimit settings for IBM Streams](https://www.ibm.com/support/knowledgecenter/SSCRJU_4.2.0/com.ibm.streams.install.doc/doc/ibminfospherestreams-install-operating-system-settings.html)
+
 
 #### 端口占用
 - 基本用法
