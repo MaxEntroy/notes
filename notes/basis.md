@@ -411,6 +411,104 @@ q:What's Generated From Your .proto?
 总之：如果出现类似情形。就是字段没有对其。
 ```
 
+- pb深入理解
+
+q:pb的优点有哪些？
+> A lot of the time we have no control over the network that the application is on and therefore our only control over this performance factor is the amount of data we are sending across it.
+Binary message formats allow us to compress data much more efficiently than other formats and therefore are a good match to c++.
+
+ps:第一篇参考文献有一点特别棒，对比了xml和json，需要翻作者的blog
+
+
+q:序列化接口的选择?
+```ParseFromArray/SerializeToArray```
+
+```cpp
+void do_io_event(int clnt_sfd) {
+  // recv from client
+  char buf[BUF_SZ];
+  ssize_t nread = read(clnt_sfd, buf, BUF_SZ);
+
+  cal::CalRequest req;
+  req.ParseFromArray(buf, nread);
+
+  if(!req.has_seqno() || !req.has_left() || !req.has_right() || !req.has_optr()) {
+    fprintf(stderr, "%s\n", "Invalid CalRequest.");
+    return;
+  }
+
+  // do caculation
+  cal::CalResponse res;
+  do_cal(req, &res);
+
+  // send to client
+  int sz = res.ByteSize();
+  res.SerializeToArray(buf, sz);
+
+  write(clnt_sfd, buf, sz);
+}
+```
+
+```cpp
+bool	
+ParseFromArray(const void * data, int size)
+//Parse a protocol buffer contained in an array of bytes.
+
+bool	
+SerializeToArray(void * data, int size) const
+//Serialize the message and store it in the given byte array.
+```
+
+通过这个demo，我看可以看出。```SerializeToArray```这个接口的使用，buf和sz都没有什么问题。```ParseFromArray```这个接口的问题在于，sz如何确定，还是需要知道
+
+```ParseFromString/SerializeToString```
+
+```cpp
+bool SerializeToString(string* output) const 
+// serializes the message and stores the bytes in the given string. Note that the bytes are binary, not text; we only use the string class as a convenient container.
+// 这点特别要注意，不是unp当中提到的text strings，就是binary bytes，不是character bytes.即前者不具有可解释性
+bool ParseFromString(const string& data);
+// parses a message from the given string.
+```
+
+```cpp
+void do_io_event(int clnt_sfd) {
+  // recv from client
+  char buf[BUF_SZ];
+  ssize_t nread = read(clnt_sfd, buf, BUF_SZ);
+
+  cal::CalRequest req;
+  std::string recv_buf(buf, nread);
+  req.ParseFromString(recv_buf);
+
+  if(!req.has_seqno() || !req.has_left() || !req.has_right() || !req.has_optr()) {
+    fprintf(stderr, "%s\n", "Invalid CalRequest.");
+    return;
+  }
+
+  // do caculation
+  cal::CalResponse res;
+  do_cal(req, &res);
+
+  // send to client
+  std::string send_buf;
+  res.SerializeToString(&send_buf);
+
+  write(clnt_sfd, send_buf.data(), send_buf.size());
+}
+```
+
+对于这两个接口，注意如下：
+1.SerializeToString没什么说的，write时，注意是send_buf.data()，之前一直写的是send_buf.c_str(). 通过c_str()我们知道，这个方法，返回的是包括null-terminated sequence of characters.
+通过上面的接口，我们知道，string做的只是一个convenient container，是binary bytes.
+data：returns a pointer to the first character of a string 
+c_str：returns a non-modifiable standard C character array version of the string 
+
+2.ParseFromString这个接口，虽然是对string进行反序列化，但是string的构造要注意，不能直接通过buf，否则会截断
+
+参考<br>
+[Binary Message Format C++ Examples](https://www.thomaswhitton.com/blog/2013/07/03/binary-message-format-c-plus-plus-examples/)
+
 ### 序列化(Serialization)
 
 q:序列化的概念是什么?
