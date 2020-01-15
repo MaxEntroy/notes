@@ -1,3 +1,12 @@
+## 大牛博客
+
+- gaya
+这位大牛实现了一个简易的rpc framework,我觉得对于理解Rpc特别有帮助。先从简单的开始。
+[gaya](https://github.com/goyas)<br>
+[一个基于protobuf的极简RPC](https://www.lagou.com/lgeduarticle/43689.html)
+
+
+## 日常絮叨
 - 中午PCG乔迁见面会有感
 
 >曾几何时南风窗的总编辑，现在PCG的C大。时过境迁，不知道这些资深编辑在看到这种无差别打击的信息流产品时作何感想？他们也真的相信机器比我们更了解我们嘛？

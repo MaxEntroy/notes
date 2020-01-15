@@ -381,6 +381,7 @@ q:pb自己的理解?
 [Pb语法](https://developers.google.com/protocol-buffers/docs/proto#scalar)<br>
 [Pb-cpp相关](https://developers.google.com/protocol-buffers/docs/cpptutorial )<br>
 [Pb-generated code](https://developers.google.com/protocol-buffers/docs/reference/cpp-generated#repeatedmessage)<br>
+[Pb-序列化](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.message_lite#MessageLite.ByteSize)
 [Pb-反射](https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor)<br>
 [Pb-反射-demo](https://yrczone.com/blog/article/45)<br>
 
