@@ -1226,6 +1226,8 @@ Tex Studio: IDE
 
 这一节我觉得需要说的，如果开发不能保证好的质量，都交给测试去做。只会降低效率。打铁还需自身硬，一方面对于语言本身精益求精，另一方面对于测试理论的了解，我觉得有助于写出更好的代码。
 
+### 测试理论
+
 - 基本概念
 
 q:什么是单元测试？
@@ -1244,6 +1246,69 @@ q:如何理解回归测试当中的回归？
 参考<br>
 [软件测试笔记（一）理论篇](https://testerhome.com/topics/8594)<br>
 [单元测试和回归测试](http://www.uml.org.cn/Test/201112285.asp)<br>
+
+
+q:什么是test case?
+>In software engineering, a test case is a specification of the inputs, execution conditions, testing procedure, and expected results that define a single test to be executed to achieve a particular software testing objective, such as to exercise a particular program path or to verify compliance with a specific requirement.
+>
+>对于这句话的理解，我是这么想的，为了达到测试目的，一组程序输入，执行条件，测试过程，以及期待结果的说明。当然前半句话说的比较泛，后面这句比较具体：对于特定程序执行逻辑的测试，来验证是否满足预期的结果。
+>
+>总结下什么是测例，以一组输入的形式给出，为了测试程序的某条执行逻辑，是否符合预期。
+
+q:什么是test suite?
+>In software development, a test suite, less commonly known as a 'validation suite', is a collection of test cases that are intended to be used to test a software program to show that it has some specified set of behaviours.
+>
+>我的理解，一组相关的测试用例。或者说是，测试程序特定功能的测例集合。
+
+我们可以看下gtest给出的例子，从名称上就能看出来。
+
+```cpp
+// gtest提供的测试方法
+TEST(TestSuiteName, TestName) {
+  ... test body ...
+}
+
+TEST(AddTest, HandlePositive) {
+  EXPECT_EQ(add(1,2), 3);
+}
+
+TEST(AddTest, HandleZero) {
+  EXPECT_EQ(add(0,3), 0);
+  EXPECT_EQ(add(3,0), 0);
+  EXPECT_EQ(add(0,0), 0);
+}
+
+TEST(AddTest, HandleNegative) {
+  EXPECT_EQ(add(-1,1), -1);
+  EXPECT_EQ(add(1,-1), -1);
+  EXPECT_EQ(add(-1,-1), -1);
+}
+```
+
+q:什么是xUnit architecture?
+>xUnit is the collective name for several unit testing frameworks that derive their structure and functionality from Smalltalk's SUnit.
+简言之，从SUnit发展而来的测试框架，我们都叫做xUnit测试框架
+
+q:xUnit测试框架特点？
+>All xUnit frameworks share the following basic component architecture, with some varied implementation details:
+- Test runner: A test runner is an executable program that runs tests implemented using an xUnit framework and reports the test results
+- Test case: A test case is the most elemental class. All unit tests are inherited from here.
+- Test fixtures: A test fixture (also known as a test context) is the set of preconditions or state needed to run a test. The developer should set up a known good state before the tests, and return to the original state after the tests.
+- Test suites: A test suite is a set of tests that all share the same fixture. The order of the tests shouldn't matter.
+- Test execution: The execution of an individual unit test proceeds as follows: 
+- Test result formatter: A test runner produces results in one or more output formats
+- Assertions: An assertion is a function or macro that verifies the behavior (or the state) of the unit under test.Usually an assertion expresses a logical condition that is true for results expected in a correctly running system under test (SUT).
+
+参考<br>
+[XUnit](https://en.wikipedia.org/wiki/XUnit)<br>
+
+### 测试框架
+
+
+- gtest
+
+[How to set up googletest library from source?](https://lchsk.com/how-to-set-up-googletest-library-from-source.html)
+
 
 ## 其他
 
