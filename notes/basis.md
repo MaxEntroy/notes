@@ -1181,6 +1181,19 @@ q:如何理解分支?
 >分支本质上关联的是commit对象的链表。master,test这些分支是链表的头指针，从逻辑上关联整个链表。
 HEAD则指向了当前的工作链表，即工作分支
 
+q:如何理解remote branches?
+- Remote branches are references to the state of branches on your remote repositories.
+- They’re local branches that you can’t move.
+    - they’re moved automatically whenever you do any network communication
+从这两点，我们能看出来，远程分支是一种本地分支，它是远程仓库分支的引用，在本地不能进行操作。因为它只是引用。
+远程分支的作用，主要是多人协作时告诉我们某一个分支在远程仓库的情形，即别人的共享如何。
+
+q:如何理解tracking branches?
+>Checking out a local branch from a remote branch automatically creates what is called a tracking branch.
+说的很清楚了，从远程分支checkout出来的本地分支，叫做tracking branch.它的特性就是和一个远程分支保持直接的联系，
+最直观的体现在git fetch以及git push时，自动甄别进行同步的远程分支。
+racking branches are local branches that have a direct relationship to a remote branch.
+
 q:git修改上次提交?
 >主要说下，怎么修改username和email
 ```c
