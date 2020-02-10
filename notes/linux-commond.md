@@ -262,3 +262,17 @@ ps: rz/sz不是下载就能用，需要配置
 #### 纵向操作
 
 [技巧：Vim 的纵向编辑模式](https://www.ibm.com/developerworks/cn/linux/l-cn-vimcolumn/index.html)
+
+### pkg-config
+
+q:这么命令的作用是什么？
+>pkg-config is a helper tool used when compiling applications and libraries. 
+It helps you insert the correct compiler options on the command line so an application can use.
+>
+>简言之，如果当你在使用一个比较大的库时，需要指定很多头文件，以及需要链接很多库时,如果一个一个手动写，比较麻烦，并且容易遗漏。
+此时使用pkg-config可以帮助编译器自动识别这个库对应的头文件以及需要链接的库.
+所以，当使用一个比较大的库，可以考虑使用pkg-config.
+
+参考<br>
+[freedesktop.org](https://www.freedesktop.org/wiki/Software/pkg-config/)<br>
+[pkg-config的一些用法](https://blog.csdn.net/luotuo44/article/details/24836901)<br>
