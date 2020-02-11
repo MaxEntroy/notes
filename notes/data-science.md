@@ -145,7 +145,7 @@ to put word firmly and deeply into vector space.
 
 总结，从逻辑上来说，推荐引擎是推荐系统的核心，承担的是驱动推荐系统工作的部分。物理上来说，推荐引擎是推荐系统整个框架设计部分的代码，它并不描述每个部分是怎样工作的，而是描述每个部分是在怎样的组织设计下，被驱动工作的。
 
-## 计算理论
+## 计算科学
 
 ### 图灵机
 
@@ -203,3 +203,27 @@ q:函数抽象和函数应用怎么理解？
 参考<br>
 [Lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus)
 [编程语言的基石——Lambda calculus](https://liujiacai.net/blog/2014/10/12/lambda-calculus-introduction/)
+
+### Software framework
+
+q:先简单谈一下自己对于框架和库的理解？
+>我理解库还是针对一些非常具体、细节的问题，比如网络通信，这是一个非常落地的，非常细节的问题，我们可以开发一套网络库来解决网络通信
+的问题，此时我们不说这是套网络框架。
+对于框架，主要针对的是一些相对系统，不是那么具体、细节的问题。比如我们想实现一个推荐系统，工程上需要实现一个推荐框架，这个框架由
+各个模块以及各个模块之间的联系构成。对于这其中的某些模块，他们可能会涉及网络通信的问题，此时可以利用之前开发的网络库进行开发。
+所以，框架指的是的是更加系统、宏观的问题。而库则是相对具体、细致的问题。
+
+q:wiki是怎么解释软件框架的?
+>Software frameworks may include support programs, compilers, code libraries, tool sets, and application programming interfaces (APIs) 
+that bring together all the different components to enable development of a project or system.
+>
+>这句话主要表达了框架的构成，最后一句表明了框架的根本目的是为了解决对于一个庞大工程或者系统的开发。
+
+q:wiki是怎么描述differences between Frameworks and normal libraries?
+Frameworks have key distinguishing features that separate them from normal libraries:
+- inversion of control: In a framework, unlike in libraries or in standard user applications, the overall program's flow of control is not dictated by the caller, but by the framework.
+- extensibility: A user can extend the framework – usually by selective overriding – or programmers can add specialized user code to provide specific functionality.
+- non-modifiable framework code: The framework code, in general, is not supposed to be modified, while accepting user-implemented extensions. In other words, users can extend the framework, but cannot modify its code.
+
+
+
