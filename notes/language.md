@@ -1,3 +1,5 @@
+[TOC]
+
 ## lua
 
 ### lua table用法注意
@@ -609,6 +611,19 @@ ps:为什么int,float,double类型不一致，也可以强转。因为int,float,
 
 参考<br>
 [C/C++函数指针参数不匹配问题](https://blog.csdn.net/oktears/article/details/39452341)<br>
+
+### cstdio vs stdio.h
+
+我采用陈硕在答案中提到的方式，因为我看到了leveldb的实践也是采用陈硕的方式，
+c++代码使用c库，不采用标准的建议，主要原因是
+- 需要记住哪些c头文件有对应的cpp版本，哪些没有
+- 对于有对应cpp版本的头文件，也需要进一步判断哪些在名字空间std当中，哪些在global namespace
+- 及时做到以上两点，代码中也会出现std::aa ::bb这样混用的形式，造成风格不一致
+
+综上，碰到cpp当中调用c库，统一采用.h的形式
+
+参考<br>
+[如何说服同学在写C++程序的时候用cstdio而不是stdio.h？](https://www.zhihu.com/question/51288493)
 
 ## c
 
