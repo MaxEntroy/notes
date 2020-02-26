@@ -1,4 +1,6 @@
-## 基础
+[TOC]
+
+## Overview
 
 q:什么是软件工程?
 >Software engineering is the systematic application of engineering approaches to the development of software.
@@ -18,7 +20,7 @@ q:软件工程的流程大体分几个阶段?
 
 ## UML
 
-- 基础
+### Basis
 
 q:什么是uml?
 >The Unified Modeling Language (UML) is a general-purpose, developmental, modeling language in the field of software engineering that is intended to provide a standard way to visualize the design of a system
@@ -51,6 +53,99 @@ q:uml具体由哪些图?
         - Sequence Diagram
         - Timing Diagram
         - Interaction Overview Diagram
+
+### Class Diagram
+
+- classes,
+- their attributes,
+- operations (or methods),
+- and the relationships among objects.
+
+下面我们主要说下类之间的关系
+
+- Class-level relationships
+
+#### Association
+
+Associations are relationships between classes in a UML Class Diagram.
+
+q:如何理解association?
+>association其实表达的是一种非常泛的关联，只要两个对象之间有关系，我们就说存在association.
+其实也可以看到，association细化后才有了后续的各种关系.
+
+q:现实的例子有哪些？
+>由于，association是最泛的一个概念，所以更加细化的关系，又其它关系表达就好。
+我理解，一般用association表达的关系，通常都是逻辑上的关联，在代码上没有特殊的反映。
+>比如，两个类Client and Server,A server can process the requests of a client.
+这其中，更强调server对于client请求的处理，因此，uml是server指向client的箭头
+
+#### Dependency
+
+An object of one class might use an object of another class in the code of a method. If the object is not stored in any field, then this is modeled as a dependency relationship.
+
+- A special type of association.
+- Exists between two classes if changes to the definition of one may cause changes to the other (but not the other way around).
+
+```cpp
+class Book {};
+
+class Person {
+ public:
+  void ReadBook(const Book&);
+};
+```
+
+#### Aggregation
+
+A special type of association.
+
+- It represents a "part of" relationship.
+- Objects of Class1 and Class2 have separate lifetimes.
+
+```cpp
+class Wheel {};
+
+class Car {
+private:
+  Wheel wheel_arr[4];
+};
+
+class Bicycle {
+ private:
+  Wheel wheel_arr_[2]
+};
+```
+
+#### Composition
+
+- A special type of aggregation where parts are destroyed when the whole is destroyed.
+- Class2 cannot stand by itself.
+
+```cpp
+class Departments {};
+
+class Universtiy {
+ private:
+  Departments department_arr_[4];  
+};
+```
+
+- Instance-level relationships
+
+#### Inheritance (or Generalization)
+
+- Represents an "is-a" relationship.
+- SubClass1 and SubClass2 are specializations of SuperClass.
+
+#### Realization
+
+- Realization is special type of inheritance.
+- Realization is a relationship between the blueprint class and the object containing its respective implementation level details.(abstract class and implementation class.)
+
+参考<br>
+[Class diagram](https://en.wikipedia.org/wiki/Class_diagram#Association)<br>
+[UML Class Diagram Tutorial](https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-class-diagram-tutorial/)<br>
+[UML Association vs Aggregation vs Composition with EXAMPLE](https://www.guru99.com/association-aggregation-composition-difference.html)
 
 ## 编程范式(Programming paradigm)
 
