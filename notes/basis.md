@@ -133,6 +133,7 @@ q:什么是控制反转
 [如何浅显地解释回调函数](https://bot-man-jl.github.io/articles/?post=2017/Callback-Explained)<br>
 [深入理解回调函数](https://flat2010.github.io/2017/01/10/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/#undefined)<br>
 [控制反转与依赖注入](https://www.jianshu.com/p/07af9dbbbc4b)<br>
+[异步消息的传递-回调机制](https://www.ibm.com/developerworks/cn/linux/l-callback/index.html)<br>
 
 ### 热更新
 >你可以在不中断进程运行的情况下，把修改过的代码加载到进程中，让随后的过程运行新版本的代码。by cloud wu
