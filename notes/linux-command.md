@@ -1,3 +1,5 @@
+[TOC]
+
 ## 常用命令
 
 ### 文件
@@ -88,8 +90,6 @@ q:install命令有什么作用？
 
 ---
 
-### 进程/网络
-
 ### gdb
 
 - 初识
@@ -158,6 +158,7 @@ The soft limit is the value that Linux uses to limit the system resources for ru
 [Linux Note – 通过ulimit和PAM来限制资源](https://blog.csdn.net/tianyue168/article/details/41896921)<br>
 [Guidelines for configuring Linux ulimit settings for IBM Streams](https://www.ibm.com/support/knowledgecenter/SSCRJU_4.2.0/com.ibm.streams.install.doc/doc/ibminfospherestreams-install-operating-system-settings.html)
 
+### 进程/网络
 
 #### 端口占用
 - 基本用法
@@ -252,18 +253,37 @@ ps: rz/sz不是下载就能用，需要配置
 
 ### 编译/链接
 
-#### ld
+#### ldconfig
+
+q:ldconfig的作用是什么?
+>ldconfig creates the necessary links and cache to the most recent shared libraries found in the directories specified on the command line, in the file /etc/ld.so.conf, and in the trusted directories (/lib and /usr/lib).The cache is used by the run-time linker, ld.so or ld-linux.so.
+>
+>如何理解上面这句话，两层含义：
+1.ldconfig创造了动态链接库的缓存信息，这个缓存信息会被run time linker使用。
+2.ldconfig只会为 /lib,/usr/lib或者/etc/ld.so.conf里面所列出的的动态库创建cache信息
+
+q:ldconfig如何使用？
+>当我们新增.so时，比如加到了/lib,/usr/lib下面，需要执行ldconfig，即更新ldconfig创造的缓存信息。否则，
+dynamic linking是，run-time linker根据ldconfig创造的cache，无法找到对应的动态链接库在哪，即链接失败。
+>
+>如果我们新增的.so，没有放到/lib或者/usr/lib，而是放到了other-path，那么需要把这个other-path加入到/etc/ld.so.conf里面。
+再执行ldconfig更新cache.
+>
+>当我们新增的.so，即不想放到/usr/lib /lib，也不想更新/etc/ld.so.conf时，此时run-time linker无法找到对应.so。可以通过
+增加一个LD_LIBRARY_PATH的全局变量，也能告诉run-time linker去哪找
+>
+>当我们的新增的.so，以上3种方案均不想采用时。比如自己项目的thirdparty/.so，此时编译时指定LDFLAGS:= -Wl,-rpath=$(LIB_PATH)
+>
+>总之，需要让run-time linker知道到哪里去找.so.
+需要特别注意区别的是，-L是个compile time options，跟以上的讨论没有任何关系。compile time linking阶段，一定要找到符号定义，因此也需要知道库的路径。
+但是，compile time知道不代表run-time也能知道。
 
 参考<br>
+[ldconfig(8) - Linux man page](https://linux.die.net/man/8/ldconfig)<br>
+[ldconfig](https://wangchujiang.com/linux-command/c/ldconfig.html)<br>
 [multiple Lua VMs detected](https://blog.csdn.net/u010144805/article/details/80776802)
 
-### vim
-
-#### 纵向操作
-
-[技巧：Vim 的纵向编辑模式](https://www.ibm.com/developerworks/cn/linux/l-cn-vimcolumn/index.html)
-
-### pkg-config
+#### pkg-config
 
 q:这么命令的作用是什么？
 >pkg-config is a helper tool used when compiling applications and libraries. 
@@ -276,3 +296,9 @@ It helps you insert the correct compiler options on the command line so an appli
 参考<br>
 [freedesktop.org](https://www.freedesktop.org/wiki/Software/pkg-config/)<br>
 [pkg-config的一些用法](https://blog.csdn.net/luotuo44/article/details/24836901)<br>
+
+### vim
+
+#### 纵向操作
+
+[技巧：Vim 的纵向编辑模式](https://www.ibm.com/developerworks/cn/linux/l-cn-vimcolumn/index.html)
