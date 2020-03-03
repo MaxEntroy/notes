@@ -264,12 +264,12 @@ q:ldconfig的作用是什么?
 
 q:ldconfig如何使用？
 >当我们新增.so时，比如加到了/lib,/usr/lib下面，需要执行ldconfig，即更新ldconfig创造的缓存信息。否则，
-dynamic linking是，run-time linker根据ldconfig创造的cache，无法找到对应的动态链接库在哪，即链接失败。
+dynamic linking时，run-time linker根据ldconfig创造的cache，无法找到对应的动态链接库在哪，即链接失败。
 >
 >如果我们新增的.so，没有放到/lib或者/usr/lib，而是放到了other-path，那么需要把这个other-path加入到/etc/ld.so.conf里面。
 再执行ldconfig更新cache.
 >
->当我们新增的.so，即不想放到/usr/lib /lib，也不想更新/etc/ld.so.conf时，此时run-time linker无法找到对应.so。可以通过
+>当我们新增的.so，既不想放到/usr/lib /lib，也不想更新/etc/ld.so.conf时，此时run-time linker无法找到对应.so。可以通过
 增加一个LD_LIBRARY_PATH的全局变量，也能告诉run-time linker去哪找
 >
 >当我们的新增的.so，以上3种方案均不想采用时。比如自己项目的thirdparty/.so，此时编译时指定LDFLAGS:= -Wl,-rpath=$(LIB_PATH)
