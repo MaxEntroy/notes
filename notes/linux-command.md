@@ -48,6 +48,7 @@ ln [OPTION]... -t DIRECTORY TARGET...  (4th form)
 参考<br>
 [软链接与硬链接的区别](https://blog.csdn.net/netwalk/article/details/38039155)<br>
 [ln](https://github.com/MaxEntroy/notes/blob/master/notes/linux-command.md)<br>
+[linux下创建和删除软、硬链接](https://www.cnblogs.com/xiaochaohuashengmi/archive/2011/10/05/2199534.html)<br>
 
 #### ls
 - 基本用法
