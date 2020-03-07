@@ -149,11 +149,32 @@ class Universtiy {
 
 ## 编程范式(Programming paradigm)
 
+### 基础
+q:什么是编程范式?
+>A style of building the structure and elements of computer programs
+
+q:有那些编程范式？
+>Common programming paradigms include:
+imperative in which the programmer instructs the machine how to change its state,(imperative programming)
+declarative in which the programmer merely declares properties of the desired result, but not how to compute it(declarative programming)
+
+### 函数式编程
+
+q:如何理解函数式编程
+>显然，根据上面的划分，函数式编程属于declarative programming的一种。具体来说，
+1.treats computation as the evaluation of mathematical functions 
+2.avoids changing-state and mutable data. 
+用我自己的话来说，以lamda calculus作为思想的语言范式，就是函数式编程。具体来说，支持function abstraction and function application.
+
+参考<br>
+[Functional_programming](https://en.wikipedia.org/wiki/Functional_programming)<br>
+[Programming_paradigm](https://en.wikipedia.org/wiki/Programming_paradigm)<br>
+
 ### OO
 
 ## 设计模式(Software design pattern)
 
-- 基础
+### 基础
 
 q:什么是设计模式?
 >In software engineering, a software design pattern is a general, reusable solution to a commonly occurring problem within a given context in software design.

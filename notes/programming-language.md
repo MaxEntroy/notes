@@ -1052,3 +1052,14 @@ val11 == val12
 val21 != val22
 */
 ```
+
+### Tex
+
+对几个概念先进行简单描述：
+>
+TEX: 一种排版语言
+Latex: 基于TEX实现的一个宏集，自然也是一种排版语言
+>
+Tex Live: TEX/TEX based 语言编译器的发行版，如g++, visual c++。目前使用的CTEX = Tex live + 中文支持
+>
+Tex Studio: IDE
