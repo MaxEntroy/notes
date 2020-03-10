@@ -63,9 +63,9 @@ q:uml具体由哪些图?
 
 下面我们主要说下类之间的关系
 
-- Class-level relationships
+#### Class-level relationships
 
-#### Association
+- Association
 
 Associations are relationships between classes in a UML Class Diagram.
 
@@ -79,12 +79,12 @@ q:现实的例子有哪些？
 >比如，两个类Client and Server,A server can process the requests of a client.
 这其中，更强调server对于client请求的处理，因此，uml是server指向client的箭头
 
-#### Dependency
+- Dependency
 
 An object of one class might use an object of another class in the code of a method. If the object is not stored in any field, then this is modeled as a dependency relationship.
 
-- A special type of association.
-- Exists between two classes if changes to the definition of one may cause changes to the other (but not the other way around).
+1. A special type of association.
+2. Exists between two classes if changes to the definition of one may cause changes to the other (but not the other way around).
 
 ```cpp
 class Book {};
@@ -95,12 +95,12 @@ class Person {
 };
 ```
 
-#### Aggregation
+- Aggregation
 
 A special type of association.
 
-- It represents a "part of" relationship.
-- Objects of Class1 and Class2 have separate lifetimes.
+1. It represents a "part of" relationship.
+2. Objects of Class1 and Class2 have separate lifetimes.
 
 ```cpp
 class Wheel {};
@@ -116,10 +116,10 @@ class Bicycle {
 };
 ```
 
-#### Composition
+- Composition
 
-- A special type of aggregation where parts are destroyed when the whole is destroyed.
-- Class2 cannot stand by itself.
+1. A special type of aggregation where parts are destroyed when the whole is destroyed.
+2. Class2 cannot stand by itself.
 
 ```cpp
 class Departments {};
@@ -130,17 +130,17 @@ class Universtiy {
 };
 ```
 
-- Instance-level relationships
+#### Instance-level relationships
 
-#### Inheritance (or Generalization)
+- Inheritance (or Generalization)
 
-- Represents an "is-a" relationship.
-- SubClass1 and SubClass2 are specializations of SuperClass.
+1. Represents an "is-a" relationship.
+2. SubClass1 and SubClass2 are specializations of SuperClass.
 
-#### Realization
+- Realization
 
-- Realization is special type of inheritance.
-- Realization is a relationship between the blueprint class and the object containing its respective implementation level details.(abstract class and implementation class.)
+1. Realization is special type of inheritance.
+2. Realization is a relationship between the blueprint class and the object containing its respective implementation level details.(abstract class and implementation class.)
 
 参考<br>
 [Class diagram](https://en.wikipedia.org/wiki/Class_diagram#Association)<br>
