@@ -82,7 +82,7 @@ q:xUnit测试框架特点？
 
 ### 版本控制
 
-- 基础理论
+#### 基础理论
 
 q:什么是版本控制？
 >本控制是一种记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的系统
@@ -100,7 +100,7 @@ q:他们各自优缺点?
 参考<br>
 [why-is-git-better-than-subversion](https://stackoverflow.com/questions/871/why-is-git-better-than-subversion)
 
-- git
+#### git
 
 q:如何理解分支?
 >分支本质上关联的是commit对象的链表。master,test这些分支是链表的头指针，从逻辑上关联整个链表。
@@ -130,3 +130,32 @@ q: merge/rebase的区别
 
 参考<br>
 [git中 修改已提交的commit的用户名邮箱](https://www.jianshu.com/p/7def4f387e9f)
+
+#### git workflow
+
+参考<br>
+[大家如何选择 git 工作流模型？](http://mk.oa.com/q/255762)
+
+### CI/CD
+
+q:CI指什么？
+>Continuous Integration (CI) is a development practice where developers integrate code into a shared repository frequently, preferably several times a day.
+>
+>简单来说，一天之内，频繁的将代码集成(提交)到主干(仓库)
+
+q:CI的这种实践，有什么优点？
+- 快速发现错误。每完成一点更新，就集成到主干，可以快速发现错误，定位错误也比较容易
+- 防止分支大幅偏离主干。
+
+q:CI的意义是什么？
+>持续集成的目的，就是让产品可以快速迭代，同时还能保持高质量。它的核心措施是，代码集成到主干之前，必须通过自动化测试。只要有一个测试用例失败，就不能集成。
+
+q:Continuous Deliver指什么?
+>指的是，频繁地将软件的新版本，交付给质量团队或者用户，以供评审。如果评审通过，代码就进入生产阶段。
+
+q:Continuous Deployment指什么?
+>是持续交付的下一步，指的是代码通过评审以后，自动部署到生产环境
+
+参考<br>
+[持续集成是什么？](http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html)<br>
+[CONTINUOUS INTEGRATION ESSENTIALS](https://codeship.com/continuous-integration-essentials)
