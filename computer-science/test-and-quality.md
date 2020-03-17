@@ -75,8 +75,13 @@ q:xUnit测试框架特点？
 - Test result formatter: A test runner produces results in one or more output formats
 - Assertions: An assertion is a function or macro that verifies the behavior (or the state) of the unit under test.Usually an assertion expresses a logical condition that is true for results expected in a correctly running system under test (SUT).
 
+q:从测试同学的角度来说，作为开发同学，如何写一个测试用例子?
+>参考第二篇参考文献
+
+
 参考<br>
 [XUnit](https://en.wikipedia.org/wiki/XUnit)<br>
+[How to Write Test Cases for Software](https://blog.testlodge.com/how-to-write-test-cases-for-software-with-sample/)<br>
 
 ## Devops
 
