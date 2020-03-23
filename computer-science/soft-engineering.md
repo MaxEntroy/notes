@@ -180,7 +180,7 @@ q:什么是设计模式?
 >In software engineering, a software design pattern is a general, reusable solution to a commonly occurring problem within a given context in software design.
 >
 >对于给定上下文经常出现的某类问题，一种通用，可重用的解决办法。
-对于某一类通用问题的程学设计最佳实践。
+对于某一类通用问题的程序设计最佳实践。
 
 q:什么是模式？
 >泛泛的来说是，一些事物所展示出来的非常典型、通用、具体的特点，这些特点的汇总叫做模式。
