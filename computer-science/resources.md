@@ -13,4 +13,10 @@
 这位同学实现了一个很有意思的程序员婚礼请柬，并且有微信的排版组件。
 [leadream](https://github.com/leadream)
 
+### 语言
 
+#### Lua
+
+- lua性能优化实践
+既然作者给出了建议，那就没什么好说的
+[Lua Performance Tips](http://www.lua.org/gems/sample.pdf)
