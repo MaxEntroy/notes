@@ -20,3 +20,7 @@
 - lua性能优化实践
 既然作者给出了建议，那就没什么好说的
 [Lua Performance Tips](http://www.lua.org/gems/sample.pdf)
+
+- lua的一些实践
+这位大牛的讨论并不仅限于lua，很多方面都涉及，关键是这位大牛的学习思路和我是一致的，基本上采用的也是递归的学习方式。有共鸣。
+[重归混沌的BLOG](https://blog.gotocoding.com/)
