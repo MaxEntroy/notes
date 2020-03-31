@@ -2,6 +2,38 @@
 
 ## lua
 
+### lua编程实践的一些心得
+
+>https://www.zhihu.com/question/20067457
+这篇链接里提到，
+1.lua能胜任简单的工作，lua一旦复杂起来，比c++有过之而无不及
+2.多用组合，少用继承
+3.保持lua开发效率高的特点，不要写的比c++还复杂
+
+>https://www.zhihu.com/question/27624597
+这篇链接给了lua一些最佳实践的建议
+1.Lua的最佳实践，一定和自己的语言特性有关，这点非常重要。lua只有一种数据结构table
+2.更普遍的Lua风格，是精炼的，短小的，注入式风格的
+
+>其实，我看这些的原因在于，最近oop看的比较多，所以总想着用oop那一套来适用在lua身上，自然oop的优点就都有了。
+但是，lua的语言特点又不支持这么做，所以我想着找一些官方的建议，来从理论上指导我工作。
+
+>https://gamedev.stackexchange.com/questions/3405/lightweight-lua-objects-vs-inheritance
+Use composition to model properties of complex entities rather than inheritance.
+
+>结合lua语言自身特点
+  - lua本身不支持oop特性，需要自己模拟。额外的开发负担，性能的损耗。
+  - lua提供了唯一的数据结构table，采用table进行继承的模拟)
+>以及Lua的应用场景，
+  - 作为胶水语言，通常和c/c++配合实用，来完成业务逻辑的编写。
+  - 需要较高的开发效率
+
+>结论我觉得是清晰的：
+1. 保持Lua开发效率高的特点。这个是第一原则
+2. 鉴于1的特点，我们采用如下实践方式
+2.1. 更多的使用组合，而不是继承
+2.2. oop中只使用封装的能力，用类表达概念，尽量不使用继承和多态。
+
 ### lua table用法注意
 
 q:lua table对于元素的方式有几种？
