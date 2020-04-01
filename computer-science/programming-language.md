@@ -2,6 +2,14 @@
 
 ## lua
 
+### lua string.find的一些坑
+
+其实这一小节主要说的是lua当中魔法字符的转义问题。这个问题也很容易发现，plain匹配没问题，但是关闭plain出现问题，肯定是有魔法字符的问题。
+所以，在pattern当中需要对这些魔法字符进行转义
+
+参考
+[魔法字符问题](https://blog.csdn.net/ma2595162349/article/details/71941361)
+
 ### lua编程实践的一些心得
 
 >https://www.zhihu.com/question/20067457
