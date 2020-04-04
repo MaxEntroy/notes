@@ -2,6 +2,83 @@
 
 ## lua
 
+### lua继承的一些trick
+
+我们先来看一段代码，并给出输出结果
+```lua
+-- base.lua
+local Base = {}
+
+function Base.New()
+  local o = {
+    pos = 0
+  }
+  setmetatable(o, {__index = Base})
+
+  return o
+end
+
+function Base.GetPos(self)
+  return self.pos
+end
+
+return Base
+
+-- derived.lua
+local Base = require "base"
+
+local Derived = Base.New()
+
+function Derived.GetReason(self)
+  return self.reason
+end
+
+return Derived
+
+-- main.lua
+local Derived = require "derived"
+
+print(Derived.pos) -- 0
+
+local a_deri = Derived:New()
+
+Derived.pos = 3
+
+print(Derived.pos) -- 3
+print(a_deri.pos) -- 0
+```
+
+我来说一下，上面这段代码如果用oo的思路去理解，很难想明白输出。所以，**lua奇妙就奇妙在，它基本没有提供给我们太多的机制，而是通过我们自己去模拟，类达到某种程度的形似**
+1. 核心思路是，lua当中只有table这一种结构。所以，围绕table很容易理解上面代码
+2. Derived是Base.New()返回的table
+3. a_deri的生成过程是这样，Derived这张表调用New函数，但是这章表没有这个成员。所以，去metatable当中找，在Base当中找到New()，所以又返回了一张表
+4. 所以,Derived和a_deri不是同一张表。
+
+按照我们的语义，我们希望的是，派生类继承了基类的数据，换句话说派生类当中存在基类。但是，上面的代码不是这样的包含关系。那么，如何实现呢？
+关键还是一样的，围绕table做文章即可。
+
+```lua
+-- derived.lua
+local Base = require "base"
+
+-- Derived 继承 Base
+local Derived = Base.New()
+
+-- 定义自己的"构造函数"
+function Derived.New(self)
+  return self
+end
+
+function Derived.GetReason(self)
+  return self.reason
+end
+
+return Derived
+
+```
+
+只需定义派生类自己的构造函数即可。因为这个构造函数本质是table的一个成员，只要找到这个成员，就不会再寻找metatable当中的成员
+
 ### lua string.find的一些坑
 
 其实这一小节主要说的是lua当中魔法字符的转义问题。这个问题也很容易发现，plain匹配没问题，但是关闭plain出现问题，肯定是有魔法字符的问题。
