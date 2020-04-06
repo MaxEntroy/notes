@@ -2,6 +2,49 @@
 
 ## lua
 
+### print重定向实现
+
+对于print重定向，在语言层面需要重新实现这个函数。由于function在lua当中就是变量，所有重新定义这个变量即可
+```lua
+file_path = "tmp.log"
+
+function debug(...)
+  file = io.open(file_path, "w")
+  io.output(file)
+  io.write(...)
+  io.close(file)
+end
+
+function read()
+  file = io.open(file_path, "r")
+  io.input(file)
+  local line = io.read()
+  io.close(file)
+  return line
+end
+
+local order = 3
+local pos = "3-8"
+debug(string.format("order=%d,pos=%s", order, pos))
+
+local line = read()
+print(line)
+```
+
+### lua local
+
+q:local的作用是什么?
+>Local variables only exist in the block they were created in. Outside of the block, they do not exist any more.
+
+q:变量为什么不默认声明为local?
+>这是一种选择吧。如果默认声明为local，那我们使用全局变量时怎么办?作者的逻辑是，当我们需要使用local时，我们使用local就好
+
+q:when to user local?
+>The general rule is to always use local variables, unless it's necessary for every part of your program to be able to access the variable (which is very rare).
+
+参考
+[Scope tutial](http://lua-users.org/wiki/ScopeTutorial)
+
 ### lua继承的一些trick
 
 我们先来看一段代码，并给出输出结果
