@@ -2,6 +2,166 @@
 
 ## lua
 
+### print重定向实现
+
+对于print重定向，在语言层面需要重新实现这个函数。由于function在lua当中就是变量，所有重新定义这个变量即可
+```lua
+file_path = "tmp.log"
+
+function debug(...)
+  file = io.open(file_path, "w")
+  io.output(file)
+  io.write(...)
+  io.close(file)
+end
+
+function read()
+  file = io.open(file_path, "r")
+  io.input(file)
+  local line = io.read()
+  io.close(file)
+  return line
+end
+
+local order = 3
+local pos = "3-8"
+debug(string.format("order=%d,pos=%s", order, pos))
+
+local line = read()
+print(line)
+```
+
+### lua local
+
+q:local的作用是什么?
+>Local variables only exist in the block they were created in. Outside of the block, they do not exist any more.
+
+q:变量为什么不默认声明为local?
+>这是一种选择吧。如果默认声明为local，那我们使用全局变量时怎么办?作者的逻辑是，当我们需要使用local时，我们使用local就好
+
+q:when to user local?
+>The general rule is to always use local variables, unless it's necessary for every part of your program to be able to access the variable (which is very rare).
+
+参考
+[Scope tutial](http://lua-users.org/wiki/ScopeTutorial)
+
+### lua继承的一些trick
+
+我们先来看一段代码，并给出输出结果
+```lua
+-- base.lua
+local Base = {}
+
+function Base.New()
+  local o = {
+    pos = 0
+  }
+  setmetatable(o, {__index = Base})
+
+  return o
+end
+
+function Base.GetPos(self)
+  return self.pos
+end
+
+return Base
+
+-- derived.lua
+local Base = require "base"
+
+local Derived = Base.New()
+
+function Derived.GetReason(self)
+  return self.reason
+end
+
+return Derived
+
+-- main.lua
+local Derived = require "derived"
+
+print(Derived.pos) -- 0
+
+local a_deri = Derived:New()
+
+Derived.pos = 3
+
+print(Derived.pos) -- 3
+print(a_deri.pos) -- 0
+```
+
+我来说一下，上面这段代码如果用oo的思路去理解，很难想明白输出。所以，**lua奇妙就奇妙在，它基本没有提供给我们太多的机制，而是通过我们自己去模拟，类达到某种程度的形似**
+1. 核心思路是，lua当中只有table这一种结构。所以，围绕table很容易理解上面代码
+2. Derived是Base.New()返回的table
+3. a_deri的生成过程是这样，Derived这张表调用New函数，但是这章表没有这个成员。所以，去metatable当中找，在Base当中找到New()，所以又返回了一张表
+4. 所以,Derived和a_deri不是同一张表。
+
+按照我们的语义，我们希望的是，派生类继承了基类的数据，换句话说派生类当中存在基类。但是，上面的代码不是这样的包含关系。那么，如何实现呢？
+关键还是一样的，围绕table做文章即可。
+
+```lua
+-- derived.lua
+local Base = require "base"
+
+-- Derived 继承 Base
+local Derived = Base.New()
+
+-- 定义自己的"构造函数"
+function Derived.New(self)
+  return self
+end
+
+function Derived.GetReason(self)
+  return self.reason
+end
+
+return Derived
+
+```
+
+只需定义派生类自己的构造函数即可。因为这个构造函数本质是table的一个成员，只要找到这个成员，就不会再寻找metatable当中的成员
+
+### lua string.find的一些坑
+
+其实这一小节主要说的是lua当中魔法字符的转义问题。这个问题也很容易发现，plain匹配没问题，但是关闭plain出现问题，肯定是有魔法字符的问题。
+所以，在pattern当中需要对这些魔法字符进行转义
+
+参考
+[魔法字符问题](https://blog.csdn.net/ma2595162349/article/details/71941361)
+
+### lua编程实践的一些心得
+
+>https://www.zhihu.com/question/20067457
+这篇链接里提到，
+1.lua能胜任简单的工作，lua一旦复杂起来，比c++有过之而无不及
+2.多用组合，少用继承
+3.保持lua开发效率高的特点，不要写的比c++还复杂
+
+>https://www.zhihu.com/question/27624597
+这篇链接给了lua一些最佳实践的建议
+1.Lua的最佳实践，一定和自己的语言特性有关，这点非常重要。lua只有一种数据结构table
+2.更普遍的Lua风格，是精炼的，短小的，注入式风格的
+
+>其实，我看这些的原因在于，最近oop看的比较多，所以总想着用oop那一套来适用在lua身上，自然oop的优点就都有了。
+但是，lua的语言特点又不支持这么做，所以我想着找一些官方的建议，来从理论上指导我工作。
+
+>https://gamedev.stackexchange.com/questions/3405/lightweight-lua-objects-vs-inheritance
+Use composition to model properties of complex entities rather than inheritance.
+
+>结合lua语言自身特点
+  - lua本身不支持oop特性，需要自己模拟。额外的开发负担，性能的损耗。
+  - lua提供了唯一的数据结构table，采用table进行继承的模拟)
+>以及Lua的应用场景，
+  - 作为胶水语言，通常和c/c++配合实用，来完成业务逻辑的编写。
+  - 需要较高的开发效率
+
+>结论我觉得是清晰的：
+1. 保持Lua开发效率高的特点。这个是第一原则
+2. 鉴于1的特点，我们采用如下实践方式
+2.1. 更多的使用组合，而不是继承
+2.2. oop中只使用封装的能力，用类表达概念，尽量不使用继承和多态。
+
 ### lua table用法注意
 
 q:lua table对于元素的方式有几种？
