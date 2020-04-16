@@ -4,36 +4,49 @@
 
 ### 表达式/语句
 - 引言
-```
 这2个概念，所有程序设计语言都会讲。但是具体的概念及其区分，一直没有搞得很透彻。
-```
 
-- 为什么要有expression?
-```
-An expression is an combination of values, variables, oerators and calls to functions.
+q:为什么要有expression?
+>An expression is an combination of values, variables, oerators and calls to functions.
 Expression needs to be evaluated.
-```
-显然，定义精准的描述了expession的作用：表达式就是用来做计算的。
+>显然，定义精准的描述了expession的作用：表达式就是用来做计算的。
 
-```
-那显而易见，计算机的最基本功能是什么？不就是做计算。计算的是什么，不就是计算表达式。
-只不过，这里的计算，由于oeprator分为算数，关系，逻辑这3中，因此可以计算3中表达式。算数表达式（这个易懂，就是计算机的初衷），关系表达式和逻辑表达式，不能在计算的场景直接理解。需要结合更复杂的程序逻辑。eg: if(a > 3) print("a > 3") 即结合控制结构，进行使用。
-```
-- 为什么要有statements?
-```
-A statement is an instruction that the Python intepreter can execute.(从Python解释器的角度出发)
-```
-- 既然statement对应到指令，那expression又算什么呢?
-```
-考虑最简单的statement,就是打印算数表达式。
-print(1+2+3+4+5) //计算机的本质是做计算没错，但是计算结果你要怎么处理呢？是打印，还是做其它用途。这些就要由指令来驱动
-expression，是做数值，逻辑，关系的计算。对于这些计算，有对应的计算指令。
-但是，计算机并不是只有计算的功能，比如基本的输入输出，这些就不是expression的范围。
-严格意义上来说，计算机语言的statements对应到机器层面的instructions.
-而，expression是构成诸多statements当中，最主要的一种。
-```
+q:除了算术expression，还有逻辑表达式，关系表达式，那么表达式是如何进行衍进的?
+>那显而易见，计算机的最基本功能是什么？不就是做计算。计算的是什么，无外乎一些数学表达式
+只不过，后期我们发现计算的任务变得更加复杂，这个时候，单独的计算表达式不足以解决问题。这就需要关系表达式和逻辑表达式的能力，来进行弥补。
+>
+>比如当我们对学生成绩进行评价的时候，可能期中考试要采取中位数的办法，期末考试采取平均分的办法。这样，就需要
+我们对当前处在什么阶段进行判断，而这不是算术表达式可以解决的。只能通过计算关系表达式来判断。
+本质上来说，增加关系和逻辑表达式，是为了丰富计算机程序的能力。
+
+q: 为什么要有statements?statements和expression什么关系?
+>A statement is an instruction that the Python intepreter can execute.(从Python解释器的角度出发)
+>
+>statements可以由expression组成。但是，从上面我们能看出来，expression的对应的是计算机cpu和内存的能力。
+但是，现代计算机可不是只有cpu和内存组成的。
+比如说，你想打印一个hello,world。显然，这件事并没有做什么计算，所以需要计算机支持io statement来解决这个问题。
+statement是计算机程序的核心，而expression是statement的核心。
+
+q:程序的副作用是什么?(side effectes)
+>还是从上面讲的计算机的本质来说，计算机的本质是什么？就是为了做计算，拿到计算值。我觉得可以简单理解，如果一条statements带来了除了计算以外的结果，那么这个结果可以理解为副作用。
+print("hello,world\n");显然，这条statements并不期望他做什么计算，print return void，但是它打印了hello,world。
+>
+>A side effect is anything a method does besides computing and returning a value. Any change of instance or class field values is a side effect, as is drawing something on the screen, writing to a file or a network connection.
+>
+Strictly speaking, a "function" is defined as not having side effects - which is why Java uses the word "method" instead. A real function with no return value would be pointless.
+>
+>上面是stackoverflow的解释，有一点说的很好，从最初计数学计算的角度来看，如果一个函数没有返回值，那确实没意义。
+随着计算机的发展，程序的能力得到了增加，并不是只能做数学计算，也可以进行io的工作，从而带来了除了数学计算以外的结果，这部分结果
+我觉得可以称作是副作用。
+>
+>我们再回到语句本身，如果一个statements是如下逻辑，那么我们认为这条statements带来side effects
+- Changing the value of a variable;
+- Writing some data to disk;
+- Enabling or disabling a button in the User Interface.
+
 参考<br>
 [Statements and Expressions](http://interactivepython.org/runestone/static/CS152f17/SimplePythonData/StatementsandExpressions.html)<br>
+[What is a “side effect?”](https://softwareengineering.stackexchange.com/questions/40297/what-is-a-side-effect)
 
 ### 类型
 

@@ -151,7 +151,10 @@ class Universtiy {
 
 ### 基础
 q:什么是编程范式?
->A style of building the structure and elements of computer programs
+>A style of building the structure and elements of computer programs.
+
+q:当我们对编程范式进行区分的时候，主要从哪些特征进行区分?
+>Some paradigms are concerned mainly with implications for the execution model of the language, such as allowing side effects, or whether the sequence of operations is defined by the execution model. Other paradigms are concerned mainly with the way that code is organized, such as grouping a code into units along with the state that is modified by the code. Yet others are concerned mainly with the style of syntax and grammar.
 
 q:有那些编程范式？
 >Common programming paradigms include:
