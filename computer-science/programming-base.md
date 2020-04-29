@@ -243,6 +243,15 @@ for reason, conf in pairs(self.policy) do
 end
 ```
 
+### ABI VS API
+
+q:我的理解?
+>简单说下，参考的文章写的非常好。ABI正如其名，application binary interface，主要是要强调binary，所以一定要从low-level来考虑问题。
+作者主要举了source code编译后的产物library来说，binary层面的api就是abi。比如前后library在数据类型的兼容，就是abi需要考虑的问题
+
+参考<br>
+[What is an application binary interface (ABI)?](https://stackoverflow.com/questions/2171177/what-is-an-application-binary-interface-abi?answertab=active#tab-top)
+
 ## 基础算法
 
 ### 启发式算法
