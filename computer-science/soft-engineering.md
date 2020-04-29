@@ -147,11 +147,36 @@ class Universtiy {
 [UML Class Diagram Tutorial](https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-class-diagram-tutorial/)<br>
 [UML Association vs Aggregation vs Composition with EXAMPLE](https://www.guru99.com/association-aggregation-composition-difference.html)
 
+#### Sequence Diagram
+
+q:什么是Sequence Diagram
+>A sequence diagram shows object interactions arranged in time sequence.
+>
+根据定义，我们知道有两点是很重要的：
+1. object interactions
+2. time sesquence
+
+q:时序图本质是相对什么建模?
+>时序图通过消息，注意，是消息(或者说事件)来对对象之间的交互进行建模，对象之间的交互指的是其实就是对象之间的方法调用。
+
+q:序列图由哪些部分组成
+- Messages. written with horizontal arrows with the message name written above them, display interaction.
+  - synchronous message
+  - asynchronous message
+  - reply messages
+- Activation boxes.are opaque rectangles drawn on top of lifelines to represent that processes are being performed in response to the message 
+- Objects
+
+[Sequence diagram](https://en.wikipedia.org/wiki/Sequence_diagram)<br>
+
 ## 编程范式(Programming paradigm)
 
 ### 基础
 q:什么是编程范式?
->A style of building the structure and elements of computer programs
+>A style of building the structure and elements of computer programs.
+
+q:当我们对编程范式进行区分的时候，主要从哪些特征进行区分?
+>Some paradigms are concerned mainly with implications for the execution model of the language, such as allowing side effects, or whether the sequence of operations is defined by the execution model. Other paradigms are concerned mainly with the way that code is organized, such as grouping a code into units along with the state that is modified by the code. Yet others are concerned mainly with the style of syntax and grammar.
 
 q:有那些编程范式？
 >Common programming paradigms include:
