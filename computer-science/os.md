@@ -2,6 +2,148 @@
 
 ## 操作系统(Linux)
 
+### Memory
+
+本小节主要记录linux性能调整io篇的一些学习心得
+
+#### 常用命令
+
+q:buffer/cache的演进
+>linux设计缓存系统的原因是，大部分内存，内核用的很少，主要是给应用。对于一些剩余的内存，也得用起来，所以，设计了这样一套缓存系统。
+最初的时候：
+cache:读缓存(app read)
+buf:写缓冲(app write)
+>
+>但是这么设计有一个问题，比如一个应用刚读取数据，又需要写入到另一个file，那么此时还需要写一次buf，没有办法利用cache当中的数据.所以2.4(这个不是很确定)之后的版本，做了新的变更
+page cache: file content
+buffer cache: file meta(格式化文件系统，需要写文件系统结构数据，这个数据会缓存在buffer里面啊，所以buffer里面一般是file的meta)
+
+q:top命令的一些细节
+```
+             total       used       free     shared    buffers     cached
+Mem:          7.8G       5.1G       2.7G        31M       306M       2.7G
+-/+ buffers/cache:       2.1G       5.7G(这一行很重要)
+Swap:         8.0G         0B       8.0G
+```
+
+>之前提到过，对于buf/cache是利用操作系统当中剩下的数据，进行一个再利用。那么本质上来说，这一部分数据可以被free掉
+所以-+buffer/cache是考虑这层因素之后的结果。
+>
+>但是，即使考虑了这一部分结果，这里的数据也不能完全可信
+原因在于,cache当中有些数据，内核是不能释放的。只能强制手动释放。
+那既然这里的数据也不准，哪的数据准呢？
+
+```
+cat /proc/meminfo (使用这条命令)
+MemTotal:        8157844 kB
+MemFree:         2806844 kB
+MemAvailable:    6065884 kB(关注这个属性)
+Buffers:          314296 kB
+Cached:          2854064 kB
+SwapCached:            0 kB
+Active:          3620924 kB
+Inactive:         740924 kB
+Active(anon):    1208984 kB
+Inactive(anon):    16984 kB
+Active(file):    2411940 kB
+Inactive(file):   723940 kB
+Unevictable:          84 kB
+Mlocked:              84 kB
+SwapTotal:       8386556 kB
+SwapFree:        8386556 kB
+Dirty:                 4 kB
+Writeback:             0 kB
+AnonPages:       1193568 kB
+Mapped:           371352 kB
+Shmem:             32484 kB
+Slab:             487112 kB
+SReclaimable:     429072 kB
+SUnreclaim:        58040 kB
+KernelStack:       11152 kB
+PageTables:        35128 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    12465476 kB
+Committed_AS:    4674748 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:           0 kB
+VmallocChunk:          0 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:    606208 kB
+CmaTotal:              0 kB
+CmaFree:               0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:      198464 kB
+DirectMap2M:     8189952 kB
+DirectMap1G:     2097152 kB
+```
+
+q:cache当中的哪些数据是不能释放的呢?
+>跟ipc相关的不能释放
+echo 3 > /proc/sys/vm/drop_caches(这条命令可以强制丢弃cache 1和２分别代码buffer和cache)
+```cpp
+ipcs
+------------ 共享内存段 --------------
+键        shmid      拥有者  权限     字节     连接数  状态      
+0x00000000 131072     kang       600        16777216   2                       
+0x00000000 425985     kang       600        134217728  2          目标       
+0x00000000 393218     kang       600        524288     2          目标       
+0x00000000 688131     kang       600        524288     2          目标       
+0x00000000 917508     kang       600        393216     2          目标       
+0x00000000 1015813    kang       600        1048576    2          目标       
+0x00000000 1048582    kang       600        393216     2          目标       
+0x00000000 1146887    kang       700        16472      2          目标       
+0x00000000 2195464    kang       700        648576     2          目标       
+0x00000000 1736714    kang       600        393216     2          目标       
+
+--------- 信号量数组 -----------
+键        semid      拥有者  权限     nsems     
+
+--------- 消息队列 -----------
+键        msqid      拥有者  权限     已用字节数 消息
+```
+
+q:Swap的作用?
+>内存里面不活跃的空间，交换到磁盘中，空出来的空间给别的程序用
+
+q:top 命令当中需要关注的指标有哪些?
+>RES是物理内存总量
+VIRT虚拟内存占用量(VIRT不一定映射到RES)
+
+q:还有哪些常用命令?
+>sudo sar -r 1
+
+#### os是怎么管理memory(宏观)
+
+q:这个问题可以这么考虑，加入现在要支持并发1024个进程，目前有4G内存，我们如果设计操作系统来管理内存，应该怎么管理？
+>朴素的想法自然是，4G / 1024 = 4M，那就每个进程分配4M空间。但是这带来的问题是，如果目前只有2个进程，也只能用这么大空间。显然不合理。
+此时引入虚拟空间的概念，即每个进程都可以使用4G的空间。先说风险，如果有一个进程真的用了4G空间，那多余一个进程都不能分配资源。
+显然，之所有能这么考虑的原因在于，对于进程使用空间的预判，知道进程使用的空间远小于这个数，所以这么设计，因为programmer一般都会按照自己的需求来申请，是克制的。
+我之所以这么说，是想举银行的例子，有1000个人，每个人都向银行存4k，银行总共有400w，每个人贷款的时候，可以贷远多余1000的个数，这里是想类比虚拟内存的概念。
+但实际上，由于人借了钱可能不还钱，银行为了降低自己的分享给每个人做了限制。
+>
+>内核的实际做法就是引入虚拟内存的概念来解决这个问题。
+内核给app分配的是虚拟内存。(malloc返回给app的地址，是一个虚拟地址，只有具体写这段空间的时候，内核才会做映射)
+内核只需做的是把虚拟内存和物理内存对应起来。
+
+#### 内核到底是怎么管理memory(微观)
+
+q:rt?
+>buddy是底层分配器
+slab帮助用户代码，来进行底层物理内存的管理。slab也是同过buddy进行管理
+>
+>下面的知识没有求证，因为我听课听一半被叫走了：
+实际物理page块: 1 1 1 1 1 1 1 1(2^0)
+page表         1 1 1 1 1 1 1 1(2^1，此时每一个page块，有一个page表跟它对应)
+再一层管理       1   1   1   1  (2^2，每2个page表，被一个二级page表管理)
+再一层管理       1       1      (2^3，第三级page表管理)
+基本思路我是知道的，但是至于是否是这样管理，后续再验证下
+
 ### compile and run time
 
 #### 构建(build)
