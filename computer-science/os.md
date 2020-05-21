@@ -2,6 +2,10 @@
 
 ## 操作系统(Linux)
 
+### CPU
+
+#### 进程/线程/协程
+
 ### Memory
 
 本小节主要记录linux性能调整io篇的一些学习心得
@@ -144,7 +148,7 @@ page表         1 1 1 1 1 1 1 1(2^1，此时每一个page块，有一个page表�
 再一层管理       1       1      (2^3，第三级page表管理)
 基本思路我是知道的，但是至于是否是这样管理，后续再验证下
 
-### compile and run time
+### 编译系统
 
 #### 构建(build)
 
@@ -587,17 +591,28 @@ q:更一般的解决办法是什么?
 
 - 分类
 
-### 进程/线程/协程
+### 虚拟化
 
-#### 进程
+这一小节主要说下容器相关技术
 
-#### 线程
+#### 基本概念
 
-#### 协程
+q:什么是LXC?
+>LXC (Linux Containers) is an operating-system-level virtualization method for running multiple isolated Linux systems (containers) on a control host using a single Linux kernel.
+>
+>翻译过来就是linux容器。具体来说，容器是一种os级别的虚拟化方法，这种方法主要用来在单一os kernel上面提供多个独立的linux系统(也即是linux容器)
 
-### 文件
+q:LXC主要使用了哪些技术？
+1. cgroups functionality(that allows limitation and prioritization of resources (CPU, memory, block I/O, network, etc.) without the need for starting any virtual machines,)
+2. namespace isolation functionality( that allows complete isolation of an application's view of the operating environment, including process trees, networking, user IDs and mounted file systems)
 
-### 一些细节
+简单来说，分别从物理层面，应用层面进行了隔离。
+
+**LXC combines the kernel's cgroups and support for isolated namespaces to provide an isolated environment for applications. Early versions of Docker used LXC as the container execution driver**
+
+#### 容器实现的一些技术细节
+
+### 其他
 
 #### 回车换行问题(CRLF)
 
