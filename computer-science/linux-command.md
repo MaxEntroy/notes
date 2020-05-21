@@ -79,6 +79,33 @@ ls [OPTION] [FILE]
 [Linux 下 ls -l 命令执行显示结果的每一列含义](https://blog.csdn.net/zhuoya_/article/details/77418413)
 [What do the fields in ls -al output mean?](https://unix.stackexchange.com/questions/103114/what-do-the-fields-in-ls-al-output-mean)
 
+- 一些case
+
+下午碰到写文件禁止权限的问题，借此我们再来详细谈一下文件的用户权限
+
+q:如何理解文件权限？
+>文件权限的理解，一定要结合用户来说，因为不同的用户具有不同的权限。所以需要先明确linux当中的用户管理
+
+q:linux的身份等级(不从root角度来说，而是结合文件权限的角度来说)?
+1. user(文件的属主)
+2. group(文件的用户组)
+3. others(其他)
+这么分类的原因，还是牵扯到文件权限。比如user一般作为文件的创建者，具备可读可写的能力。而文件的用户组，一般具有可读的能力。而其他用户则没有查看权限
+
+q:ls是如何查看这些信息的？
+1. 第一列是不同用户组的权限
+2. 第二列是user(表示user是谁)
+3. 第三列是group
+4. 没有other是因为可以根据前两个进行推断
+
+q:下午碰到一个程序写权限不具备的案例。
+>首先我们查看文件权限，发现是A。那么，我们就需要关心，当前程序是哪个用户在执行它。因为不同权限的用户对于同一个文件，具备不同的操作能力。
+后来了解到，当前程序的执行用户是B。然后，对比了这个目录权限，发现B是other用户，但是对于他来说，权限只有读。所以不具备写权限。
+解决办法就是为这个文件的other增加写权限
+
+参考
+[文件权限](https://xwjgo.github.io/2016/11/05/linux%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90/)
+
 #### install
 
 q:install命令有什么作用？
