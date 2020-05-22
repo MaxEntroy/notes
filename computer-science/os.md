@@ -612,6 +612,11 @@ q:LXC主要使用了哪些技术？
 
 #### 容器实现的一些技术细节
 
+参考<br>
+[什么是 Docker](https://yeasy.gitbook.io/docker_practice/introduction/what)<br>
+[C++ 实现简易 Docker 容器](https://www.shiyanlou.com/courses/608)<br>
+[Docker (software)](https://en.wikipedia.org/wiki/Docker_(software))<br>
+
 ### 其他
 
 #### 回车换行问题(CRLF)
