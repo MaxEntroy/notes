@@ -610,12 +610,62 @@ q:LXC主要使用了哪些技术？
 
 **LXC combines the kernel's cgroups and support for isolated namespaces to provide an isolated environment for applications. Early versions of Docker used LXC as the container execution driver**
 
+q:什么是docker?
+>Docker is a set of platform as a service (PaaS) products that uses OS-level virtualization to deliver software in packages called containers
+>
+>docker我的理解，应该是平台。在这个平台上面，软件可以在容器当中运行。整体来看，container的概念更像是virtual machine，而docker作为平台(本质是服务)，把容器作为服务对象，提供给大家。
+或者简单理解为，提供容器服务的平台。
+
+q:docker的组成？
+>The Docker software as a service offering consists of three components:
+1. Software: The Docker daemon, called dockerd, is a persistent process that manages Docker containers and handles container objects. The daemon listens for requests sent via the Docker Engine API.[38][39] The Docker client program, called docker, provides a command-line interface that allows users to interact with Docker daemons
+2. Objects: Docker objects are various entities used to assemble an application in Docker. The main classes of Docker objects are images, containers, and services
+2.1. A Docker container is a standardized, encapsulated environment that runs applications.[41] A container is managed using the Docker API or CL
+2.2. A Docker image is a read-only template used to build containers. Images are used to store and ship applications.
+2.3. A Docker service allows containers to be scaled across multiple Docker daemons. The result is known as a swarm, a set of cooperating daemons that communicate through the Docker API
+3. A Docker registry is a repository for Docker images. Docker clients connect to registries to download ("pull") images for use or upload ("push") images that they have built
+
+q:docker vs virtual machine?
+>最本质的区别： OS-level virtualization software
+docker支持是在os层面进行支持，而vm不是，比如你在win上启动一个ubuntu，提供的是一个独立的os。但是docker则是在同一个os提供不同的container.
+1. 性能：docker一般接近原生,vm则逊于docker
+2. 硬盘：docker逊于vm
+3. 系统支持量：单机支持上千个container，vm则只能支持一般几十个
+
+q:docker的优点
+1. 更高效的利用资源。由于docker不需要硬件虚拟以及完整的os支持，跟传统虚拟化技术相比，显得轻量级。
+2. 一致的运行环境。开发过程中一个常见的问题是环境一致性问题。由于开发环境、测试环境、生产环境不一致，导致有些 bug 并未在开发过程中被发现。而 Docker 的镜像提供了除内核外完整的运行时环境，确保了应用运行环境一致性
+3. 更轻松的迁移。由于 Docker 确保了执行环境的一致性，使得应用的迁移更加容易。Docker 可以在很多平台上运行，无论是物理机、虚拟机、公有云、私有云，甚至是笔记本，其运行结果是一致的
+4. 更轻松的扩展和维护。Docker 使用的分层存储以及镜像的技术，使得应用重复部分的复用更为容易，也使得应用的维护更新更加简单，基于基础镜像进一步扩展镜像也变得非常简单。
+
+q:再议docker image?
+>A Docker image is a read-only template that contains a set of instructions for creating a container that can run on the Docker platform. It provides a convenient way to package up applications and preconfigured server environments, which you can use for your own private use or share publicly with other Docker users.
+>
+>功能上来说，是用来创建容器的。具体来说，定制运行环境的离线存储。
+
+q:docker image vs os image?
+>因为镜像包含操作系统完整的 root 文件系统，其体积往往是庞大的，因此在 Docker 设计时，就充分利用 Union FS 的技术，将其设计为分层存储的架构。所以严格来说，镜像并非是像一个 ISO 那样的打包文件，镜像只是一个虚拟的概念，其实际体现并非由一个文件组成，而是由一组文件系统组成，或者说，由多层文件系统联合组成
+>
+>镜像构建时，会一层层构建，前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。比如，删除前一层文件的操作，实际不是真的删除前一层的文件，而是仅在当前层标记为该文件已删除。在最终容器运行的时候，虽然不会看到这个文件，但是实际上该文件会一直跟随镜像。因此，在构建镜像的时候，需要额外小心，每一层尽量只包含该层需要添加的东西，任何额外的东西应该在该层构建结束前清理掉
+>
+>分层存储的特征还使得镜像的复用、定制变的更为容易。甚至可以用之前构建好的镜像作为基础层，然后进一步添加新的层，以定制自己所需的内容，构建新的镜像。
+
+q:容器有什么需要特别注意的地方？
+>镜像使用的是分层存储，容器也是如此。每一个容器运行时，是以镜像为基础层，在其上创建一个当前容器的存储层，我们可以称这个为容器运行时读写而准备的存储层为 容器存储层
+>
+>可以这么理解，我们可以使用同一个docker image来构造不同的container，那么不同container的基础镜像是一致的。但是container也需要自己的容器存储层。
+>
+>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡。因此，任何保存于容器存储层的信息都会随容器删除而丢失。
+按照 Docker 最佳实践的要求，容器不应该向其存储层内写入任何数据，容器存储层要保持无状态化。所有的文件写入操作，都应该使用 数据卷（Volume）、或者绑定宿主目录，在这些位置的读写会跳过容器存储层，直接对宿主（或网络存储）发生读写，其性能和稳定性更高
+
 #### 容器实现的一些技术细节
 
 参考<br>
+[LXC](https://en.wikipedia.org/wiki/LXC)
+[Docker (software)](https://en.wikipedia.org/wiki/Docker_(software))<br>
 [什么是 Docker](https://yeasy.gitbook.io/docker_practice/introduction/what)<br>
 [C++ 实现简易 Docker 容器](https://www.shiyanlou.com/courses/608)<br>
-[Docker (software)](https://en.wikipedia.org/wiki/Docker_(software))<br>
+
 
 ### 其他
 
