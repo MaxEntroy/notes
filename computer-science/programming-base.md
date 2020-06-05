@@ -2,7 +2,7 @@
 
 ## 程序设计基础
 
-### 表达式/语句
+### expression/statements
 - 引言
 这2个概念，所有程序设计语言都会讲。但是具体的概念及其区分，一直没有搞得很透彻。
 
@@ -43,6 +43,10 @@ Strictly speaking, a "function" is defined as not having side effects - which is
 - Changing the value of a variable;
 - Writing some data to disk;
 - Enabling or disabling a button in the User Interface.
+
+上面已经总结的很好了，我再补充下
+- expression是对计算的抽象
+- statement是对所有计算机指令的抽象，所有计算机指令不只有计算指令
 
 参考<br>
 [Statements and Expressions](http://interactivepython.org/runestone/static/CS152f17/SimplePythonData/StatementsandExpressions.html)<br>
