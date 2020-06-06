@@ -150,6 +150,12 @@ page表         1 1 1 1 1 1 1 1(2^1，此时每一个page块，有一个page表�
 
 ### 编译系统
 
+#### linux elf格式
+
+- 引言
+
+- 分类
+
 #### 构建(build)
 
 q:什么是构建？
@@ -413,7 +419,7 @@ q:有了.a为什么还要.so
 
 #### 编译问题集锦
 
-- compile time符号找不到
+##### compile time符号找不到
 
 文件结构如下
 ```c
@@ -490,8 +496,8 @@ q:本次的特点是什么?
 总结，compile time符号一般找不到的原因就是，.h和.c当中的实现没对上。所以，.h提供的符号，在.c->.o(.a/.so)当中，找不到。
 
 
-- 动态库链接静态库
-
+##### 动态库链接静态库
+- case1
 ```
 问题描述：
 g++ -fPIC -shared -o other.so other_lib.cc
@@ -515,8 +521,32 @@ collect2: error: ld returned 1 exit status
 [linux编译问题集锦（持续更新中）](https://www.cnblogs.com/octave/p/4824584.html)
 [how-to-write-makefile/implicit_rules](https://seisman.github.io/how-to-write-makefile/implicit_rules.html)
 
+- case2
 
-- 动态库run time找不到
+q:问题描述？
+>背景是，我之前安装好了gflags，给出了.a。我也不知道这个.a是不是fPIC
+>安装glog时，有如下问题
+/usr/bin/ld: /usr/local/thirdparty/gflags/lib/../lib/libgflags.a(gflags.cc.o): relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
+>
+>根据错误信息，我们得知：
+1.编译glog的过程中，用到了libgflags.a，但是后者不是fPIC代码
+2.对于问题的解决，我们有如下思考
+2.1.如果glog只是生成一个.a，那么用到了.a直接打包即可。不需要fPIC代码，那么这代表默认的glog库生成方式，不是紧紧需要.a without fpic的形式。我们可以从这个角度尝试修改
+2.2.重新编译libgflags.a，参考case1地第二篇参考文献可解决
+>
+网上的参考：提示说需要-fPIC编译，然后在链接动态库的地方加上-fPIC的参数编译结果还是报错，需要把共享库所用到的所有静态库都采用-fPIC编译一边才可以成功的在64位环境下编译出动态库。
+
+q:解决？
+>方案一：glog编译成.a，那么对于.a and .o没有fPIC的要求
+方案二：gflags重新编译成.so或者.a with fPIC
+>
+>为了不影响现有代码，我采用了方案一。但是一直都不行，主要卡在进行了congifure配置，但是从提示上来看，生成的还是.so，无法生成.a。配置没有生效。
+衡量下，暂时找不到解决办法，不想一致卡在这。换到方法二解决
+
+参考<br>
+[一些与编译，链接相关的问题(-fPIC)](https://blog.csdn.net/laoyi_grace/article/details/9404269)
+
+##### 动态库run time找不到
 
 q:现象是什么?
 >./main: error while loading shared libraries: libzlog.so.1.2: cannot open shared object file: No such file or directory
@@ -584,12 +614,6 @@ q:更一般的解决办法是什么?
 ["error while loading shared libraries: xxx.so.x" 错误的原因和解决办法](https://blog.csdn.net/sahusoft/article/details/7388617)<br>
 [LIBRARY_PATH和LD_LIBRARY_PATH环境变量的区别](https://www.cnblogs.com/panfeng412/archive/2011/10/20/library_path-and-ld_library_path.html)<br>
 [Relationship between ldconfig and ld.so.cache](https://unix.stackexchange.com/questions/256893/relationship-between-ldconfig-and-ld-so-cache/317526)
-
-#### linux elf格式
-
-- 引言
-
-- 分类
 
 ### 虚拟化
 
