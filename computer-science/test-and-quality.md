@@ -164,3 +164,11 @@ q:Continuous Deployment指什么?
 参考<br>
 [持续集成是什么？](http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html)<br>
 [CONTINUOUS INTEGRATION ESSENTIALS](https://codeship.com/continuous-integration-essentials)
+
+q:what is pipiline?
+>注意，devops所指的pipeline和cpu 体系结构当中的pipeline，概念类似，但是还不完全一样。后者主要是指一种时间并行技术，提高cpu的处理效率。
+而devops的pipeline，指的则是一系列自动化过程，可以帮助我们进行代码的compile, build, deploy，当然，这其中你也可以加入类似质量管控，cr之类的流程。
+我理解devops的pipeline，主要强调的还是一个自动化。如果没有流水线，我们代码写完之后，上述过程均需要自己手动进行操作。显然和一个自动化过程相比，效率差了很多。
+
+参考<br>
+[Deployment Pipelines (CI/CD) in Software Engineering](https://www.bmc.com/blogs/deployment-pipeline/)
