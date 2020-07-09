@@ -86,30 +86,28 @@ red   green   blue
 
 
 ### embedding
-- word representation
-上述谈到的one-hot encoding有一个很重要的作用，就是可以对词进行编码。
-考虑如下的两句话：
-Have a good day.
-Have a great day.
-```
- V = {Have, a, good, great, day}.
 
- Have = [1,0,0,0,0]`; a=[0,1,0,0,0]` ; good=[0,0,1,0,0]` ; great=[0,0,0,1,0]` ; day=[0,0,0,0,1]` (` represents transpose)
-```
+q:embedding?
+>看到一个非常好的解释：
+Embed这个词，英文的释义为, fix (an object) firmly and deeply in a surrounding mass, 也就是“嵌入”之意。例如：One of the bullets passed through Andrea's chest before embedding itself in a wall.
+>
+另外，这个词（的分词形式）在数学上也是一个专有名词，Embedding，它广泛存在于包括代数、拓扑与几何等诸多数学领域。它主要表征某个数学结构中的一个实例被包含在另外一个实例中，例如一个group它同时又是一个subgroup
+当我们说某个对象 X 被嵌入到另外一个对象 Y 中, 那么 embedding 就由一个单射的、结构保持的（structure-preserving）映射 f : X → Y 来给定的。此处的结构保持的具体含义要依赖于X 和 Y 是哪种数学结构的实例而定
 
-- embed是什么意思？
-```
-先给出朗文高阶(6th)的解释
-to put something firmly and deeply into something.
-那么，我们不妨这么说：
-to put word firmly and deeply into vector space.
-所以，word embedding本质是一种word representation.
-```
+q:word embedding misunderstanding?
+>们在把单词嵌入进另外一个空间时，要做到单射和structure-preserving，或者说我们更专注的是映射关系，而最终得到每个单词在另外一个空间中的表达也仅仅是之前设计好的映射关系的很自然的表达
 
-参考<br>
-[Introduction to Word Embedding and Word2Vec](https://towardsdatascience.com/introduction-to-word-embedding-and-word2vec-652d0c2060fa)<br>
-[【NLP】 詞嵌入 (word embeddings) 的基本概念](https://www.kesci.com/home/project/5b7a359e31902f000f55152f)<br>
-[What the heck is Word Embedding](https://towardsdatascience.com/what-the-heck-is-word-embedding-b30f67f01c81)<br>
+这里需要特助注意的是，由于wor2vec已经变成主流的word embedding方法，所以一般当大家在nlp领域说word embedding时，说的就是w2v.但是，不要误会了。w2v只是word embedding的一种方法。
+本质要清楚的是，embedding是一种映射，并且这个映射具备它自己的特点。
+
+q:embedding的作用？
+>Embedding 是一个将离散变量转为连续向量表示的一个方式
+结合我们上文提到的one-hot编码来看，看起来都是0,1，不是连续向量。
+这里的理解有误，其实将字符串形式的分类，映射到实数空间，已经转换为连续向量了。你也可以把0,1替换了0.0和0.1
+
+参考
+[Word Embedding与Word2Vec](https://blog.csdn.net/baimafujinji/article/details/77836142)
+[Embedding 的理解](https://zhuanlan.zhihu.com/p/46016518)
 
 ## 业务场景
 
