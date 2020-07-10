@@ -91,13 +91,13 @@ q:embedding?
 >看到一个非常好的解释：
 Embed这个词，英文的释义为, fix (an object) firmly and deeply in a surrounding mass, 也就是“嵌入”之意。例如：One of the bullets passed through Andrea's chest before embedding itself in a wall.
 >
-另外，这个词（的分词形式）在数学上也是一个专有名词，Embedding，它广泛存在于包括代数、拓扑与几何等诸多数学领域。它主要表征某个数学结构中的一个实例被包含在另外一个实例中，例如一个group它同时又是一个subgroup
+>另外，这个词（的分词形式）在数学上也是一个专有名词，Embedding，它广泛存在于包括代数、拓扑与几何等诸多数学领域。它主要表征某个数学结构中的一个实例被包含在另外一个实例中，例如一个group它同时又是一个subgroup
 当我们说某个对象 X 被嵌入到另外一个对象 Y 中, 那么 embedding 就由一个单射的、结构保持的（structure-preserving）映射 f : X → Y 来给定的。此处的结构保持的具体含义要依赖于X 和 Y 是哪种数学结构的实例而定
 
 q:word embedding misunderstanding?
 >们在把单词嵌入进另外一个空间时，要做到单射和structure-preserving，或者说我们更专注的是映射关系，而最终得到每个单词在另外一个空间中的表达也仅仅是之前设计好的映射关系的很自然的表达
 
-这里需要特助注意的是，由于wor2vec已经变成主流的word embedding方法，所以一般当大家在nlp领域说word embedding时，说的就是w2v.但是，不要误会了。w2v只是word embedding的一种方法。
+>这里需要特助注意的是，由于wor2vec已经变成主流的word embedding方法，所以一般当大家在nlp领域说word embedding时，说的就是w2v.但是，不要误会了。w2v只是word embedding的一种方法。
 本质要清楚的是，embedding是一种映射，并且这个映射具备它自己的特点。
 
 q:embedding的作用？
@@ -105,11 +105,22 @@ q:embedding的作用？
 结合我们上文提到的one-hot编码来看，看起来都是0,1，不是连续向量。
 这里的理解有误，其实将字符串形式的分类，映射到实数空间，已经转换为连续向量了。你也可以把0,1替换了0.0和0.1
 
-参考
-[Word Embedding与Word2Vec](https://blog.csdn.net/baimafujinji/article/details/77836142)
-[Embedding 的理解](https://zhuanlan.zhihu.com/p/46016518)
+q:目前有哪些embedding方法?
+- interger encoding
+- one-hot encoding
+- cocurrence
+- w2v
 
-## 业务场景
+q:embedding目前主要用在哪？
+- word embedding
+- entity embedding(类别数据)
+
+参考<br>
+[Word Embedding与Word2Vec](https://blog.csdn.net/baimafujinji/article/details/77836142)<br>
+[Embedding 的理解](https://zhuanlan.zhihu.com/p/46016518)<br>
+[深度学习推荐系统 | Embedding，从哪里来，到哪里去](https://zhuanlan.zhihu.com/p/138310401)
+
+## 一些概念
 
 ### Feed流
 
@@ -125,8 +136,9 @@ q:embedding的作用？
 参考<br>
 [什么叫feed流？](https://www.zhihu.com/question/20690652)
 
-### 推荐系统
+## 推荐系统
 
+### 推荐引擎
 - 引擎(Engine)
 我们先来看剑桥英文字典给的定义，
 >a machine that uses the energy from liquid fuel or steam to produce movement.
@@ -143,85 +155,70 @@ q:embedding的作用？
 
 总结，从逻辑上来说，推荐引擎是推荐系统的核心，承担的是驱动推荐系统工作的部分。物理上来说，推荐引擎是推荐系统整个框架设计部分的代码，它并不描述每个部分是怎样工作的，而是描述每个部分是在怎样的组织设计下，被驱动工作的。
 
-## 计算科学
+### 召回算法
 
-### 图灵机
+下面的总结，我参照了厂内的一篇文章，在此做读书笔记。作者对于召回算法的分类，依据召回算法使用的数据来进行分类
 
-q:为什么之前一直不理解？
->以前读书的时候，发现tm模型很简单，但是没有理解这种简单的含义在哪里？即它到底抽象了什么东西？比如回调这个思想非常简单好理解，但是大家看回调总觉得很难，因为没有理解到回调的思想到底是什么？即控制反转的思路，所以以至于回调看起来那么简单，但就是大家不理解。对于tm，我面临了一样的问题，我一向是崇尚简单可解释的，但是tm这个简单可解释的机器，我一直没有理解其简单之道在哪里？还是不懂它到底抽象了什么东西？
+- behavior information(协同类召回)
 
-我是在看了[非数学，非计算机专业的我，对编程什么的一窍不通的我要怎么理解图灵机的概念？](https://www.zhihu.com/question/22602657) Invalid s的回答之后，豁然开朗。
-他主要对于以下节问题做了清晰的解答。
+这一类基于用户的行为数据，通常也叫作协同过滤。协同过滤的本质是一种基于统计的算法，最初的做法并没有模型的能力在里面。
+目前协同的做法主要分一下两类：
+1. memory-based. 基于统计出来的u2u,i2i关系，计算相似关系，得到推荐结果
+2. model-based. 基于隐变量模型，主要是一些矩阵分解，pLSA,LDA。通过模型计算出u2u,i2i关系，在这个基础上计算相似关系，得到推荐结果。
 
-q:什么是计算？
->计算就是通过一些机械动作，把问题映射到答案的过程。(从集合论的角度去考虑，我发现形式语言的东西也多从集合论入手，为什么是集合论，这个暂时也不深究)至于你的机械动作是数手指，还是用算盘，还是更复杂的电子计算机，本质都是这一系列的机械动作。
+显然，model-based泛化能力相对更好，比如可以看下面这个列表
+| 左对齐 | kobe | jordan | brian willams | winfrey |
+| :-----| ----: | :----: | :----: | :----: |
+| lee | 1 | 0 | 0 | 0 |
+| jerry | 0 | 1 | 0 | 0 |
+| marry | 0 | 0 | 1 | 0 |
+| james | 0 | 0 | 0 | 1 |
 
-q:既然一切计算归根结底都可以是机械过程，那么有没有什么机械过程可以模拟一切运算呢？
->图灵说了，可以做一个机械装置，他包含以下部分
-1.从纸带上读入内容或输出信息到纸带上
-2.移动到纸带上的其他位置
-3.有一套控制规则和一个内部状态寄存器。可根据状态寄存器内容以及当前纸带格子里的内容，决定下一步动作(在纸带上移动、读取或者写入，停机)
+对于这个矩阵，直接看起来，这4个user，他们没有任何交集，从某种意义上来说，无法推荐。但是，当我们提取tag的语义之后，我们其实可以发现，前2个是篮球运动员，后两个是主持人。
+所以，这个共现矩阵我们可以近似的分解为下面的两个矩阵
+| 左对齐 | player | host |
+| :-----| ----: | :----: |
+| lee | 1 | 0 | 
+| jerry | 1 | 0 | 
+| marry | 0 | 1 | 
+| james | 0 | 1 | 
+此时，计算u2u关系，更容易得到lee和jerry是相似的结论，从而可以进行推荐
 
-显然，具有如上构造的tm，可以完成计算这一过程。
-这其中非常重要的一点是，然后呢，问题虽然是无限的；但解答某个问题需要的“控制规则”的数目是有限的，所以这些“控制规则”总可以编码然后存到纸带上。
+| 左对齐 | kobe | jordan | brian willams | winfrey |
+| :-----| ----: | :----: | :----: | :----: |
+| player | 1 | 1 | 0 | 0 |
+| host | 0 | 0 | 1 | 1 |
+同理，此时计算i2i关系，更容易得到kobe和jordan是相似的结论，从而可以进行推荐
 
-q:什么又是通用图灵机？
->图灵证明了，可以设计一些特殊的控制规则，使得它控制下的图灵机可以从纸带读入任意的控制规则M，然后仿照控制规则M去处理纸带内容。这种可以模拟任意其他计算规则的图灵机就是“通用图灵机”；我们把“足以模拟任意其他计算规则”这个要求称为“图灵完备”。
+- side information(内容召回or模型召回)
 
-q:如何理解通用图灵机？
->对于特定问题的规则，总是有限可编码，即可被tm当做输入读取，读取后按照这些规则进行执行，所以通用tm不负责直接计算所有问题，而是读入算子，执行算子，从而达到可以解决任何问题的能力。这么看，人一定是tm。因为tm能做到的，人都能做到。我不会加法，你告诉我加法的规则，我按着规则进行计算，就能有结果，你告诉我减法，我也能做减法。严格来说，规则都是死的，是在课本上的。但是tm和人都是活的。
+除了用户行为数据，我们还可以拿到user infomation and item information，这个是用户或者物品本身的属性。
+协同算法一般不会利用side information。当时当利用side information时，通常会和behavior information一起使用。
 
-结论：
-说的更浅显一些，就是：支持“通用控制规则”的图灵机，不管它看起来有多简单，但它的确就是一种万能机器。这里抢到，一定要支持通用规则，这代表什么规则动能执行。不过，放在这个角度，人还是不是通用图灵机，因为人不支持通用控制规则，即对于我而言，有我不理解的无法学习的特殊规则，那我我就无法完成这个计算。
+1.内容召回.
+1.1.基础的做法是利用用户画像中的cat/tag信息，进行相关文章的召回
+1.2.也可以做embedding召回。这里利用过去的文章信息，利用title正文信息，学习出一个item embedding信息，我们可以用来简介表示user.然后，和文章池当中item embedding进行匹配。主流的做法是可以利用faiss
+2.模型召回。
+2.1. 基础的就是上一个lr这样的模型
+2.2. 目前主流的做法是上一个深度模型。
 
-q:如何理解imitation game(turing test)?
->从上面对于图灵机的理解来看，通用图灵机在读入规则之后，就是按照(模仿)控制规则去执行。所以，图灵机的过程是一个imitation process。那么，如果这个process 能达到一定的程度(阈值)，我们认为这台tm具备智能。
-当然，这是一个简单的理解，我也不能确定理解是否正确，只能说是按着tm去理解了模仿。
+对于1.2和2.2的区别，我是了解的。前者是根据相似度进行pctr计算，后者是利用feature进行pctr计算
 
-参考<br>
-[非数学，非计算机专业的我，对编程什么的一窍不通的我要怎么理解图灵机的概念？](https://www.zhihu.com/question/22602657)<br>
-[智能哲学：“第三问题”与图灵的“模仿游戏”](https://cloud.tencent.com/developer/article/1133181)<br>
+在第二类算法中，最常见的模型就是CTR模型.
+1. CTR模型本质上是一个二分类的分类器，用得比较多的是LR、xgboost、lightGBM等分类器
+2. 其中，behavior information和side information被用于构造训练样本的feature and label.
+3. 分类器完成训练后，通过预测user点击item的概率，可以把topK概率最大的item作为推荐结果推送给用户
 
-
-### Lambda calculus
-q:什么是lamda calculus
->Lambda calculus (also written as λ-calculus) is a formal system in mathematical logic for expressing computation based on function abstraction and application using variable binding and substitution.
-直接给出了wiki的定义，我觉得我还没有直接描述的能力，我们可有总结下他到底是什么：1.一套系统，在梳理逻辑当中用来表示计算 2.基于函数抽象和函数应用
-
-q:如何理解lambda calculus
->It is a universal model of computation that can be used to simulate any Turing machine.简言之，通用计算模型，和tm等价，这是我能理解到的。
-
-q:函数抽象和函数应用怎么理解？
->这两个特性保证了一门函数式语言是图灵完备的。
-与图灵机对应，λ-演算的直接影响是函数式编程语言，如lisp、Haskell等，如果说这些函数式语言图灵完备，需要有以下两个特征：
-能够进行函数抽象（也就是函数定义）
-能够进行函数应用（也就是函数调用）
-鉴别一个语言是不是函数式的标准是：这个语言能否在运行时创建函数，如果能，就是函数式语言。
-
-参考<br>
-[Lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus)
-[编程语言的基石——Lambda calculus](https://liujiacai.net/blog/2014/10/12/lambda-calculus-introduction/)
-
-### Software framework
-
-q:先简单谈一下自己对于框架和库的理解？
->我理解库还是针对一些非常具体、细节的问题，比如网络通信，这是一个非常落地的，非常细节的问题，我们可以开发一套网络库来解决网络通信
-的问题，此时我们不说这是套网络框架。
-对于框架，主要针对的是一些相对系统，不是那么具体、细节的问题。比如我们想实现一个推荐系统，工程上需要实现一个推荐框架，这个框架由
-各个模块以及各个模块之间的联系构成。对于这其中的某些模块，他们可能会涉及网络通信的问题，此时可以利用之前开发的网络库进行开发。
-所以，框架指的是的是更加系统、宏观的问题。而库则是相对具体、细致的问题。
-
-q:wiki是怎么解释软件框架的?
->Software frameworks may include support programs, compilers, code libraries, tool sets, and application programming interfaces (APIs) 
-that bring together all the different components to enable development of a project or system.
->
->这句话主要表达了框架的构成，最后一句表明了框架的根本目的是为了解决对于一个庞大工程或者系统的开发。
-
-q:wiki是怎么描述differences between Frameworks and normal libraries?
-Frameworks have key distinguishing features that separate them from normal libraries:
-- inversion of control: In a framework, unlike in libraries or in standard user applications, the overall program's flow of control is not dictated by the caller, but by the framework.
-- extensibility: A user can extend the framework – usually by selective overriding – or programmers can add specialized user code to provide specific functionality.
-- non-modifiable framework code: The framework code, in general, is not supposed to be modified, while accepting user-implemented extensions. In other words, users can extend the framework, but cannot modify its code.
+假设我们用user information, item informaton, behavior infomation训练一个lr，简单构造如下样本
+(age, title, click_cnt)，这个样本有来自三方面的信息，我们训练完成一个lr.进行在线预测时，
+1.age 从user profile获得
+2.title 从进行打分的文章获得，click_cnt根据打分的文章获得
+3.通过以上信息，我们可以给到lr进行pctr计算
 
 
+q:key point?
+>比起纯行为的协同过滤，使用了side information 的CTR模型通常会取得更好的推荐效果。而整个CTR模型取胜的关键，在于如何结合side information和行为数据构造出具有判别性的用户特征、物品特征以及交叉特征
 
+q:当前主流的ctr模型？
+>近五年来，基于深度学习的CTR模型逐渐发展起来，在不少应用场景下取得了比传统CTR模型更好的效果
+相比于传统的CTR模型，深度CTR模型有着自己独到的优势
