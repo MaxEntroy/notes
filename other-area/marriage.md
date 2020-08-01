@@ -1,0 +1,41 @@
+### 婚纱照
+
+- P013 
+  - Light in my heart the way 
+  - 修改为 Just the way you are
+- P014 
+  - Light in my heart the way 
+  - 修改为 Just the way you are
+- P015 
+  - ROMANCE WEDDING           
+  - 修改为 CLASSIC WEDDING
+- P016 
+  - The Rose WEDDING          
+  - 修改为 The Rustic WEDDING
+- P005 
+  - KEEPING WATCH LOVE.       
+  - 修改为 With this ring, I thee wed. 同时修改字体，不要正体，需要艺术字的效果(用这个字体 Elizabeth)
+- P007
+  - 目前图片的顺序123
+  - 修改为321
+- P009 
+  - YOU MAKE MY HEART SMILA   
+  - 修改为 HOW DO I LOVE THEE
+- P009 
+  - when the palm of our hand have mutually affinity, every one will see 
+  - 修改为 when felling out our sight, my soul can reach
+- P009 
+  - I LOVE YOU 
+  - 修改为 Elizabeth
+- P010 
+  - 缔结良缘 
+  - 修改为 佳人才子(字体用相对正式的字体) 删除英文
+- P011 
+  - 删除英文
+- P012 
+  - 删除中国风汉字，删除右边中间位置的英文
+  - 右下角的图片替换第一张，做成最大的，如果不和谐，可以协调一下
+- P020
+  - 右侧两张图片，上下位置交换
+- P023
+  - 删除英文
