@@ -1169,7 +1169,7 @@ int main(void) {
 [“extern” keyword in C](https://www.tutorialspoint.com/extern-keyword-in-c)<br>
 [warning in extern declaration](https://stackoverflow.com/questions/4268589/warning-in-extern-declaration)
 
-### 低维信息用高维表示
+#### 低维信息用高维表示
 
 ```c
 #include <stdio.h>
@@ -1212,6 +1212,67 @@ val11 == val12
 val21 != val22
 */
 ```
+
+#### 输出参数指针vs引用
+
+这一部分的总结，主要来自于对于内网的一次讨论，对于一些基本观点，我做如下总结
+
+q:起因？
+>规范要求，所有函数的传出参数，强制使用指针。这个也是GCS的标准
+
+q:指针作为传出参数的特点是什么？
+>和引用相比，指针具有更好的可读性。
+>
+>这里我的问题是，可读性好，体现在哪里？
+
+```cpp
+//callee:
+void copy1(const std::string& a, std::string* b);
+void copy2(const std::string& a, std::string& b);
+
+
+//caller:
+copy1(foo, &bar);
+copy2(foo, bar);
+```
+
+上面这段代码，可以很清楚的明白：
+1. copy1, bar是传出参数，因为获取了它的地址
+2. copy2当中，bar则是传入参数，因为没有获取它的地址。
+
+上面是从调用着的角度，非常清晰的明白函数参数的传入传出性。这么做的一个好处是，对于不是写代码的人，只是看代码的人，可以比较清晰的明白数据的流向。
+注意，我这里强调了，不是写代码的人，如果写代码的人，无论如何你是要看函数声明的。此时，const& and & 一样能清晰的表达语义。
+
+q:上面的这种case，有表达不好的地方吗？
+>有的。
+
+```cpp
+void swap(int* a, int* b);
+
+int* a = new int(3);
+int* b = new int(4);
+
+swap(a, b);
+```
+
+显然，从caller来说，我们看不出谁是传入/传出函数。当然，phongchen也提到了，这种还是比较少的case.不过draculaqian也补充道，即使对于普通的case，
+也只能是最初的调用链这里能看到，再向下传递就看不到了。
+
+简单总结下：
+1. 指针作为传出参数，从caller这里来看，还是有一个清楚的语义的。取地址的表明这个变量是传出参数
+2. 这个优势有一部分case不满足
+3. 只有在最初的caller才看的出来，之后的链条看不到了
+
+q:draculaqian的观点？
+>语义需要明确，而不是基于隐喻;
+怎么表达一个参数，是类型系统；用一个参数具体做什么，是具体的逻辑，这是独立的两件事，一件事不该隐喻另一件事。
+>
+>下面这句话我不是很理解，因为我觉得指针是一个类型，承载了这个类型的语义。所以，我认为是有一点道理的。
+不过作者可能认为，什么类型的变量，确定的是它的用途。传入/传出的语义不应该用这个取承载。
+作者也举了别的语言的例子，in out标识。或者类似rust(& &mut)
+
+所以，从上面这个角度讲，用const& and &标识传入和传出参数，也是合理的。
+
 
 ### Tex
 
