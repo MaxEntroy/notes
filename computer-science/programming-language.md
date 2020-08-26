@@ -646,6 +646,37 @@ table: 0x194e5f0
 
 ## cpp
 
+### resize vs reserve
+
+q:resize?
+- Resizes the container to contain count elements.
+- If the current size is greater than count, the container is reduced to its first count elements.
+- If the current size is less than count,
+  - additional default-inserted elements are appended
+  - additional copies of value are appended.
+
+q:reserve?
+- Increase the capacity of the vector to a value that's greater or equal to new_cap. If new_cap is greater than the current capacity(), new storage is allocated, otherwise the method does nothing.
+- reserve() does not change the size of the vector.
+- If new_cap is greater than capacity(), all iterators, including the past-the-end iterator, and all references to the elements are invalidated. Otherwise, no iterators or references are invalidated(Be careful!!!)
+
+q:区别？
+1.一个对象的构造涉及两方面工作：一是内存分配，二是对象构造
+2.reserve只进行内存分配，不进行对象构造。所以reserve不改变容器的元素个数(size)，只改变容器的容量(capacity)
+3.resize，分好几种情况，但是本质是它要完成一个对象的构造。
+3.1.如果count < size，对于多余的对象进行析构。但是不回收空间。
+3.2.如果size < count < capacity, 对于多余的对象进行构造，但是不分配空间。
+3.3.如果capacity < count，对于多余的对象内存分配并且构造
+
+q:什么时候使用这2者？
+1.reserve的使用场景很明显，需要提前开辟好空间(提前知道空间大小)，但是具体的元素之后插入，所以只进行空间预分配。
+2.resize不是reserve使用的场景，使用resize.
+
+参考<br>
+[choice-between-vectorresize-and-vectorreserve](https://stackoverflow.com/questions/7397768/choice-between-vectorresize-and-vectorreserve)<br>
+[reserve-resize-functions](https://stackoverflow.com/questions/9521629/stdstringss-capacity-reserve-resize-functions)
+
+
 ### 传值/传引用
 ```
 c只有传值这一种方式，传指针本质上也只传值。
