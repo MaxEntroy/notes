@@ -650,15 +650,28 @@ table: 0x194e5f0
 
 这一小节是非常重要的，在单核时代，我们没有讨论线程安全的必要性。但是多核时代，这个是肯定的。因为多核时代如果不写并发程序，对于资源是一种浪费
 
-- C++函数内的静态变量初始化以及线程安全问题
+- local static variables
 
-下面我直接给出结论：
+关于初始化，下面我直接给出结论：
 1. C++11 保证静态局部变量的初始化过程是线程安全的。
 2. C++03 不保证静态局部变量的初始化是线程安全的。
 
-参考<br>
-[C++函数内的静态变量初始化以及线程安全问题？](https://www.zhihu.com/question/267013757)
+关于写操作，
+1. local static variables make code not thread safe.
 
+q:对于local static variables的一些认知？
+> You can think of local static variables as "global" in the sense of the program's memory space, 
+but with limited access enforced by the programming language at the scope in which it is defined.
+>
+>When you have multiple threads, they each have their own stacks, which expand and shrink as the thread runs. 
+Global variables and local static variables are outside of these individual thread stacks
+>
+>Local static variables should be avoided in almost all cases, because they also add hidden state to your functions, 
+and they are no-longer what is known as 'pure'. Pure functions are functions in which the output of the function depends only on the inputs to the function.
+
+参考<br>
+[C++函数内的静态变量初始化以及线程安全问题？](https://www.zhihu.com/question/267013757)<br>
+[Why use of local static variable makes C code not thread safe?](https://www.quora.com/Why-use-of-local-static-variable-makes-C-code-not-thread-safe)
 
 ### resize vs reserve
 
