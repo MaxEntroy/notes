@@ -646,6 +646,48 @@ table: 0x194e5f0
 
 ## cpp
 
+### anonomous namespace
+
+```cpp
+// 下面这段代码输出是什么
+#include <iostream>
+
+namespace {
+  int foo = 3;
+}
+
+namespace a {
+int foo = 2;
+}
+
+int main() {
+  std::cout << foo << std::endl;
+  return 0;
+}
+
+// 下面这段代码输出又是什么
+#include <iostream>
+namespace a {
+  int foo = 3;
+}
+
+namespace b {
+int foo = 2;
+}
+
+int main() {
+  std::cout << foo << std::endl;
+  return 0;
+}
+```
+
+- 第一段代码输出3
+- 第二段代码编译失败
+
+下面直接给出结论：
+1. nonymous namespace的作用域空间，从变量定义开始，到**名字空间**作用域结束
+2. anonymous namespace的作用域空间，从变量定义开始，到**文件作用域**结束
+
 ### 线程安全
 
 这一小节是非常重要的，在单核时代，我们没有讨论线程安全的必要性。但是多核时代，这个是肯定的。因为多核时代如果不写并发程序，对于资源是一种浪费
