@@ -2,6 +2,24 @@
 
 ## 程序设计基础
 
+### reflection
+
+q:这个概念产生的背景？
+>只有了解背景，才能明白其意义.参考文献1介绍了作者想尝试做的工作，我简单总结下：
+1.对于外部世界的推理，我们可以通过programming来进行. x:表示外部世界 F(x):process of reasoning the real world(programming)
+2.现在我们尝试对programming这个过程进行推理. F(F(x)):process of reasoning programming.
+>2中描述的过程，叫做reflection.中文翻译为反射，我觉得多少有点不合适。其实过程是self-expression. reflection本身有show/express的语义。
+只不过，这里是通过programming来表示programming，这个流程看起来有中文语义反射的概念。所以这么翻译
+
+q:reflection semantics?
+>既然是process of reasoning，一定有set/get能力。正如同programming对real world做的一样。
+现在reflection做的是对于programming的set/get.理解到这个层面，我们就可以看懂wiki的定义了。
+In computer science, reflection is the ability of a process to examine, introspect, and modify its own structure and behavior
+
+
+参考<br>
+[Procedural reflection in programming languages](https://dspace.mit.edu/handle/1721.1/15961)
+
 ### expression/statements
 - 引言
 这2个概念，所有程序设计语言都会讲。但是具体的概念及其区分，一直没有搞得很透彻。
