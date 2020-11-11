@@ -16,6 +16,12 @@ q:reflection semantics?
 现在reflection做的是对于programming的set/get.理解到这个层面，我们就可以看懂wiki的定义了。
 In computer science, reflection is the ability of a process to examine, introspect, and modify its own structure and behavior
 
+q:如何实现反射？
+这里我参考了erenli同学的文章，总结的很精辟：获取系统元信息
+讲到这，我们就不难理解，pb在反射的时候，descriptor/fielddiscriptor这两个类的作用了。
+同时再配合reflection接口即可。
+这里需要注意的是，reflection是用来实现ref semantics的，而descriptor这2个类是用来描述元信息的。彼此的语义都很确定，需要配合使用
+
 
 参考<br>
 [Procedural reflection in programming languages](https://dspace.mit.edu/handle/1721.1/15961)
