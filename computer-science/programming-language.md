@@ -646,6 +646,49 @@ table: 0x194e5f0
 
 ## cpp
 
+### cast
+
+- static_cast
+  - conversions of related type.
+  - 这里强调相关类型，即类型是存在一定兼容性的
+- dynamic_cast
+  - dynamic_cast is only for polymorphic types. 
+  - you only need to use it when you're casting to a derived class
+  - 这里的原因在于，base*可以指向base/derived。如果指向base，那么不能转换为derived pointer.
+  - 但是static_cast转换失败不会有任何提示，还是指向自己。dynamic_cast会给出run time error
+
+```cpp
+#include <iostream>
+class Base {
+ public:
+  virtual ~Base() = default;
+  virtual void NameOf() {
+    std::cout << "Base." << std::endl;
+  }
+};
+
+class Derived : public Base {
+ public:
+  virtual void NameOf() {
+    std::cout << "Derived." << std::endl;
+  }
+};
+
+int main() {
+  Base base;
+  Derived deri;
+
+  Base* pbase = &base;
+  //Derived* pderi = static_cast<Derived*>(pbase); // 这么转换其实有问题的，但是不会报出来
+  //pderi->NameOf();
+
+  Derived* pderi = dynamic_cast<Derived*>(pbase);  // runtime error
+  pderi->NameOf();
+
+  return 0;
+}
+```
+
 ### anonomous namespace
 
 ```cpp
