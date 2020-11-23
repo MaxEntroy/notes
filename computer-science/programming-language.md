@@ -646,6 +646,26 @@ table: 0x194e5f0
 
 ## cpp
 
+### static
+
+这里参照了陈硕对于static和anonymous namespace的解释
+
+- c 用法
+  - file scope : 修饰变量和函数，表示该变量只可见于本文件，其他文件看不到也无法访问的变量和函数。具有internal linkage
+  - function scope : 修饰函数局部变量，这种变量长期存在与函数内部，使函数具有一定状态。一般不可重入，也非线程安全。
+
+- cpp 用法
+  - file scope : 同上
+  - function scope : 同上
+  - class scope 
+    - 修饰class data member,这种变量生存期大于object，语义是类共享，也叫作class variable
+    - 修饰class function member, 该类函数用来访问class static member和其他static function member.这里需要注意，non-static function member也可以访问static class data member，但是无法通过Class::Method()的形式访问。
+
+static的用法是非常明确的，我们按照作scope来划分即可。对于anonymous namespace，则是在file scope之下又增加了一层。陈硕指出，c++中可以不必使用文件级别的作用域限制，可以使用anonymous namespace达到一样的效果。
+
+q:static const vs const?
+按照上文提到的，对于不同作用于进行比较即可
+
 ### cast
 
 - static_cast
