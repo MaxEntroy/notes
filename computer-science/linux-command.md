@@ -126,6 +126,23 @@ q:install命令有什么作用？
 
 ---
 
+### perf
+
+- 初识
+
+以下几个命令，可以帮助我们简单的分析程序的性能
+
+```perf top -p pid```:查看运行程序的性能，具体每一列的内容，参照参考文献
+```perf record -a -g -p pid```:对运行程序进行采用，dump一段时间的运行数据
+```perf report -i perf.dat```:查看已经dump的perf性能数据
+
+对于热点的查看，直接进入对应的cpu时间占用较高的函数内部即可。直到找到cpu占比时间较高代码部分
+
+参考<br>
+[系统级性能分析工具perf的介绍与使用](https://www.cnblogs.com/arnoldlu/p/6241297.html)<br>
+[perf Examples](http://www.brendangregg.com/perf.html)
+
+
 ### gdb
 
 - 初识
