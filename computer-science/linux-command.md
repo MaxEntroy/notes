@@ -4,6 +4,15 @@
 
 ### 文件
 
+#### awk
+
+q:这个命令的作用
+>mawk - pattern scanning and text processing language
+>简单来说，就是文本处理工具
+
+q:实际中的能力
+1.对于输入进行逐行处理的能力
+
 #### 磁盘大小
 
 ```shell
@@ -117,6 +126,23 @@ q:install命令有什么作用？
 
 ---
 
+### perf
+
+- 初识
+
+以下几个命令，可以帮助我们简单的分析程序的性能
+
+```perf top -p pid```:查看运行程序的性能，具体每一列的内容，参照参考文献
+```perf record -a -g -p pid```:对运行程序进行采用，dump一段时间的运行数据
+```perf report -i perf.dat```:查看已经dump的perf性能数据
+
+对于热点的查看，直接进入对应的cpu时间占用较高的函数内部即可。直到找到cpu占比时间较高代码部分
+
+参考<br>
+[系统级性能分析工具perf的介绍与使用](https://www.cnblogs.com/arnoldlu/p/6241297.html)<br>
+[perf Examples](http://www.brendangregg.com/perf.html)
+
+
 ### gdb
 
 - 初识
@@ -187,6 +213,23 @@ The soft limit is the value that Linux uses to limit the system resources for ru
 
 ### 进程/网络
 
+#### xargs
+
+q:这个命令的作用?
+1.xargs - build and execute command lines from standard input
+2.翻译过来就是，把标准输入，转化为命令行参数。
+
+q:命令的用法?
+1.管道可以把标准输出转换为标准输入，提供给右侧命令
+2.但是不是所有命令，都接受标准输入作为参数。
+3.对于不接受标准输入作为参数的命令，使用xargs将标准输入转化为命令行参数，从而执行该命令
+
+>cat /etc/passwd | grep root, 这个命令ok，因为grep接受把标准输出转化为标准输入
+echo "hello world" | echo，这个命令不ok，因为echo不接受标准输入作为参数
+echo "hello world" | xargs echo，这么写就ok了
+
+**xargs的作用在于，大多数命令（比如rm、mkdir、ls）与管道一起使用时，都需要xargs将标准输入转为命令行参数。**
+
 #### 端口占用
 - 基本用法
 ```shell
@@ -237,6 +280,9 @@ lsof -a pid -i 4
     - 一个应用程序，打开了哪些文件
     - 一个文件，被哪些应用程序打开了
 
+**这里特别强调，everything is a file in linux**，所以，如果我们想知道进程引用了哪些socket，.so，以及shared mem，都可以通过这种形式来查找。
+因为后者都是file，所以这个概念一定要有
+
 考虑如下场景，我用code打开了linux-comand.md
 ```
 kang@ubuntu:~/workspace/myspace/git-personal/notes/notes(master)$ lsof -a -p 27626 -d cwd
@@ -264,7 +310,41 @@ zzzzz 203771 root    106u  IPv4 11111111      0t0  TCP *:xxxxx (LISTEN)
 
 总结，这个命令的主要作用是，**显示打开的文件和控制它们的进程之间的关系**
 
+这里进行更深一步的讨论，我认为主要搞定以下几个应用场景即可
 
+q:对于某一个程序，如何知道它打开的文件？
+1. 进程名(-c) ```lsof -c pname```
+2. 进程号(-p) ```lsof -p pid```
+
+>kang@ubuntu:~$ lsof -c vim
+COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF     NODE NAME
+vim     704 kang  cwd    DIR    8,1     4096 12464319 /home/kang/tmp
+vim     704 kang  rtd    DIR    8,1     4096        2 /
+vim     704 kang  txt    REG    8,1  2191736 15074454 /usr/bin/vim.basic
+vim     704 kang  mem    REG    8,1    43616  3145818 /lib/x86_64-linux-gnu/libnss_files-2.19.so
+...
+vim     704 kang    0u   CHR  136,8      0t0       11 /dev/pts/8
+vim     704 kang    1u   CHR  136,8      0t0       11 /dev/pts/8
+vim     704 kang    2u   CHR  136,8      0t0       11 /dev/pts/8
+vim     704 kang    4u   REG    8,1     4096 12458216 /home/kang/tmp/.t.txt.swp
+
+
+>kang@ubuntu:~$ lsof -p 704
+COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF     NODE NAME
+vim     704 kang  cwd    DIR    8,1     4096 12464319 /home/kang/tmp
+vim     704 kang  rtd    DIR    8,1     4096        2 /
+vim     704 kang  txt    REG    8,1  2191736 15074454 /usr/bin/vim.basic
+vim     704 kang  mem    REG    8,1    43616  3145818 /lib/x86_64-linux-gnu/libnss_files-2.19.so
+...
+vim     704 kang    0u   CHR  136,8      0t0       11 /dev/pts/8
+vim     704 kang    1u   CHR  136,8      0t0       11 /dev/pts/8
+vim     704 kang    2u   CHR  136,8      0t0       11 /dev/pts/8
+vim     704 kang    4u   REG    8,1    12288 12458216 /home/kang/tmp/.t.txt.swp
+
+q:对于一个文件，如何知道哪些程序打开了它
+1. lsof |grep filename
+
+当然，对于端口，则需要特别的命令，因为port并不是一个文件，但是它一般会关联一个file(sockcet)
 
 参考<br>
 [使用 lsof 查找打开的文件](https://www.ibm.com/developerworks/cn/aix/library/au-lsof.html#listing2)<br>

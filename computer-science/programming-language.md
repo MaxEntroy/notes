@@ -646,6 +646,169 @@ table: 0x194e5f0
 
 ## cpp
 
+### static
+
+这里参照了陈硕对于static和anonymous namespace的解释
+
+- c 用法
+  - file scope : 修饰变量和函数，表示该变量只可见于本文件，其他文件看不到也无法访问的变量和函数。具有internal linkage
+  - function scope : 修饰函数局部变量，这种变量长期存在与函数内部，使函数具有一定状态。一般不可重入，也非线程安全。
+
+- cpp 用法
+  - file scope : 同上
+  - function scope : 同上
+  - class scope 
+    - 修饰class data member,这种变量生存期大于object，语义是类共享，也叫作class variable
+    - 修饰class function member, 该类函数用来访问class static member和其他static function member.这里需要注意，non-static function member也可以访问static class data member，但是无法通过Class::Method()的形式访问。
+
+static的用法是非常明确的，我们按照作scope来划分即可。对于anonymous namespace，则是在file scope之下又增加了一层。陈硕指出，c++中可以不必使用文件级别的作用域限制，可以使用anonymous namespace达到一样的效果。
+
+q:static const vs const?
+按照上文提到的，对于不同作用于进行比较即可
+
+### cast
+
+- static_cast
+  - conversions of related type.
+  - 这里强调相关类型，即类型是存在一定兼容性的
+- dynamic_cast
+  - dynamic_cast is only for polymorphic types. 
+  - you only need to use it when you're casting to a derived class
+  - 这里的原因在于，base*可以指向base/derived。如果指向base，那么不能转换为derived pointer.
+  - 但是static_cast转换失败不会有任何提示，还是指向自己。dynamic_cast会给出run time error
+
+```cpp
+#include <iostream>
+class Base {
+ public:
+  virtual ~Base() = default;
+  virtual void NameOf() {
+    std::cout << "Base." << std::endl;
+  }
+};
+
+class Derived : public Base {
+ public:
+  virtual void NameOf() {
+    std::cout << "Derived." << std::endl;
+  }
+};
+
+int main() {
+  Base base;
+  Derived deri;
+
+  Base* pbase = &base;
+  //Derived* pderi = static_cast<Derived*>(pbase); // 这么转换其实有问题的，但是不会报出来
+  //pderi->NameOf();
+
+  Derived* pderi = dynamic_cast<Derived*>(pbase);  // runtime error
+  pderi->NameOf();
+
+  return 0;
+}
+```
+
+### anonomous namespace
+
+```cpp
+// 下面这段代码输出是什么
+#include <iostream>
+
+namespace {
+  int foo = 3;
+}
+
+namespace a {
+int foo = 2;
+}
+
+int main() {
+  std::cout << foo << std::endl;
+  return 0;
+}
+
+// 下面这段代码输出又是什么
+#include <iostream>
+namespace a {
+  int foo = 3;
+}
+
+namespace b {
+int foo = 2;
+}
+
+int main() {
+  std::cout << foo << std::endl;
+  return 0;
+}
+```
+
+- 第一段代码输出3
+- 第二段代码编译失败
+
+下面直接给出结论：
+1. nonymous namespace的作用域空间，从变量定义开始，到**名字空间**作用域结束
+2. anonymous namespace的作用域空间，从变量定义开始，到**文件作用域**结束
+
+### 线程安全
+
+这一小节是非常重要的，在单核时代，我们没有讨论线程安全的必要性。但是多核时代，这个是肯定的。因为多核时代如果不写并发程序，对于资源是一种浪费
+
+- local static variables
+
+关于初始化，下面我直接给出结论：
+1. C++11 保证静态局部变量的初始化过程是线程安全的。
+2. C++03 不保证静态局部变量的初始化是线程安全的。
+
+关于写操作，
+1. local static variables make code not thread safe.
+
+q:对于local static variables的一些认知？
+> You can think of local static variables as "global" in the sense of the program's memory space, 
+but with limited access enforced by the programming language at the scope in which it is defined.
+>
+>When you have multiple threads, they each have their own stacks, which expand and shrink as the thread runs. 
+Global variables and local static variables are outside of these individual thread stacks
+>
+>Local static variables should be avoided in almost all cases, because they also add hidden state to your functions, 
+and they are no-longer what is known as 'pure'. Pure functions are functions in which the output of the function depends only on the inputs to the function.
+
+参考<br>
+[C++函数内的静态变量初始化以及线程安全问题？](https://www.zhihu.com/question/267013757)<br>
+[Why use of local static variable makes C code not thread safe?](https://www.quora.com/Why-use-of-local-static-variable-makes-C-code-not-thread-safe)
+
+### resize vs reserve
+
+q:resize?
+- Resizes the container to contain count elements.
+- If the current size is greater than count, the container is reduced to its first count elements.
+- If the current size is less than count,
+  - additional default-inserted elements are appended
+  - additional copies of value are appended.
+
+q:reserve?
+- Increase the capacity of the vector to a value that's greater or equal to new_cap. If new_cap is greater than the current capacity(), new storage is allocated, otherwise the method does nothing.
+- reserve() does not change the size of the vector.
+- If new_cap is greater than capacity(), all iterators, including the past-the-end iterator, and all references to the elements are invalidated. Otherwise, no iterators or references are invalidated(Be careful!!!)
+
+q:区别？
+1.一个对象的构造涉及两方面工作：一是内存分配，二是对象构造
+2.reserve只进行内存分配，不进行对象构造。所以reserve不改变容器的元素个数(size)，只改变容器的容量(capacity)
+3.resize，分好几种情况，但是本质是它要完成一个对象的构造。
+3.1.如果count < size，对于多余的对象进行析构。但是不回收空间。
+3.2.如果size < count < capacity, 对于多余的对象进行构造，但是不分配空间。
+3.3.如果capacity < count，对于多余的对象内存分配并且构造
+
+q:什么时候使用这2者？
+1.reserve的使用场景很明显，需要提前开辟好空间(提前知道空间大小)，但是具体的元素之后插入，所以只进行空间预分配。
+2.resize不是reserve使用的场景，使用resize.
+
+参考<br>
+[choice-between-vectorresize-and-vectorreserve](https://stackoverflow.com/questions/7397768/choice-between-vectorresize-and-vectorreserve)<br>
+[reserve-resize-functions](https://stackoverflow.com/questions/9521629/stdstringss-capacity-reserve-resize-functions)
+
+
 ### 传值/传引用
 ```
 c只有传值这一种方式，传指针本质上也只传值。
@@ -1169,7 +1332,7 @@ int main(void) {
 [“extern” keyword in C](https://www.tutorialspoint.com/extern-keyword-in-c)<br>
 [warning in extern declaration](https://stackoverflow.com/questions/4268589/warning-in-extern-declaration)
 
-### 低维信息用高维表示
+#### 低维信息用高维表示
 
 ```c
 #include <stdio.h>
@@ -1212,6 +1375,67 @@ val11 == val12
 val21 != val22
 */
 ```
+
+#### 输出参数指针vs引用
+
+这一部分的总结，主要来自于对于内网的一次讨论，对于一些基本观点，我做如下总结
+
+q:起因？
+>规范要求，所有函数的传出参数，强制使用指针。这个也是GCS的标准
+
+q:指针作为传出参数的特点是什么？
+>和引用相比，指针具有更好的可读性。
+>
+>这里我的问题是，可读性好，体现在哪里？
+
+```cpp
+//callee:
+void copy1(const std::string& a, std::string* b);
+void copy2(const std::string& a, std::string& b);
+
+
+//caller:
+copy1(foo, &bar);
+copy2(foo, bar);
+```
+
+上面这段代码，可以很清楚的明白：
+1. copy1, bar是传出参数，因为获取了它的地址
+2. copy2当中，bar则是传入参数，因为没有获取它的地址。
+
+上面是从调用着的角度，非常清晰的明白函数参数的传入传出性。这么做的一个好处是，对于不是写代码的人，只是看代码的人，可以比较清晰的明白数据的流向。
+注意，我这里强调了，不是写代码的人，如果写代码的人，无论如何你是要看函数声明的。此时，const& and & 一样能清晰的表达语义。
+
+q:上面的这种case，有表达不好的地方吗？
+>有的。
+
+```cpp
+void swap(int* a, int* b);
+
+int* a = new int(3);
+int* b = new int(4);
+
+swap(a, b);
+```
+
+显然，从caller来说，我们看不出谁是传入/传出函数。当然，phongchen也提到了，这种还是比较少的case.不过draculaqian也补充道，即使对于普通的case，
+也只能是最初的调用链这里能看到，再向下传递就看不到了。
+
+简单总结下：
+1. 指针作为传出参数，从caller这里来看，还是有一个清楚的语义的。取地址的表明这个变量是传出参数
+2. 这个优势有一部分case不满足
+3. 只有在最初的caller才看的出来，之后的链条看不到了
+
+q:draculaqian的观点？
+>语义需要明确，而不是基于隐喻;
+怎么表达一个参数，是类型系统；用一个参数具体做什么，是具体的逻辑，这是独立的两件事，一件事不该隐喻另一件事。
+>
+>下面这句话我不是很理解，因为我觉得指针是一个类型，承载了这个类型的语义。所以，我认为是有一点道理的。
+不过作者可能认为，什么类型的变量，确定的是它的用途。传入/传出的语义不应该用这个取承载。
+作者也举了别的语言的例子，in out标识。或者类似rust(& &mut)
+
+所以，从上面这个角度讲，用const& and &标识传入和传出参数，也是合理的。
+
 
 ### Tex
 
