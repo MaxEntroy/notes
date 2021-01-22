@@ -1,6 +1,6 @@
 ## Chapter07 Templates and Generic Programming
 
-### Item47: Use Member function templates to accept all compatible types.
+### Item45: Use Member function templates to accept all compatible types.
 
 It is about type conversion.
 
@@ -12,7 +12,7 @@ We have to program them explicitly.
   - subitem1: we need a ctor template.
   - subitem2: The generalized copy ctor is not declared explicit.
   - subitem3: We use the member initialization list to initialize SmartPtr<T>'s data member of type T* with the type U*
-  held by the SmartPtr<U>
+  held by the SmartPtr<U>.
   - subitem4: Another common role for them is in support for assignment.
   - subitem5: If you declare member templates for generalized copy construction or generalized assignment, you'll
 still need to declare the normal copy constructor and copy assignment operator, too.(Member function templates are wonderful things, but they don't alter the basic rules of the language.)
