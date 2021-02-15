@@ -213,6 +213,14 @@ The soft limit is the value that Linux uses to limit the system resources for ru
 
 ### 进程/网络
 
+#### pgrep
+
+q:作用？
+>pgrep, pkill - look up or signal processes based on name and other attributes
+
+q:用法？
+1.```pgrep -f ProcessName```这个命令获得对应进程名的pid
+
 #### xargs
 
 q:这个命令的作用?
