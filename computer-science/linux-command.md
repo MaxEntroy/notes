@@ -219,18 +219,18 @@ q:作用？
 >pgrep, pkill - look up or signal processes based on name and other attributes
 
 q:用法？
-1.```pgrep -f ProcessName```这个命令获得对应进程名的pid
+- ```pgrep -f ProcessName```这个命令获得对应进程名的pid
 
 #### xargs
 
 q:这个命令的作用?
-1.xargs - build and execute command lines from standard input
-2.翻译过来就是，把标准输入，转化为命令行参数。
+1. xargs - build and execute command lines from standard input
+2. 翻译过来就是，把标准输入，转化为命令行参数。
 
 q:命令的用法?
-1.管道可以把标准输出转换为标准输入，提供给右侧命令
-2.但是不是所有命令，都接受标准输入作为参数。
-3.对于不接受标准输入作为参数的命令，使用xargs将标准输入转化为命令行参数，从而执行该命令
+1. 管道可以把标准输出转换为标准输入，提供给右侧命令
+2. 但是不是所有命令，都接受标准输入作为参数。
+3. 对于不接受标准输入作为参数的命令，使用xargs将标准输入转化为命令行参数，从而执行该命令
 
 >cat /etc/passwd | grep root, 这个命令ok，因为grep接受把标准输出转化为标准输入
 echo "hello world" | echo，这个命令不ok，因为echo不接受标准输入作为参数
