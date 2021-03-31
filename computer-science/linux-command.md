@@ -2,6 +2,10 @@
 
 ## 常用命令
 
+### 系统信息
+
+[cpu/mem](https://www.cnblogs.com/emanlee/p/3587571.html)
+
 ### 文件
 
 #### awk
