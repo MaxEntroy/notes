@@ -1,9 +1,9 @@
 ### 同步/异步/阻塞/非阻塞
 
 这几个概念容易搞混，主要是因为没有限定好讨论问题的背景，所以当我们特别讨论这几个概念时，一定是在如下的背景
-- socket programming
+- Socket programming
 - I/O model
-- function call
+- Function call
 
 #### 同步/异步
 
@@ -18,4 +18,6 @@ microsoft从file I/O的角度给出了定义
   - 时间：非线性
   - 空间：非连续
 
-  <img width="700"  src="img/sync-async-io.png"/>
+这里面时空是否线性，连续，时区分二者的根本原因。
+
+  <img width="500"  src="img/sync-async-io.png"/>
