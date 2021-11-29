@@ -1,6 +1,12 @@
 本文借助Posix threads，介绍thread的一些基本概念
 
-### 基本概念
+### Thread Execution Model
+
+- Each thread has its own thread context, including a unique integer thread
+ID (TID), stack, stack pointer, program counter, general-purpose registers, and
+condition codes. (csapp.12.3)
+- Everything within a process is sharable among the threads in a process, including the text of the executable
+program, the program’s global and heap memory, the stacks, and the file descriptors.(apue.11.2)
 
 ### Posix Threads
 
