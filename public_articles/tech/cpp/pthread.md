@@ -35,6 +35,14 @@ pthread_t pthread_self(void);
 // Returns: thread ID of caller
 ```
 
+- When a thread is created, there is no guarantee which will run first: the newly
+created thread or the calling thread.
+- The newly created thread has access to the process
+address space and inherits the calling thread’s floating-point environment and signal
+mask; however, the set of pending signals for the thread is cleared.
+
+上面这点非常关键，因为此时peer thread共享main thread address space，而这二者的执行顺序又不确定，很容易导致race condition.
+
 #### Terminating Threads
 
 A thread terminates in one of the following ways:
