@@ -1,4 +1,4 @@
-本文借助Posix threads，介绍thread的一些基本概念
+本文作为csapp 12.3(Concurrent Programming with Threads)的读书笔记，介绍常见pthread API。同时，也作为线程基础的第一部分讲义。
 
 ### Thread Execution Model
 
@@ -41,7 +41,29 @@ created thread or the calling thread.
 address space and inherits the calling thread’s floating-point environment and signal
 mask; however, the set of pending signals for the thread is cleared.
 
-上面这点非常关键，因为此时peer thread共享main thread address space，而这二者的执行顺序又不确定，很容易导致race condition.
+**上面这点非常关键，此时peer thread共享main thread address space，而这二者的执行顺序又不确定，很容易导致race condition.**
+
+看下面的代码，非常经典的race condition问题
+```cpp
+// main thread
+connfd = Accept(listenfd, (SA *) &clientaddr, &clientlen);
+Pthread_create(&tid, NULL, thread, &connfd);
+
+// peer thread
+void *thread(void *vargp) {
+  int connfd = *((int *)vargp);
+  ...
+}
+
+```
+- 现象
+  - 如果main thread先执行，connfd更新。peer thread后执行，此时，拿到错误的connfd
+  - 如果peer thread先执行，拿到正确的connfd。main thread后执行，更新无异常。
+- 原因
+  - connfd is a shared variable.
+  - 虽然connfd是一个non-static local var，但是peer thread还是会可能访问到main thread
+    - 具体原因下一个章节会详述
+    - 简单来说，通过指针来"捣鬼"
 
 #### Terminating Threads
 
