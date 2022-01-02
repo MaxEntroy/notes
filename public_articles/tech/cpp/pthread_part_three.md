@@ -106,7 +106,7 @@ safe_transfer(your_account, my_account, 50);  // [A]
 safe_transfer(your_account, my_account, 80);  // [B]
 ```
 
-其实不管是race condition还是data race，我们可以发现race其实会引入non-deterministic，导致程序的正确性收到影响
+其实不管是race condition还是data race，我们可以发现race其实会引入non-deterministic，导致程序的正确性受到影响
 
 ### 参考
 [Synchronization](https://en.wikipedia.org/wiki/Synchronization)<br>
