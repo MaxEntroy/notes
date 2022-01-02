@@ -1,4 +1,4 @@
-本文作为csapp 12.4(Shared Variables in Threaded Programs)的读书笔记，主要介绍Threads Memory Model。同时，也作为线程基础的第二部分讲义。
+本文作为csapp 12.5(Synchronizing Threads with Semaphores)的读书笔记，主要介绍线程同步的相关问题。同时，也作为线程基础的第三部分讲义。
 
 ### Intro
 
