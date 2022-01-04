@@ -31,7 +31,7 @@ The need for synchronization does not arise merely in multi-processor systems bu
 - Thread synchronization is defined as a mechanism which ensures that two or more concurrent processes or threads do not simultaneously execute some particular program segment known as critical section.Processes' access to critical section is controlled by using synchronization techniques.
 - When one thread starts executing the critical section (serialized segment of the program) the other thread should wait until the first thread finishes. If proper synchronization techniques are not applied, it may cause a race condition where the values of variables may be unpredictable and vary depending on the timings of context switches of the processes or threads.
 
-这里说下我的理解，同步机制是指，在并发环境下，保证程序并发执行正确性的手段。这个手段具体来说，就是协调进程/线程的执行顺序，来保证时空的一致性(回应道本文一开始提出的同步概念)
+这里说下我的理解，同步机制是指，在并发环境下，保证程序并发执行正确性的手段。这个手段具体来说，就是协调进程/线程的执行顺序，来保证时空的一致性(回应本文一开始提出的同步概念)
 
 这里我们多探讨两组概念：
 - critical section: program where the shared resource is accessed, **it cannot be executed by more than one process at a time**
@@ -108,7 +108,74 @@ safe_transfer(your_account, my_account, 80);  // [B]
 
 其实不管是race condition还是data race，我们可以发现race其实会引入non-deterministic，导致程序的正确性受到影响
 
-### 参考
+#### RMO operations
+
+下面我们来详细分析一个例子
+
+```cpp
+void *thread(void *vargp); /* Thread routine prototype */
+
+/* Global shared variable */
+volatile long cnt = 0; /* Counter */
+
+int main(int argc, char **argv)
+{
+  long niters;
+  pthread_t tid1, tid2;
+  
+  /* Check input argument */
+  if (argc != 2) {
+    printf("usage: %s <niters>\n", argv[0]);
+    exit(0);
+  }
+  niters = atoi(argv[1]);
+  
+  /* Create threads and wait for them to finish */
+  Pthread_create(&tid1, NULL, thread, &niters);
+  Pthread_create(&tid2, NULL, thread, &niters);
+  Pthread_join(tid1, NULL);
+  Pthread_join(tid2, NULL);
+  
+  /* Check result */
+  if (cnt != (2 * niters))
+    printf("BOOM! cnt=%ld\n", cnt);
+  else
+    printf("OK cnt=%ld\n", cnt);
+  exit(0);
+}
+
+/* Thread routine */
+void *thread(void *vargp)
+{
+  long i, niters = *((long *)vargp);
+  
+  for (i = 0; i < niters; i++)
+    cnt++;
+  
+  return NULL;
+}
+```
+
+To understand the problem clearly, we need to study the assembly code for the counter loop (lines 40–41),
+- Hi : The block of instructions at the head of the loop
+- Li : The instruction that loads the shared variable cnt into the accumulator register %rdxi , where %rdxi denotes the value of register %rdx in thread i
+- Ui : The instruction that updates (increments) %rdxi
+- Si : The instruction that stores the updated value of %rdxi back to the shared variable cnt
+- Ti : The block of instructions at the tail of the loop
+
+1. When the two peer threads in badcnt.c run concurrently on a uniprocessor, the machine instructions are completed one after the other in some order. 
+2. Thus, each concurrent execution defines some total ordering (or interleaving) of the instructions in the two threads. 
+3. Unfortunately, some of these orderings will produce correct results, but others will not.
+
+**Here is the crucial point: In general, there is no way for you to predict whether the operating system will choose a correct ordering for your threads.**
+
+上面这句话讲到根本了，kernel也无法保证一个固定的instruction order，这有可能会导致机器指令的交替执行，从而导致错误的结果。当然，从结论中，我们可以反推一些前提条件
+- assembly code是指令执行的最小单元(这个只是我的反推，没有校验)
+- 即使都是cpu操作，也会发生汇编指令级别的乱序(是否有可能cpu执行时，不进行调度，只有io才进行调度)
+
+### Semaphores
+
+### References
 [Synchronization](https://en.wikipedia.org/wiki/Synchronization)<br>
 [同步](https://zh.wikipedia.org/wiki/%E5%90%8C%E6%AD%A5)<br>
 [Asynchronous I/O](https://en.wikipedia.org/wiki/Asynchronous_I/O)<br>
