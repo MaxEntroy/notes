@@ -175,6 +175,25 @@ To understand the problem clearly, we need to study the assembly code for the co
 
 ### Semaphores
 
+A semaphore, s, is a **global variable** with a nonnegative integer value that can only be manipulated by two special operations, called P and V
+- P(s):
+  - If s is nonzero, then P decrements s and returns immediately. 
+  - If s iszero, then suspend the thread until s becomes nonzero and the thread is restarted by a V operation. 
+  - After restarting, the P operation decrements s and returns control to the caller.
+- V(s):
+  - The V operation increments s by 1.
+  - If there are any threads blocked at a P operation waiting for s to become nonzero, then the V operation restarts exactly one of these threads,
+  - which then completes its P operation by decrementing s.
+
+这里有一点要注意，P操作，无论如何都要减一，V操作，无论如何都要加1.关于PV操作，还有一些需要注意的地方：
+
+- The test and decrement operations in P occur indivisibly
+- Notice that the definition of V does not define the order in which waiting threads are restarted.Thus, when several threads are waiting at a semaphore, you cannot predict which one will be restarted as a result of the V .
+
+#### Using Semaphores for Mutual Exclusion
+
+#### Using Semaphores to Schedule Shared Resources
+
 ### References
 [Synchronization](https://en.wikipedia.org/wiki/Synchronization)<br>
 [同步](https://zh.wikipedia.org/wiki/%E5%90%8C%E6%AD%A5)<br>
