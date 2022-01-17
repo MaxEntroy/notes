@@ -190,7 +190,36 @@ A semaphore, s, is a **global variable** with a nonnegative integer value that c
 - The test and decrement operations in P occur indivisibly
 - Notice that the definition of V does not define the order in which waiting threads are restarted.Thus, when several threads are waiting at a semaphore, you cannot predict which one will be restarted as a result of the V .
 
+Regardless, the message remains the same: always synchronize accesses to your shared variables, regardless if you’re running on a uniprocessor or a multiprocessor
+
 #### Using Semaphores for Mutual Exclusion
+
+Semaphores provide a convenient way to ensure mutually exclusive access to shared variables. The basic idea is to associate a semaphore s, initially 1, with each shared variable and then surround the corresponding critical section with P(s) and V (s) operations.
+
+- Binary semaphores whose purpose is to provide mutual exclusion are often called mutexes.
+- Performing a P operation on a mutex is called locking the mutex.
+- Similarly, performing the V operation is called unlocking the mutex.
+- A thread that has locked but not yet unlocked a mutex is said to be holding the mutex
+
+```cpp
+#define P(s) sem_wait(&s)
+#define V(s) sem_post(&s)
+
+sem_t mtx;
+
+/* Thread routine */
+void *thread(void *vargp)
+{
+  long i, niters = *((long *)vargp);
+  sem_init(&mtx, 0, 1);
+  for (i = 0; i < niters; i++) {
+    P(mtx);
+    cnt++;
+    V(mtx);
+  }
+  return NULL;
+}
+```
 
 #### Using Semaphores to Schedule Shared Resources
 
