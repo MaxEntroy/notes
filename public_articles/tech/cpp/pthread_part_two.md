@@ -47,7 +47,7 @@ Pthread_create(&tid, NULL, thread, reinterpret_cast<void*>connfd);
 
 // peer thread
 void *thread(void *vargp) {
-  int connfd = reinterpret_cast<int>vargp);
+  int connfd = reinterpret_cast<int>(vargp));
   ...
 }
 ```
