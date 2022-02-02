@@ -324,7 +324,7 @@ int sbuf_remove(sbuf_t *sp)
 
 这个问题也可以用信号量建模，本质是因为读写的资源，一般是memory arena(a shared variable)，所以我们可以用一个信号量来表示资源的个数。
 
-First readers–writers problem
+- First readers–writers problem
 >Suppose we have a shared memory area (critical section) with the basic constraints detailed above. It is possible to protect the shared data behind a mutual exclusion mutex, in which case no two threads can access the data at the same time. However, this solution is sub-optimal, because it is possible that a reader R1 might have the lock, and then another reader R2 requests access. It would be foolish for R2 to wait until R1 was done before starting its own read operation; instead, R2 should be allowed to read the resource alongside R1 because reads don't modify data, so concurrent reads are safe. This is the motivation for the first readers–writers problem, in which the constraint is added that no reader shall be kept waiting if the share is currently opened for reading. This is also called readers-preference, with its solution:
 
 ```cpp
@@ -370,7 +370,7 @@ reader() {
 }
 ```
 
-Second readers–writers problem
+- Second readers–writers problem
 >The first solution is suboptimal, because it is possible that a reader R1 might have the lock, a writer W be waiting for the lock, and then a reader R2 requests access. It would be unfair for R2 to jump in immediately, ahead of W; if that happened often enough, W would starve. Instead, W should start as soon as possible. This is the motivation for the second readers–writers problem, in which the constraint is added that no writer, once added to the queue, shall be kept waiting longer than absolutely necessary. This is also called writers-preference.
 
 ```cpp
@@ -421,7 +421,7 @@ writer() {
 }
 ```
 
-Third readers–writers problem
+- Third readers–writers problem
 >In fact, the solutions implied by both problem statements can result in starvation — the first one may starve writers in the queue, and the second one may starve readers. Therefore, the third readers–writers problem is sometimes proposed, which adds the constraint that no thread shall be allowed to starve; that is, the operation of obtaining a lock on the shared data will always terminate in a bounded amount of time. A solution with fairness for both readers and writers might be as follows:
 
 ```cpp
