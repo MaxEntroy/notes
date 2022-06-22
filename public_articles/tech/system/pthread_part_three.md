@@ -190,7 +190,7 @@ A semaphore, s, is a **global variable** with a nonnegative integer value that c
 - The test and decrement operations in P occur indivisibly
 - Notice that the definition of V does not define the order in which waiting threads are restarted.Thus, when several threads are waiting at a semaphore, you cannot predict which one will be restarted as a result of the V .
 
-Regardless, the message remains the same: always synchronize accesses to your shared variables, regardless if you’re running on a uniprocessor or a multiprocessor
+**Regardless, the message remains the same: always synchronize accesses to your shared variables, regardless if you’re running on a uniprocessor or a multiprocessor**
 
 #### Using Semaphores for Mutual Exclusion
 
@@ -256,6 +256,219 @@ void *thread(void *vargp)
 
 #### Using Semaphores to Schedule Shared Resources
 
+Another important use of semaphores, besides providing mutual exclusion, is to
+schedule accesses to shared resources. In this scenario, a thread uses a semaphore operation to **notify** another thread that **some condition in the program state has become true.**
+
+##### Producer-Consumer Problem
+
+- Since inserting and removing items involves updating shared variables, we must guarantee mutually exclusive access to the buffer.
+- But guaranteeing mutual exclusion is not sufficient. We also need to schedule accesses to the buffer.
+  - If the buffer is full (there are no empty slots), then the producer must wait until a slot becomes available.
+  - Similarly, if the buffer is empty (there are no available items), then the consumer must wait until an item becomes available.
+
+```cpp
+typedef struct {
+  int *buf; /* Buffer array */
+  int n; /* Maximum number of slots */
+  int front; /* buf[(front+1)%n] is first item */
+  int rear; /* buf[rear%n] is last item */
+  sem_t mutex; /* Protects accesses to buf */
+  sem_t slots; /* Counts available slots */
+  sem_t items; /* Counts available items */
+ } sbuf_t;
+
+/* Create an empty, bounded, shared FIFO buffer with n slots */
+void sbuf_init(sbuf_t *sp, int n)
+{
+  sp->buf = Calloc(n, sizeof(int));
+  sp->n = n; /* Buffer holds max of n items */
+  sp->front = sp->rear = 0; /* Empty buffer iff front == rear */
+  Sem_init(&sp->mutex, 0, 1); /* Binary semaphore for locking */
+  Sem_init(&sp->slots, 0, n); /* Initially, buf has n empty slots */
+  Sem_init(&sp->items, 0, 0); /* Initially, buf has zero data items */
+}
+
+/* Clean up buffer sp */
+void sbuf_deinit(sbuf_t *sp)
+{
+  Free(sp->buf);
+}
+
+/* Insert item onto the rear of shared buffer sp */
+void sbuf_insert(sbuf_t *sp, int item)
+{
+  P(&sp->slots); /* Wait for available slot */
+  P(&sp->mutex); /* Lock the buffer */
+  sp->buf[(++sp->rear)%(sp->n)] = item; /* Insert the item */
+  V(&sp->mutex); /* Unlock the buffer */
+  V(&sp->items); /* Announce available item */
+}
+
+/* Remove and return the first item from buffer sp */
+int sbuf_remove(sbuf_t *sp)
+{
+  int item;
+  P(&sp->items); /* Wait for available item */
+  P(&sp->mutex); /* Lock the buffer */
+  item = sp->buf[(++sp->front)%(sp->n)]; /* Remove the item */
+  V(&sp->mutex); /* Unlock the buffer */
+  V(&sp->slots); /* Announce available slot */
+  return item;
+}
+```
+
+- 这里核心的理解是，用信号量来表达共享资源的个数，不管是用来同步互斥，还是同步调度。
+- 不过，我个人觉得，可能条件变量的语义更清楚一点。当然，信号量的语义也很清楚，但是如果我们换个问题，比如某个条件发生时，线程被阻塞。某个条件发生时，线程被唤醒。此时如果用信号量就不是很直观。因为，某个条件是否能用信号量的语义来表达，这个不一定。上面的条件刚好是资源数，所以信号量的表达没问题。
+
+#### Readers–writers problem
+
+这个问题也可以用信号量建模，本质是因为读写的资源，一般是memory arena(a shared variable)，所以我们可以用一个信号量来表示资源的个数。
+
+- First readers–writers problem
+>Suppose we have a shared memory area (critical section) with the basic constraints detailed above. It is possible to protect the shared data behind a mutual exclusion mutex, in which case no two threads can access the data at the same time. However, this solution is sub-optimal, because it is possible that a reader R1 might have the lock, and then another reader R2 requests access. It would be foolish for R2 to wait until R1 was done before starting its own read operation; instead, R2 should be allowed to read the resource alongside R1 because reads don't modify data, so concurrent reads are safe. This is the motivation for the first readers–writers problem, in which the constraint is added that no reader shall be kept waiting if the share is currently opened for reading. This is also called readers-preference, with its solution:
+
+```cpp
+semaphore resource=1;
+semaphore rmutex=1;
+readcount=0;
+
+/*
+   resource.P() is equivalent to wait(resource)
+   resource.V() is equivalent to signal(resource)
+   rmutex.P() is equivalent to wait(rmutex)
+   rmutex.V() is equivalent to signal(rmutex)
+*/
+
+writer() {
+    resource.P();          //Lock the shared file for a writer
+
+    <CRITICAL Section>
+    // Writing is done
+
+    <EXIT Section>
+    resource.V();          //Release the shared file for use by other readers. Writers are allowed if there are no readers requesting it.
+}
+
+reader() {
+    rmutex.P();           //Ensure that no other reader can execute the <Entry> section while you are in it
+    <CRITICAL Section>
+    readcount++;          //Indicate that you are a reader trying to enter the Critical Section
+    if (readcount == 1)   //Checks if you are the first reader trying to enter CS
+        resource.P();     //If you are the first reader, lock the resource from writers. Resource stays reserved for subsequent readers
+    <EXIT CRITICAL Section>
+    rmutex.V();           //Release
+
+    // Do the Reading
+
+    rmutex.P();           //Ensure that no other reader can execute the <Exit> section while you are in it
+    <CRITICAL Section>
+    readcount--;          //Indicate that you no longer need the shared resource. One fewer reader
+    if (readcount == 0)   //Checks if you are the last (only) reader who is reading the shared file
+        resource.V();     //If you are last reader, then you can unlock the resource. This makes it available to writers.
+    <EXIT CRITICAL Section>
+    rmutex.V();           //Release
+}
+```
+
+- Second readers–writers problem
+>The first solution is suboptimal, because it is possible that a reader R1 might have the lock, a writer W be waiting for the lock, and then a reader R2 requests access. It would be unfair for R2 to jump in immediately, ahead of W; if that happened often enough, W would starve. Instead, W should start as soon as possible. This is the motivation for the second readers–writers problem, in which the constraint is added that no writer, once added to the queue, shall be kept waiting longer than absolutely necessary. This is also called writers-preference.
+
+```cpp
+int readcount, writecount;                   //(initial value = 0)
+semaphore rmutex, wmutex, readTry, resource; //(initial value = 1)
+
+//READER
+reader() {
+<ENTRY Section>
+  readTry.P();                 //Indicate a reader is trying to enter
+  rmutex.P();                  //lock entry section to avoid race condition with other readers
+  readcount++;                 //report yourself as a reader
+  if (readcount == 1)          //checks if you are first reader
+    resource.P();              //if you are first reader, lock  the resource
+  rmutex.V();                  //release entry section for other readers
+  readTry.V();                 //indicate you are done trying to access the resource
+
+<CRITICAL Section>
+//reading is performed
+
+<EXIT Section>
+  rmutex.P();                  //reserve exit section - avoids race condition with readers
+  readcount--;                 //indicate you're leaving
+  if (readcount == 0)          //checks if you are last reader leaving
+    resource.V();              //if last, you must release the locked resource
+  rmutex.V();                  //release exit section for other readers
+}
+
+//WRITER
+writer() {
+<ENTRY Section>
+  wmutex.P();                  //reserve entry section for writers - avoids race conditions
+  writecount++;                //report yourself as a writer entering
+  if (writecount == 1)         //checks if you're first writer
+    readTry.P();               //if you're first, then you must lock the readers out. Prevent them from trying to enter CS
+  wmutex.V();                  //release entry section
+  resource.P();                //reserve the resource for yourself - prevents other writers from simultaneously editing the shared resource
+<CRITICAL Section>
+  //writing is performed
+  resource.V();                //release file
+
+<EXIT Section>
+  wmutex.P();                  //reserve exit section
+  writecount--;                //indicate you're leaving
+  if (writecount == 0)         //checks if you're the last writer
+    readTry.V();               //if you're last writer, you must unlock the readers. Allows them to try enter CS for reading
+  wmutex.V();                  //release exit section
+}
+```
+
+- Third readers–writers problem
+>In fact, the solutions implied by both problem statements can result in starvation — the first one may starve writers in the queue, and the second one may starve readers. Therefore, the third readers–writers problem is sometimes proposed, which adds the constraint that no thread shall be allowed to starve; that is, the operation of obtaining a lock on the shared data will always terminate in a bounded amount of time. A solution with fairness for both readers and writers might be as follows:
+
+```cpp
+int readcount;                // init to 0; number of readers currently accessing resource
+
+// all semaphores initialised to 1
+semaphore resource;           // controls access (read/write) to the resource
+semaphore rmutex;             // for syncing changes to shared variable readcount
+semaphore serviceQueue;       // FAIRNESS: preserves ordering of requests (signaling must be FIFO)
+
+//READER
+reader() {
+<ENTRY Section>
+  serviceQueue.P();           // wait in line to be serviced
+  rmutex.P();                 // request exclusive access to readcount
+  readcount++;                // update count of active readers
+  if (readcount == 1)         // if I am the first reader
+    resource.P();             // request resource access for readers (writers blocked)
+  serviceQueue.V();           // let next in line be serviced
+  rmutex.V();                 // release access to readcount
+    
+<CRITICAL Section>
+//reading is performed
+    
+<EXIT Section>
+  rmutex.P();                 // request exclusive access to readcount
+  readcount--;                // update count of active readers
+  if (readcount == 0)         // if there are no readers left
+    resource.V();             // release resource access for all
+  rmutex.V();                 // release access to readcount
+}
+
+//WRITER
+writer() {
+<ENTRY Section>
+  serviceQueue.P();           // wait in line to be serviced
+  resource.P();               // request exclusive access to resource
+  serviceQueue.V();           // let next in line be serviced
+    
+<CRITICAL Section>
+// writing is performed
+    
+<EXIT Section>
+  resource.V();               // release resource access for next reader/writer
+}
+```
+
 ### References
 [Synchronization](https://en.wikipedia.org/wiki/Synchronization)<br>
 [同步](https://zh.wikipedia.org/wiki/%E5%90%8C%E6%AD%A5)<br>
@@ -264,3 +477,5 @@ void *thread(void *vargp)
 [Race condition](https://en.wikipedia.org/wiki/Race_condition#Software)<br>
 [竞争冒险](https://zh.wikipedia.org/wiki/%E7%AB%B6%E7%88%AD%E5%8D%B1%E5%AE%B3)<br>
 [Are "data races" and "race condition" actually the same thing in context of concurrent programming](https://stackoverflow.com/questions/11276259/are-data-races-and-race-condition-actually-the-same-thing-in-context-of-conc)<br>
+[https://en.wikipedia.org/wiki/Readers%E2%80%93writers_problem](https://en.wikipedia.org/wiki/Readers%E2%80%93writers_problem)<br>
+[读者写者问题（读者优先,写者优先 ,读写公平）](https://blog.csdn.net/william_munch/article/details/84256690)
