@@ -34,6 +34,19 @@
 - 这个题，应用两分查找的思路，来进行方程解逼近，比线性快。非常巧妙。有一个注意点，mid可以向下取整，但是求和不行。千万小心
 - 朴素枚举也可以解决，最简单的就是一元二次方程求解，别忘了数学
 
+#### [367.Valid Perfect Square](https://leetcode.cn/problems/valid-perfect-square/)
+- 并不是直接的两分查找，但是利用了两分查找的思路，快速搜索解空间，试探。本质不是求解，是验证。
+- 注意类型转换的地方，需要先转换，再做乘法。否则乘法结束之后，无法转化。
+
+```cpp
+double val1 = 1 / 2; // wrong, val = 0
+double val2 = static_cast<double>(1) / 2; // right
+```
+
+#### [69.Sqrt(x)](https://leetcode.cn/problems/sqrtx/)
+- 和上一题思路一致。
+- 也可以使用牛顿法。
+
 ### 朴素枚举
 
 #### [350. Intersection of Two Arrays II](https://leetcode.com/problems/intersection-of-two-arrays-ii/)
@@ -41,3 +54,21 @@
 - 这个题很难直接分类，我理解还是比较朴素的遍历了解空间
 - 当然，这个提也可以当做数据结构的妙用。这个题依赖hashmap
 - 我首选遍历的思路，借助两根指针。需要排序的预处理
+
+## 数学
+
+### Newton's method
+
+迭代公式如下，本质思路：切线是曲线的线性逼近，参见[如何通俗易懂地讲解牛顿迭代法求开方（数值分析）？](https://www.zhihu.com/question/20690553)
+
+$x_{n+1} = x_{n} - \frac{f(x_{n})}{f^{`}(x_{n})}$
+
+#### [69.Sqrt(x)](https://leetcode.cn/problems/sqrtx/)
+- 和上一题思路一致。
+- 也可以使用牛顿法。
+
+## 动态规划
+
+#### [303. Range Sum Query - Immutable](https://leetcode.cn/problems/range-sum-query-immutable/)
+
+- 动态规划第一题
