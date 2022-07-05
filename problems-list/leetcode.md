@@ -44,16 +44,59 @@ double val2 = static_cast<double>(1) / 2; // right
 ```
 
 #### [69.Sqrt(x)](https://leetcode.cn/problems/sqrtx/)
+
 - 和上一题思路一致。
 - 也可以使用牛顿法。
 
-### 朴素枚举
+### 暴力搜索
+
+#### [363.Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+
+- 承接自303/304
+- 基本算法思路其实暴力搜索，枚举所有子矩阵。
+- 矩阵和计算的时候，可以利用dp进行预处理。
+- 这个题我第一版的思路和最终的答案，我理解其实都是O(N^4)的复杂度，但是正确解在T(n)这个级别要好。
+- 53和这个题一个思路，但是类似的优化暴力搜索无法解决。
 
 #### [350. Intersection of Two Arrays II](https://leetcode.com/problems/intersection-of-two-arrays-ii/)
 
 - 这个题很难直接分类，我理解还是比较朴素的遍历了解空间
 - 当然，这个提也可以当做数据结构的妙用。这个题依赖hashmap
 - 我首选遍历的思路，借助两根指针。需要排序的预处理
+
+## 动态规划
+
+#### [303.Range Sum Query - Immutable](https://leetcode.cn/problems/range-sum-query-immutable/)
+
+- 动态规划第一题
+- 基本思路：
+    - 状态定义
+    - 状态初始化
+    - 状态转移方程，计算
+    - 状态应用
+
+#### [304.Range Sum Query 2D - Immutable](https://leetcode.com/problems/range-sum-query-2d-immutable/submissions/)
+
+- 303的基础上，进行状态抽象。
+- 注意增加了辅助列来避免下表越界的情形。
+
+#### [363.Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+
+- 参见暴力搜索
+
+## 数据结构
+
+我对于题目的划分，不倾向于通过数据结构划分，因为即使相同的数据结构，也可以承载完全不同的算法，所以主要按照算法进行分类。
+但同时我们也注意到，对于一些特定的数据结构，围绕该数据结构的题目有其特殊性，比如链表，树，图。所以，这里也会根据数据结构进行一个大类的划分
+
+### 数组
+
+[307.Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/)
+- 这个题和303一脉相承，但是超时，表明每次O(N)的更新时间复杂度无法接受。
+- 最后用了一个非常巧妙地思路，作者对于更新采用了O(1)的复杂度，但是sum的时候，将时间复杂度降到了O(sqrt(n))，这也是非常显著的提升。
+- 作者思路的来源也在于预处理的巧妙，利用了hash分桶的思路，缓存了每个桶的sum。
+    - 更新的时候，肯定只更新某一个桶，显著的降低了更新的复杂度。如果是dp的思路，更新的复杂度在O(N).
+    - 查询的时候，中间区间桶的sum可以直接累加，这里的时间复杂度从O(N)降低到了O(sqrt(N))，首位的两个桶需要单独sum
 
 ## 数学
 
@@ -66,9 +109,3 @@ $x_{n+1} = x_{n} - \frac{f(x_{n})}{f^{`}(x_{n})}$
 #### [69.Sqrt(x)](https://leetcode.cn/problems/sqrtx/)
 - 和上一题思路一致。
 - 也可以使用牛顿法。
-
-## 动态规划
-
-#### [303. Range Sum Query - Immutable](https://leetcode.cn/problems/range-sum-query-immutable/)
-
-- 动态规划第一题
