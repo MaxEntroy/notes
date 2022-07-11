@@ -232,6 +232,8 @@ dfs具备如下两条重要性质:
 
 拓扑排序可以适用于任何有向图，可以判断该有向图是否存在环。
 
+拓扑排序和bfs算法有一个明显区别就是```visited```数组在前者用```degree```数组等效实现
+
 ```cpp
 int deg[N] = {0};  // in-degree
 std::vector<int> top_seq;

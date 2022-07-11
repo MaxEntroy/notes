@@ -39,9 +39,9 @@ class Graph {
  private:
   static constexpr int kTail{-1};
   struct Edge {
-    int node{-1};
-    int weight{0};
-    int next{-1};
+    int node;
+    int weight;
+    int next;
 
     Edge(int n, int w, int ne) : node(n), weight(w), next(ne) {}
   };
@@ -90,8 +90,8 @@ class Graph {
 
  private:
   struct Edge {
-    int node{-1};
-    int weight{0};
+    int node;
+    int weight;
 
     Edge(int n, int w) : node(n), weight(w) {}
   };
@@ -112,8 +112,56 @@ void test() {
 
 }  // namespace method2
 
+namespace method3 {
+
+class Graph {
+ public:
+  explicit Graph(int ver_num) { adj_list_.resize(ver_num); }
+
+  Graph(const Graph&) = delete;
+  Graph& operator=(const Graph&) = delete;
+
+  void AddEdge(int v1, int v2, int w) {
+    adj_list_[v1].emplace_back(v2, w);
+  }
+
+  void TraverseEdge() const {
+    int v{0};
+    for (const auto& edges : adj_list_) {
+      for (const auto& edge : edges) {
+        std::cout << "(" << v << "," << edge.node << "," << edge.weight << ")" << std::endl;
+      }
+      ++v;
+    }
+  }
+
+ private:
+  struct Edge {
+    int node;
+    int weight;
+
+    Edge(int n, int w) : node(n), weight(w) {}
+  };
+  using AdjList = std::vector<std::vector<Edge> >;
+  AdjList adj_list_;
+};
+
+void test() {
+  int n;
+  std::cin >> n;
+  Graph g(n);
+  int v1, v2, w;
+  while (std::cin >> v1 >> v2 >> w) {
+    g.AddEdge(v1, v2, w);
+  }
+  g.TraverseEdge();
+}
+
+}  // namespace method3
+
 int main(void) {
-  method1::test();
-  //method2::test();
+  // method1::test();
+  // method2::test();
+  method3::test();
   return 0;
 }
