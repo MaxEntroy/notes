@@ -24,15 +24,15 @@ void add(int x, int y, int w) {
 }
 
 // visited nodes
-int v[N] = {0};
+int vis[N] = {0};
 
 namespace dfs::base {
 
 void dfs(int x) {
-  v[x] = 1;
+  vis[x] = 1;
   for (int i = head[x]; i != kTail ; i = next[i]) {
     int y = ver[i];
-    if (v[y]) continue;
+    if (vis[y]) continue;
     dfs(y);
   }
 }
@@ -49,10 +49,10 @@ int m{-1};
 
 void dfs(int x) {
   s[++m] = x;
-  v[x] = 1;
+  vis[x] = 1;
   for (int i = head[x]; i != kTail ; i = next[i]) {
     int y = ver[i];
-    if (v[y]) continue;
+    if (vis[y]) continue;
     dfs(y);
   }
   s[++m] = x;
@@ -65,10 +65,10 @@ namespace dfs::depth {
 int d[N] = {1}; // zero is also ok
 
 void dfs(int x) {
-  v[x] = 1;
+  vis[x] = 1;
   for (int i = head[x]; i != kTail ; i = next[i]) {
     int y = ver[i];
-    if (v[y]) continue;
+    if (vis[y]) continue;
     d[y] = d[x] + 1;  // top-down operation is here.
     dfs(y);
   }
@@ -82,11 +82,11 @@ namespace dfs::size {
 int size[N] = {0};
 
 void dfs(int x) {
-  v[x] = 1;
+  vis[x] = 1;
   size[x] = 1;
   for (int i = head[x]; i != kTail ; i = next[i]) {
     int y = ver[i];
-    if (v[y]) continue;
+    if (vis[y]) continue;
     dfs(y);
     size[x] += size[y];
   }
@@ -101,12 +101,12 @@ int size[N] = {0};
 std::vector<int> ans;
 
 void dfs(int x) {
-  v[x] = 1;
+  vis[x] = 1;
   size[x] = 1;
   int max_part{0}; // max subtree of x
   for (int i = head[x]; i != kTail ; i = next[i]) {
     int y = ver[i];
-    if (v[y]) continue;
+    if (vis[y]) continue;
     dfs(y);
     size[x] += size[y];
     max_part = std::max(max_part, size[y]);
@@ -123,17 +123,17 @@ namespace dfs::cc {
 int cnt{0};
 
 void dfs(int x) {
-  v[x] = cnt;
+  vis[x] = cnt;
   for (int i = head[x]; i != kTail; i = next[i]) {
     int y = ver[i];
-    if (v[y]) continue;
+    if (vis[y]) continue;
     dfs(y);
   }
 }
 
 void cc() {
   for (int i = 0; i < N; ++i) {
-    if (!v[i]) {
+    if (!vis[i]) {
       cnt++;
       dfs(i);
     }
@@ -147,13 +147,13 @@ namespace bfs::base {
 void bfs() {
   std::queue<int> que;
   que.push(kHead);
-  v[kHead] = 1;
+  vis[kHead] = 1;
   while (!que.empty()) {
     int x = que.front(); que.pop();
     for (int i = head[x]; i != kTail; i = next[i]) {
       int y = ver[i];
-      if (v[y]) continue;
-      v[y] = 1;
+      if (vis[y]) continue;
+      vis[y] = 1;
       que.push(y);
     }
 
