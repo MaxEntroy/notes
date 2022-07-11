@@ -96,8 +96,13 @@ double val2 = static_cast<double>(1) / 2; // right
 
 #### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
 
+- 题面是判断图中是否存在环，可以转化为top sort
 - 这个题基础top sort
 - 注意边如何组织，我是用acwing的建议方式，把边压到一个一维数组里面。看了答案之后，我采用method2/method3的方式来组织图更方便。
+
+#### [210. Course Schedule II](https://leetcode.com/problems/course-schedule-ii/)
+
+- 这个题也是基础top sort，基于bfs搞定
 
 ## 动态规划
 
