@@ -246,9 +246,9 @@ void add(int x, int y, int w) {
   deg[y]++;
 }
 
-void topsort() {
+void topsort(int n) {
   std::queue<int> que;
-  for (int i = 0; i < ver_num; ++i) {
+  for (int i = 0; i < n; ++i) {
     if (!deg[i]) {
       que.push(i);
       top_seq.emplace_back(i);
@@ -268,7 +268,7 @@ void topsort() {
 }
 
 bool is_cyclic() {
-  topsort();
+  topsort(ver_num);
   return static_cast<int>(top_seq.size()) == ver_num;
 }
 ```
