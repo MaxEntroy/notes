@@ -1,4 +1,4 @@
-## 搜索
+## 基础算法
 
 ### 二分查找
 
@@ -64,6 +64,41 @@ double val2 = static_cast<double>(1) / 2; // right
 - 当然，这个提也可以当做数据结构的妙用。这个题依赖hashmap
 - 我首选遍历的思路，借助两根指针。需要排序的预处理
 
+## 基础数据结构
+
+我对于题目的划分，不倾向于通过数据结构划分，因为即使相同的数据结构，也可以承载完全不同的算法，所以主要按照算法进行分类。
+但同时我们也注意到，对于一些特定的数据结构，围绕该数据结构的题目有其特殊性，比如链表，树，图。所以，这里也会根据数据结构进行一个大类的划分
+
+### 数组
+
+[307.Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/)
+- 这个题和303一脉相承，但是超时，表明每次O(N)的更新时间复杂度无法接受。
+- 最后用了一个非常巧妙地思路，作者对于更新采用了O(1)的复杂度，但是sum的时候，将时间复杂度降到了O(sqrt(n))，这也是非常显著的提升。
+- 作者思路的来源也在于预处理的巧妙，利用了hash分桶的思路，缓存了每个桶的sum。
+    - 更新的时候，肯定只更新某一个桶，显著的降低了更新的复杂度。如果是dp的思路，更新的复杂度在O(N).
+    - 查询的时候，中间区间桶的sum可以直接累加，这里的时间复杂度从O(N)降低到了O(sqrt(N))，首位的两个桶需要单独sum
+
+## 搜索
+
+### DFS
+
+#### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
+
+- 这个题最好的办法使用下面的bfs去解。
+- dfs就是多提供一个方法
+    - ```bool dfs(x)```语义是从x点进行dfs，判断是否有环
+    - 核心思路：对于x，从x处进行dfs，在backtracking到x之前，不能再次访问到x
+        - 对于DAG，可以有多个节点指向x，所以需要```visited```记录访问状态，避免重复dfs
+        - 对于DAG，可以有多个节点指向x，但x在backtracking到x之前，不会再次访问x
+    - 解法：对于```vis```状态的扩展，先试探标记，等到backtracking发现没有多次试探，那么此时正常标记即可。
+
+### BFS
+
+#### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
+
+- 这个题基础top sort
+- 注意边如何组织，我是用acwing的建议方式，把边压到一个一维数组里面。看了答案之后，我采用method2/method3的方式来组织图更方便。
+
 ## 动态规划
 
 #### [303.Range Sum Query - Immutable](https://leetcode.cn/problems/range-sum-query-immutable/)
@@ -83,20 +118,6 @@ double val2 = static_cast<double>(1) / 2; // right
 #### [363.Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
 
 - 参见暴力搜索
-
-## 数据结构
-
-我对于题目的划分，不倾向于通过数据结构划分，因为即使相同的数据结构，也可以承载完全不同的算法，所以主要按照算法进行分类。
-但同时我们也注意到，对于一些特定的数据结构，围绕该数据结构的题目有其特殊性，比如链表，树，图。所以，这里也会根据数据结构进行一个大类的划分
-
-### 数组
-
-[307.Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/)
-- 这个题和303一脉相承，但是超时，表明每次O(N)的更新时间复杂度无法接受。
-- 最后用了一个非常巧妙地思路，作者对于更新采用了O(1)的复杂度，但是sum的时候，将时间复杂度降到了O(sqrt(n))，这也是非常显著的提升。
-- 作者思路的来源也在于预处理的巧妙，利用了hash分桶的思路，缓存了每个桶的sum。
-    - 更新的时候，肯定只更新某一个桶，显著的降低了更新的复杂度。如果是dp的思路，更新的复杂度在O(N).
-    - 查询的时候，中间区间桶的sum可以直接累加，这里的时间复杂度从O(N)降低到了O(sqrt(N))，首位的两个桶需要单独sum
 
 ## 数学
 
