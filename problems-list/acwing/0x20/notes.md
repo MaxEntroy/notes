@@ -11,12 +11,17 @@
 公共结构
 
 ```cpp
+constexpr int N{32};
+
+// tail of node
+constexpr int kTail{-1};
+
 // adjacency list
 int ver[N];
 int edge[N];
 int next[N];
-int head[N] = {-1};
-int tot{-1};
+int head[N] = {kTail};  // 注意初始化值 可以-1/0 遍历的时候需要根据tail(0/-1)进行
+int tot{-1};  // index of edge list
 
 // visited nodes
 int v[N] = {0};
@@ -27,7 +32,7 @@ int v[N] = {0};
 ```cpp
 void dfs(int x) {
   v[x] = 1;
-  for (int i = head[x]; i ; ++i) {
+  for (int i = head[x]; i != kTail ; ++i) {
     int y = ver[i];
     if (v[y]) continue;
     dfs(y);
@@ -54,7 +59,7 @@ int m{-1};
 void dfs(int x) {
   s[++m] = x;
   v[x] = 1;
-  for (int i = head[x]; i ; i = next[i]) {
+  for (int i = head[x]; i != kTail; i = next[i]) {
     int y = ver[i];
     if (v[y]) continue;
     dfs(y);
@@ -77,7 +82,7 @@ int d[N] = {1}; // zero is also ok
 
 void dfs(int x) {
   v[x] = 1;
-  for (int i = head[x]; i ; i = next[i]) {
+  for (int i = head[x]; i != kTail; i = next[i]) {
     int y = ver[i];
     if (v[y]) continue;
     d[y] = d[x] + 1;  // top-down operation is here.
@@ -122,7 +127,7 @@ void dfs(int x) {
   v[x] = 1;
   size[x] = 1;
   int max_part{0}; // max subtree of x
-  for (int i = head[x]; i ; i = next[i]) {
+  for (int i = head[x]; i != kTail; i = next[i]) {
     int y = ver[i];
     if (v[y]) continue;
     dfs(y);
@@ -149,7 +154,7 @@ int cnt{0};
 
 void dfs(int x) {
   v[x] = cnt;
-  for (int i = head[x]; i ; i = next[i]) {
+  for (int i = head[x]; i != kTail; i = next[i]) {
     int y = ver[i];
     if (v[y]) continue;
     dfs(y);
@@ -169,3 +174,99 @@ void cc() {
 #### 基础bfs算法
 
 广度优先遍历，就是在每个点x上面对多条分支时，将所有直接相邻边全部访问后，再考虑访问其余边。本质是一种基于层次的遍历
+
+```cpp
+void bfs() {
+  std::queue<int> que;
+  que.push(kHead);
+  v[kHead] = 1;
+  while (!que.empty()) {
+    int x = que.front(); que.pop();
+    for (int i = head[x]; i != kTail; i = next[i]) {
+      int y = ver[i];
+      if (v[y]) continue;
+      v[y] = 1;
+      que.push(y);
+    }
+
+  }
+}
+```
+
+深度(层次)算法复用```visited```数组
+
+```cpp
+int d[N] = {0};
+
+void depth() {
+  std::queue<int> que;
+  que.push(kHead);
+  d[kHead] = 1;
+  while (!que.empty()) {
+    int x = que.front(); que.pop();
+    for (int i = head[x]; i != kTail; i = next[i]) {
+      int y = ver[i];
+      if (d[y]) continue;
+      d[y] = d[x] + 1;
+      que.push(y);
+    }
+  }
+}
+```
+
+dfs具备如下两条重要性质:
+- 在访问完成所有的第i层节点后，才会开始访问第i+1层节点
+- 在任意时刻，队列中至多有两个层次的节点。其中一部分节点属于第i层，剩余节点属于第i+1层
+
+这两条性质是所有bfs算法的基础，其时间复杂度也是```O(V+E)```
+
+#### 拓扑排序
+
+给定一个DAG，顶点序列A满足: 对于每一条边(x, y)，在A中x都出现在y之前，则称A是DAG中顶点的拓扑序。求解A的过程称作拓扑排序。
+
+其算法步骤如下：
+- 预处理所有节点入度，之后将所有入度为0的节点入队，入拓扑序
+- 从队列取出头结点x
+- 将头结点x相邻的节点，入度减一，如果相邻节点入度为0，则该节点入队，入拓扑序
+- 重复2和3指到队列为空
+
+拓扑排序可以适用于任何有向图，可以判断该有向图是否存在环。
+
+```cpp
+int deg[N] = {0};  // in-degree
+std::vector<int> top_seq;
+
+int ver_num{0}; // vertex num
+
+void add(int x, int y, int w) {
+  ver[++tot] = y; edge[tot] = w;
+  next[tot] = head[x]; head[x] = tot;
+  deg[y]++;
+}
+
+void topsort() {
+  std::queue<int> que;
+  for (int i = 0; i < ver_num; ++i) {
+    if (!deg[i]) {
+      que.push(i);
+      top_seq.emplace_back(i);
+    }
+  }
+  while (!que.empty()) {
+    int x = que.front(); que.pop();
+    for (int i = head[x]; i != kTail; i = next[i]) {
+      int y = ver[i];
+      deg[y]--;
+      if (!deg[y]) {
+        que.push(y);
+        top_seq.emplace_back(y);
+      }
+    }
+  }
+}
+
+bool is_cyclic() {
+  topsort();
+  return static_cast<int>(top_seq.size()) == ver_num;
+}
+```
