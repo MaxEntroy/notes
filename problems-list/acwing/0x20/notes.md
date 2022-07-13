@@ -319,9 +319,10 @@ bool is_cyclic() {
 
 >把 1∼n 这 n 个整数排成一行后随机打乱顺序，输出所有可能的次序。
 
-思路：本质是序列生成，每个位置有多种可能。我们对于每个位置，枚举所有的可能情形即可。
+- 思路：本质是序列生成，每个位置有多种可能。我们对于每个位置，枚举所有的可能情形即可。
 - 递推：n重循环，每重循环内进行pruning
 - 递归：生成长度为n的序列 = 生成长度为n-1的序列 + 最后一位的元素。很明显具有递归结构
+- 时间复杂度：O(n!)
 
 ```cpp
 constexpr int N{32};
@@ -340,7 +341,9 @@ void dfs(int pos) {
   }
 
   for (int i = 1; i <= n; ++i) {
+    // pruning
     if (vis[i]) continue;
+    
     // try current
     chosen[pos] = i;
     vis[i] = true;
@@ -356,3 +359,70 @@ void dfs(int pos) {
 
 dfs(1);
 ```
+
+#### 递归实现组合型枚举
+
+>把 1∼n 这 n 个整数随机选择m个，输出所有可能的次序。
+
+- 思路：本质是序列生成。和求排列的基本思路一致，但是有序列长度的限制。
+- 时间复杂度：O(cmn)
+
+```cpp
+void dfs(int pos) {
+  if (pos == m + 1) {
+    for (int i = 1; i <= m; ++i)
+      std::cout << chosen[i] << " ";
+    std::cout << std::endl;
+    return ;
+  }
+
+  for (int i = 1; i <= n; ++i) {
+    // pruning
+    if (vis[i]) continue;
+
+    // try current
+    chosen[pos] = i;
+    vis[i] = true;
+
+    // solve subproblem recursionly
+    dfs(pos + 1);
+
+    // backtracking
+    chosen[pos] = 0;
+    vis[i] = false;
+  }
+}
+```
+
+#### 递归实现指数型枚举
+
+>从 1∼n 这 n 个整数中随机选取任意多个，输出所有可能的选择方案
+
+- 思路：这个题可以看做序列生成的变长版本，从1-n进行序列生成即可。更加巧妙的思路是，对于每一个数字，只有放或者不放两种可能，从这个角度去生成序列。
+- 时间复杂度：0(k^n)
+
+```cpp
+void dfs(int x) {
+  if (x == n + 1) {
+    if (!chosen.empty()) {
+        for (const auto& val : chosen) std::cout << val << " ";
+        std::cout << std::endl;
+    }
+    return;
+  }
+
+  // not choose
+  {
+    dfs(x + 1);
+  }
+
+  // choose
+  {
+    chosen.emplace_back(x);
+    dfs(x + 1);
+    chosen.pop_back();
+  }
+}
+```
+
+以上是几个简单的模板总结，我觉得这一部分解题的核心是：想办法找到题目中原问题与子问题的关系，即可以正确的抽象出一个子问题，这是关键。
