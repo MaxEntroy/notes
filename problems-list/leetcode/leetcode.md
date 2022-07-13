@@ -88,10 +88,16 @@ double val2 = static_cast<double>(1) / 2; // right
 - 不过有```next_permutation```也可以用
 
 #### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)
+
 - 首先排序，保证升序。
 - 去重序列生成的核心逻辑在于
     - 相同元素，在同一个层次，不用反复试探。
     - 注意同一个层次的限制
+
+#### [77. Combinations](https://leetcode.com/problems/combinations/)
+
+- 基础题，利用acwing的模板求解即可。
+- 方法二，利用公式。但是公式这里注意，公式只说了个数是一样的，但是这个题求的是排列集合这个元素，所以不一样。这个题的求解逻辑需要单独推到。详见[77. Combinations](https://grandyang.com/leetcode/77/)
 
 #### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
 
