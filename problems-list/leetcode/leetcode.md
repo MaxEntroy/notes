@@ -82,6 +82,17 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### DFS
 
+#### [46. Permutations](https://leetcode.com/problems/permutations/)
+
+- 排列型枚举，dfs基本题
+- 不过有```next_permutation```也可以用
+
+#### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)
+- 首先排序，保证升序。
+- 去重序列生成的核心逻辑在于
+    - 相同元素，在同一个层次，不用反复试探。
+    - 注意同一个层次的限制
+
 #### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
 
 - 这个题最好的办法使用下面的bfs去解。
