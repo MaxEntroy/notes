@@ -99,6 +99,46 @@ double val2 = static_cast<double>(1) / 2; // right
 - 基础题，利用acwing的模板求解即可。
 - 方法二，利用公式。但是公式这里注意，公式只说了个数是一样的，但是这个题求的是排列集合这个元素，所以不一样。这个题的求解逻辑需要单独推到。详见[77. Combinations](https://grandyang.com/leetcode/77/)
 
+#### [39. Combination Sum](https://leetcode.com/problems/combination-sum/)
+
+- 这个题是组合基础题，根据模板，剪枝条件一定要确定清楚。
+- 模板的起点下界是递增的，但是该题是非递减。模板的终点是n - (k - chosen.size()) + 1，但是该题是n，因为该题的区间长度不限，所以起点的上界是n
+
+#### [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)
+
+- 这个题对应47题，重复元素的组合生成。上面是重复元素的排列生成。
+- 方式一样，避免相同元素在同一个层次的试探。
+- 注意，vis的用法和排列不同，前者两种剪枝用到了这个结构，但是组合只用到了一种。使用过的元素不会重复使用，这个在排列中用startIndex保证。
+
+#### [216. Combination Sum III](https://leetcode.com/problems/combination-sum-iii/)
+
+- 这个题和前两个兄弟题的区别是，前两个题也是产生组合，但是对于组合的长度没有限制。这个题给了限制。
+- 此时，可以用acwing的模板。
+- 注意，由于组合的长度有限制，注意宽度的剪枝。
+
+#### [17. Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
+
+- 这个题有两种思路理解：
+    - 方法一：组合法
+        - 首先需要判断是排列还是组合，这个题是组合，因为需要保证次序唯一性
+        - 深度，不需要。宽度，起点下界是start，上界不剪枝。
+        - 注意class static var的初始化
+    - 方法二：不区分组合还是排列
+        - 组合和排列的区别在于，对于同一个集合的元素遍历，是否考虑次序。
+        - 本题显然不是一个集合的问题，每一层有一个独立的集合，需要全部遍历。
+        - 上面区分排列和组合，意思其实在于剪枝。这个题，由于集合不同，无法剪枝
+
+#### [131. Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
+
+- 这个题第一次没做出来，主要是没有找到解题钥匙，即没有转化问题。随想录的思考过程非常好
+- 切割问题，可以抽象为组合问题。但不完全一样，因为组合只要递归到最后的层次，肯定是解，但切割不是。
+    - 上面说的组合，也只是说，起点的下界需要递增，这个是切割的特性，切割只能向后切，不能向前切
+    - 类似组合的原因在于，切割点，可以类似从组合中选一个元素出来。
+    - 第k刀在第k-1刀的基础上进行枚举所有可能的切割点。这个是核心思路。
+    - 同时，第k刀的枚举点是否合理，取决于这个串是否为回文。如果不是，直接剪枝。尝试第k刀的下一个切割点。
+- 如何模拟切割线。这个转化为切割起点即可。
+- 切割问题如何终止。知道存在非法的切割起点，即切割起点枚举到了序列终点。即起点的下界越界了，这个是第一次使用起点下界的条件作为递归边界。
+
 #### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
 
 - 这个题最好的办法使用下面的bfs去解。
@@ -140,6 +180,12 @@ double val2 = static_cast<double>(1) / 2; // right
 #### [363.Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
 
 - 参见暴力搜索
+
+## 动态规划
+
+#### [118. Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)
+
+- 基础题，非常直接的递推结构。
 
 ## 数学
 
