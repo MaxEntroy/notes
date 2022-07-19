@@ -139,6 +139,42 @@ double val2 = static_cast<double>(1) / 2; // right
 - 如何模拟切割线。这个转化为切割起点即可。
 - 切割问题如何终止。知道存在非法的切割起点，即切割起点枚举到了序列终点。即起点的下界越界了，这个是第一次使用起点下界的条件作为递归边界。
 
+#### [93. Restore IP Addresses](https://leetcode.com/problems/restore-ip-addresses/)
+
+- 这个题在131的基础上就容易理解多了。前者求解划分，划分需要是回文，本题一样，划分需要满足ip地址的需求。
+- 边界条件有不同，本题划分只要求是4个。
+- 子串转数字，随想录的解法提供了更好的办法，就地转。不要用stringstream
+- 有一个特别需要注意的点，回溯的时候，对于chosen集合，不要给出额外的修改，否则会影响回溯。
+
+```cpp
+// 正确的实现
+if (start == s.size() and cnt == 4) {
+    auto tmp = chosen;
+    tmp.pop_back();
+    ret.push_back(tmp);
+    return;
+}
+// 错误的实现
+if (start == s.size() and cnt == 4) {
+    chosen.pop_back();
+    ret.push_back(tmp);
+    return;
+    // 这里返回后，chosen会退到dfs的回溯那里，会紧接着回溯掉#和上次加入的数字，由于#已经在这里回溯掉了，所以就会多回溯一个元素，回溯出错。
+    // 当时之所以没考虑到是因为，以为chosen是正确答案，加入ret后，这个chosen不参与回溯。
+    // 其实不是，某一个解回溯后，还有可能形成另一个解。所以，chosen不能有step in/backtracking额外的任何操作。
+}
+```
+
+#### [78. Subsets](https://leetcode.com/problems/subsets/)
+
+- 有了划分的基础，子集问题就显得非常容易了，基于排列做，没有剪枝。
+- 随想录有一个好的总结是，之前两题都需要遍历到叶子才形成一个合法的path，但是这个题不需要。非叶子只要合法，就放进来。
+
+#### [90. Subsets II](https://leetcode.com/problems/subsets-ii/)
+
+- 生成集合的元素存在副本，如果按照之前的办法，会产生重复的集合(组合)。
+- 和之前排列，以及组合的处理保持一致。如果相邻元素相等 and 不在同一个层次，此时剪枝
+
 #### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
 
 - 这个题最好的办法使用下面的bfs去解。
