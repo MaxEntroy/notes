@@ -1,5 +1,27 @@
 ## 基础算法
 
+### 模拟
+
+这一类题目的思路一般比较朴素，题目中一般会给出，直接用代码模拟实现即可。
+
+#### [13.Roman to Integer](https://leetcode.com/problems/roman-to-integer/)
+
+- 基本思路照着实现即可。
+- 不过这个题看了题解，有一个好的办法是，进一步泛华了题目给的思路，即发现如果当前位置比后面小，直接减去即可。
+
+#### [12.Integer to Roman](https://leetcode.com/problems/integer-to-roman/)
+
+- 这个题，我觉得做题过程还行，确实是想清楚了再写，保持。
+- 我的思路来自于radix的转换，按照这个不断的处理即可。
+
+#### [31.Next Permutation](https://leetcode.com/problems/next-permutation/) 
+
+- 这个题，直接看了题解。如下
+- step1: 从后向前寻找一个逆序
+- step2: 从后向前寻找第一个大于当前数的元素
+- step3: swap and reverse the rest elements.
+- 如果不存在逆序，直接reverse.
+
 ### 二分查找
 
 #### [704.Binary Search](https://leetcode.com/problems/binary-search/)
@@ -15,14 +37,19 @@
 
 #### [34.Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
-- 两分查找的衍生版本，但是更深刻
-- 关键在于边界位置查询的实现，区分左右试探
-- 边界查询的终止条件是找到非法区间，则上一次为边界
+- 二刷的心得
+    - 这个题还是能学到很多技巧，按照grandyang的分类，这个题是两分的第二类题目。
+    - 在两分的基础上扩展，寻找左右边界即可。只不过这个代码如何写的优雅，需要考虑。主要要处理，查不到以及查到边界的情形，别搞混了。
+    - 朴素的做法，可以查到左边第一个点，然后遍历过去。借助lower_bound实现
+    - 注意点
+        - 左右两侧的查找，代码如何统一？
+        - 插入点的寻找，一般是low <= high条件非法时，此时low(high + 1)是插入点。注意，这个题目的插入点无法区分到底是元素存在于序列的起点，还是元素不存在于序列的起点。
 
 #### [35.Search Insert Position](https://leetcode.com/problems/search-insert-position/)
 
 - 两分查找衍生版本，比34简单一点
 - 试了几个example发现非法区间low即为最终解
+- lower_bound方法最简单
 
 #### [475.Heaters](https://leetcode.com/problems/heaters/)
 
@@ -47,6 +74,30 @@ double val2 = static_cast<double>(1) / 2; // right
 
 - 和上一题思路一致。
 - 也可以使用牛顿法。
+
+#### [702.Search in a Sorted Array of Unknown Size](https://grandyang.com/leetcode/702/)
+
+- 这个题非会员能做，所以直接放了题解的链接。
+- 思路非常巧妙，多了一步，即数组元素不定，从而high不能确定，无法开始二分查找。
+    - 题解假设了数组的长度为INT_MAX，从而让二分符合条件。
+        - 题目中说了每个元素不大于10000，从而放INT_MAX不会和已有元素冲突。
+        - 下标越界，返回2147483647即INT_MAX。证明INT_MAX是非法下标，元素个数肯定不会这么多。
+        - 所以，可以设定这个数组有INT_MAX个元素，多余的元素由INT_MAX填充，而不影响查询结果。
+    - 注意两分的使用条件，元素可以重复，只不过此时值不唯一。
+
+#### [33.Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+
+- 这个题和702一样，也是非常好的拓展题，在基础上进行思路的拓展。
+- 这个题，不能直接套，要套思路。
+- 方法一：先两分找pivot，pivot语义代表左边区间的最后一个元素。然后再分别找，当然这里分治可以优化为减治。减治的边界条件容易找错。
+- 方法二：grandyang的思路是这样，这个数组，通过mid进行划分后，势必一半是有序，一半是非有序。对于有序区间，我们直接利用二分。注意，这个思路比较不同，需要好好理解。
+    - 其核心思路是，既然整个数组不是有序，我们需要先找到一个有序的区间，进行二分。当然，target不一定在这里面，所以对于有序区间还需要使用target判断一下。
+
+#### [81.Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
+
+- 我在找pivot时，用了遍历算法，因为没法二分找会跳过pivot
+- grandyang的做法在33的基础上，巧妙的发现，如果nums[mid] < nums[high]时，右边区间有序，这个条件不完备。nums[mid] == nums[high]时，也有可能有序
+- 所以，在这个基础上，还是去寻找nums[mid] < nums[high]的情形。
 
 ### 暴力搜索
 
@@ -82,41 +133,47 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### DFS
 
-#### [46. Permutations](https://leetcode.com/problems/permutations/)
+#### [46.Permutations](https://leetcode.com/problems/permutations/)
 
 - 排列型枚举，dfs基本题
 - 不过有```next_permutation```也可以用
+- 由于考虑不同序列，所以每次需要从头开始遍历，那么需要记录path上已经访问的元素，存储index即可。
 
-#### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)
+#### [47.Permutations II](https://leetcode.com/problems/permutations-ii/)
 
 - 首先排序，保证升序。
 - 去重序列生成的核心逻辑在于
     - 相同元素，在同一个层次，不用反复试探。
     - 注意同一个层次的限制
+    - 方法一：预处理排序，判断相邻元素是否一致同时不在一条子树上，即可
+    - 方法二：从组合那里学来的，更加通用的处理方法。利用hash过滤本次同一个元素的反复试探，hash数组空间换时间。
+        - 这个方法有一个注意点是，一定要先隔离出本层可以试探的节点，组合那里用start做了隔离。
+        - 排列这里，start不管用。只能用vis数组。
+        - 这个方法更通用，我比较喜欢。当然，由于这个题也比价基础，所以两种方法都需要熟练掌握。
 
-#### [77. Combinations](https://leetcode.com/problems/combinations/)
+#### [77.Combinations](https://leetcode.com/problems/combinations/)
 
 - 基础题，利用acwing的模板求解即可。
 - 方法二，利用公式。但是公式这里注意，公式只说了个数是一样的，但是这个题求的是排列集合这个元素，所以不一样。这个题的求解逻辑需要单独推到。详见[77. Combinations](https://grandyang.com/leetcode/77/)
 
-#### [39. Combination Sum](https://leetcode.com/problems/combination-sum/)
+#### [39.Combination Sum](https://leetcode.com/problems/combination-sum/)
 
 - 这个题是组合基础题，根据模板，剪枝条件一定要确定清楚。
 - 模板的起点下界是递增的，但是该题是非递减。模板的终点是n - (k - chosen.size()) + 1，但是该题是n，因为该题的区间长度不限，所以起点的上界是n
 
-#### [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)
+#### [40.Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)
 
 - 这个题对应47题，重复元素的组合生成。上面是重复元素的排列生成。
 - 方式一样，避免相同元素在同一个层次的试探。
 - 注意，vis的用法和排列不同，前者两种剪枝用到了这个结构，但是组合只用到了一种。使用过的元素不会重复使用，这个在排列中用startIndex保证。
 
-#### [216. Combination Sum III](https://leetcode.com/problems/combination-sum-iii/)
+#### [216.Combination Sum III](https://leetcode.com/problems/combination-sum-iii/)
 
 - 这个题和前两个兄弟题的区别是，前两个题也是产生组合，但是对于组合的长度没有限制。这个题给了限制。
 - 此时，可以用acwing的模板。
 - 注意，由于组合的长度有限制，注意宽度的剪枝。
 
-#### [17. Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
+#### [17.Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
 
 - 这个题有两种思路理解：
     - 方法一：组合法
@@ -128,7 +185,7 @@ double val2 = static_cast<double>(1) / 2; // right
         - 本题显然不是一个集合的问题，每一层有一个独立的集合，需要全部遍历。
         - 上面区分排列和组合，意思其实在于剪枝。这个题，由于集合不同，无法剪枝
 
-#### [131. Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
+#### [131.Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
 
 - 这个题第一次没做出来，主要是没有找到解题钥匙，即没有转化问题。随想录的思考过程非常好
 - 切割问题，可以抽象为组合问题。但不完全一样，因为组合只要递归到最后的层次，肯定是解，但切割不是。
@@ -139,7 +196,7 @@ double val2 = static_cast<double>(1) / 2; // right
 - 如何模拟切割线。这个转化为切割起点即可。
 - 切割问题如何终止。知道存在非法的切割起点，即切割起点枚举到了序列终点。即起点的下界越界了，这个是第一次使用起点下界的条件作为递归边界。
 
-#### [93. Restore IP Addresses](https://leetcode.com/problems/restore-ip-addresses/)
+#### [93.Restore IP Addresses](https://leetcode.com/problems/restore-ip-addresses/)
 
 - 这个题在131的基础上就容易理解多了。前者求解划分，划分需要是回文，本题一样，划分需要满足ip地址的需求。
 - 边界条件有不同，本题划分只要求是4个。
@@ -165,15 +222,23 @@ if (start == s.size() and cnt == 4) {
 }
 ```
 
-#### [78. Subsets](https://leetcode.com/problems/subsets/)
+#### [78.Subsets](https://leetcode.com/problems/subsets/)
 
 - 有了划分的基础，子集问题就显得非常容易了，基于排列做，没有剪枝。
 - 随想录有一个好的总结是，之前两题都需要遍历到叶子才形成一个合法的path，但是这个题不需要。非叶子只要合法，就放进来。
 
-#### [90. Subsets II](https://leetcode.com/problems/subsets-ii/)
+#### [90.Subsets II](https://leetcode.com/problems/subsets-ii/)
 
 - 生成集合的元素存在副本，如果按照之前的办法，会产生重复的集合(组合)。
 - 和之前排列，以及组合的处理保持一致。如果相邻元素相等 and 不在同一个层次，此时剪枝
+
+#### [491.Increasing Subsequences](https://leetcode.com/problems/increasing-subsequences/)
+
+- 这个题整体思路比较清楚，但是剪枝的实现一致没实现对。
+- 剪枝
+    - 递增
+    - 同一个子树，本层重复节点，不能反复试探。这个逻辑我一直没实现对。注意，不能排序。start的本质是下标递增，不是元素递增。
+- 优化，我在进行去重的时候，是一个O(N)的做法，随想录引入了hash数组，空间换时间，从而有O(1)的时间复杂度。
 
 #### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
 
@@ -222,6 +287,20 @@ if (start == s.size() and cnt == 4) {
 #### [118. Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)
 
 - 基础题，非常直接的递推结构。
+
+## 图论
+
+### 拓扑排序
+
+#### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
+
+- 题面是判断图中是否存在环，可以转化为top sort
+- 这个题基础top sort
+- 注意边如何组织，我是用acwing的建议方式，把边压到一个一维数组里面。看了答案之后，我采用method2/method3的方式来组织图更方便。
+
+#### [210. Course Schedule II](https://leetcode.com/problems/course-schedule-ii/)
+
+- 这个题也是基础top sort，基于bfs搞定
 
 ## 数学
 
