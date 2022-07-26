@@ -99,6 +99,23 @@ double val2 = static_cast<double>(1) / 2; // right
 - grandyang的做法在33的基础上，巧妙的发现，如果nums[mid] < nums[high]时，右边区间有序，这个条件不完备。nums[mid] == nums[high]时，也有可能有序
 - 所以，在这个基础上，还是去寻找nums[mid] < nums[high]的情形。
 
+#### [153.Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+
+- 33题的简化题，找pivot，保持思路一致即可。
+- 方法一：我说下我的办法，我还是找了一个target，即nums[0]，用它找到一个两个相邻点，一个大于它，一个小于它，此时insertion point没有问题(不管使用哪种两分查找)。小心high + 1越界的问题
+- 方法二：但是，使用grandyang的方法，即不固定target，每次比较nums[mid] and nums[right]，此时不行。只能用开区间的写法，这个我有点不太理解，暂时先记住。
+
+#### [154.Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+
+- 这个题我最终还是做出来了，用了一些trick的办法，但是先ac就行。
+- 方法一：我用的是我自己的办法，比较好理解的办法寻找pivot，但是最后边界的处理一直有问题，所以我用了trick的办法来求解。
+    - 我的办法之所以没法解决trick的问题，我认为在于闭区间的使用，代码里我显示的处理了low==mid and high==mid的情形，证明闭区间的多一次判断，会造成最后解的位置偏移。
+    - 这个题最简单，最快的办法，也是用开区间解题。
+- 方法二：grandyang的办法，开区间。不设定target，通过中点和右侧相比来找。中点不能和左侧相比，因为此时不管大小，最小值都有可能在左侧。
+
+这一套题目，我觉得非常的好，加深了对于二分的认知，因为不直接依赖二分的技巧，而是锻炼了二分的思路，即每次抛弃一半的解。同时，旋转数组这里，二分的技巧不要用闭区间，尤其是针对有重复元素的情形，
+只能用开区间。
+
 ### 暴力搜索
 
 #### [363.Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
