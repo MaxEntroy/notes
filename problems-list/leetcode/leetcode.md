@@ -373,6 +373,22 @@ if (start == s.size() and cnt == 4) {
 
 - 基础题，非常直接的递推结构。
 
+#### [300.Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
+
+- 一刷，这个是系统刷dp的第一题。
+- 思路
+    - 上来一看，觉得dfs可以搞定，最后超时，时间复杂度O(N!)，此时我还不会记忆化搜索
+    - 先复习了算竞的思路，知道用dp求解的应用场景。
+        - 问题范围：最值。符合最优化问题，可以尝试用dp
+        - dp三要素：最优子结构(当然，这个不是直接看出来的，而是先定义了状态，看看是否满足)，重复子问题，无后效型，满足，这样基本可以使用dp
+    - 方法
+        - 状态：dp[i]表示包含nums[i]的lis
+        - 转移方程：dp[i] = dp[j] + 1, if nums[j] < nums[i]; else dp[i] = 1; finally, dp[i] = max(dp[j] + 1)
+        - 初始化：dp[0] = 1
+        - 结果：ans = max(dp[i])
+        - 结果这里注意，不一定是dp[n - 1]，因为根据状态定义，最优的结果不一定是dp[n - 1]
+    - 分类：线性dp;dp的阶段，沿着各个维度线性增长。
+
 ## 图论
 
 ### 拓扑排序
