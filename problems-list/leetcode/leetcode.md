@@ -75,6 +75,11 @@ while (low < high) {
     - 注意点
         - 左右两侧的查找，代码如何统一？
         - 插入点的寻找，一般是low <= high条件非法时，此时low(high + 1)是插入点。注意，这个题目的插入点无法区分到底是元素存在于序列的起点，还是元素不存在于序列的起点。
+- 三刷心得
+    - 这题用了算竞的模板，刚好两个方向都用到了
+    - 同时验证了书中的技巧
+        - 合法边界low, high，合法区间则是[low, high)，否则过不了。由于我保证了一定能找到，所以没有拓展边界。
+        - (low + high + 1) >> 1，我调整为low + (high - low) / 2 + 1; 这个没有问题。
 
 #### [35.Search Insert Position](https://leetcode.com/problems/search-insert-position/)
 
