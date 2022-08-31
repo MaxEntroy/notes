@@ -22,11 +22,12 @@
     - 这里有一个需要注意的点，就是**负数除法**，这个抽空需要仔细看下
     - 这里的一个技巧是，没有区分正负数，均可以处理，需要明确知道负数除法和正数除法的区别
 - 方法三：官方的方法，非常巧妙，充分的考虑了数字的特点
-    - INT_MIN(-2147483648)INT_MAX(+2147483647)
-    - 如果一个数字，位数比INT_MIN/INT_MAX少一位，翻转后肯定不影响，不用考虑。
-    - 所以我们只用考虑和INT_MIN/INT_MAX位数一致的数字，这样的数字有一个特点，首位只能是1/2，否则输入数字本来就越界了
-    - 那么翻转后的数字为2147483641/2147483642，后者的原数字越界了，不会是合法输入，所以翻转后的同位数数字，最大的只能是2147483641
-    - 此时，其原数字是1463847412，是一个合法输入，反转也合法。所以，214748364这个数字，在相等的情形下不用判断。
+    - INT_MIN(-2147483648)INT_MAX(+2147483647) 
+    - 疑问在于这个判断 if (res > INT_MAX/10)，为什么不判断相等的情形。即如果res == INT_MAX/10
+    - 那我们进一步看下，如果res == INT_MAX/10，那么此次迭代形成的最终数，假设为214748364i，如果i>7，则res最终越界。
+    - 所以，我们讨论以下这个可能的i。此时res是10位数，原数字一定是1xxxxxxxxxxx/2xxxxxxxxxxx，这两种可能。因为原数字也需要保证不越界
+    - 此时翻转后i只有两种可能，即1/2。所以，最终形成的res为2147483641/2147483642，由因为后者的原数字越界，不会形成这个数
+    - 所以，如果res = INT_MAX/10，那么最终res只有一个可能就是2147483641，这个数不越界。所以，res = INT_MAX/10这种情形也不用判断。
 - 最后，这个题还需要学习一个通用的算法就是数字反转的算法
 
 #### [31.Next Permutation](https://leetcode.com/problems/next-permutation/) 
@@ -214,11 +215,6 @@ double val2 = static_cast<double>(1) / 2; // right
 - 回文类题目
 - 我的解法采用两头同时向中心移动的方法，也有从中心向两端移动的方法，后者需要考虑元素个数的奇偶
 
-#### [5.Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
-
-- 回文基本题
-- 暴力法
-
 #### [9.Palindrome Number](https://leetcode.com/problems/palindrome-number/)
 
 - 回文题
@@ -228,6 +224,43 @@ double val2 = static_cast<double>(1) / 2; // right
         - 负数，直接返回false
         - 正数，技巧在于如何拿到左右两边的数字。基本做法在于拿到基本radix之后，分别做整除和取余，然后拿到left/right
         - 同时，更新radix和value
+    - 方法三：基本思路也是转换，但是基于字符串，基本的算法来自于数字翻转，如果翻转后的数字和原数字相等，那么即为回文。
+        - 在数字翻转的过程中，有一个需要特别注意的地方就是，要特别小心翻转的时候越界的问题。这个是一个非常典型的思路
+
+#### [5.Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
+
+- 回文题
+- 思路
+    - 方法一：暴力法求解。因为它是求最长的，所以我可以从最长的开始枚举，可以降低搜索空间，当然最差的情形显然不能提升。
+    - 方法二：最优类问题，首选dp。
+        - 回文题目，dp的设计思路都是有固定技巧的，一开始我也没有思路，对于dp，我的分析基础是，寻找原问题与子问题的关系，找到突破口。
+        - 但是，这题的技巧在于，原问题和子问题怎么划分。如果是i/i+1这么划分，肯定是不行的。不是简单的线性。
+        - 回文dp的设计技巧在于，首先它不是一维，它是二维的。其次，它是由两边向中间进行，空间展开。
+        - 具体设计
+            - 状态：dp[j][i]表示子串[j,i]的longest palindromic substring
+            - 转移方程：dp[j][i] = 
+                - if s[j] != s[i], dp[j][i] = 0
+                - if s[j] == s[i] and j + 1 == i, dp[j][i] = 2
+                - if s[j] == s[i] and j + 1 < i, dp[j][i] = dp[j + 1][i - 1] + 2
+            - 边界：dp[i][i] = 1
+            - 目标：max(dp[j][i])
+        - 细节，为什么要区分j + 1 == 2，因为不区分这个情况，dp[j + 1][i - 1]会越界
+
+#### [516.Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/)
+
+- 回文题
+- 思路：搜索就不说了，直接说dp
+    - 这个题dp的状态设计和之前回文的做法一致。回文题看起来是个字符串，但是不是一个一维数组能搞定的，也不是严格的线性dp
+    - 状态：dp[j][i]表示子串[j, i]的longest palindromic sequence
+    - 转移方程：dp[j][i] = 
+        - if s[j] != s[i], max(dp[j + 1][i], dp[j][i - 1])
+        - if s[j] == s[i] and j + 1 == i, 2
+        - if s[j] == s[i] and j + 1 < i, dp[j + 1][i - 1] + 2
+    - 边界：dp[i][i] = 1
+    - 目标：dp[0][n - 1]
+- 这个题和substring的一些差异
+    - 首先，就是状态这里，看似都一样。都是子串[j, i]的最优值。但最后的目标却不一样，因为题面也不一样。子串[j,i]的最大子串，不一定是所有串里面具有最大回文能力的串。但是序列就不一样了，序列具备前向兼容性，所以最终的目标不一样。
+    - 其次，dp的核心是，通过子问题的求解，推断出更大规模问题的解。这里我在解题时候，忽略了dp的方向，导致了错误的答案。第二维下标是由内向外展开的。
 
 ## 搜索
 
@@ -509,6 +542,10 @@ if (start == s.size() and cnt == 4) {
 #### [509.Fibonacci Number](https://leetcode.com/problems/fibonacci-number/)
 
 - 同climbling stairs
+
+#### [5.Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
+
+- 参考上面的解答。
 
 ## 图论
 
