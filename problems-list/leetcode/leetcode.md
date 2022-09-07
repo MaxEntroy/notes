@@ -466,6 +466,60 @@ if (start == s.size() and cnt == 4) {
         - 对于DAG，可以有多个节点指向x，但x在backtracking到x之前，不会再次访问x
     - 解法：对于```vis```状态的扩展，先试探标记，等到backtracking发现没有多次试探，那么此时正常标记即可。
 
+#### [278. 数字组合](https://www.acwing.com/problem/content/280/)
+
+搜索这里，又有了进一步的认知。
+- 算竞里面提到的指数型枚举，方法非常直接，但是我一直和代码随想录的方法结合的不太好。
+- 代码随想录给出了搜索的通用做法，由于是个通用的做法，势必将各种情形融合在一套代码中。
+- 简单说，算竞的做法更精细，更巧妙。代码随想录的做法则更通用。
+- 这个题最优解是dp，但是讲搜索也是非常合理的。
+    - 方法一：按照算竞的思路，每个数要么放，要么不放，指数选择。
+    - 方法二：按照随想录的思路，每一层找好起始位置和结束位置，进行枚举试探即可。
+        - 其实方法二也有level的概念，只不过vector不用显示指定，如果数组则需要
+
+```cpp
+void dfs1(const vector<int>& nums, int target, int level, int sum) {
+  if (sum == target) {
+    ++ans;
+    for (const auto& val : chosen) { cout << val << ","; }
+    cout << endl;
+    return;
+  }
+  if (sum > target) return;
+  if (level == nums.size()) return;
+
+  // not choose
+  {
+    dfs1(nums, target, level + 1, sum);
+  }
+
+  // choose
+  {
+    chosen.emplace_back(nums[level]);
+    dfs1(nums, target, level + 1, sum + nums[level]);
+    chosen.pop_back();
+  }
+}
+
+void dfs2(const vector<int>& nums, int target, int start, int sum) {
+  if (sum == target) {
+    ++ans;
+    for (const auto& val : chosen) { cout << val << ","; }
+    cout << endl;
+    return;
+  }
+  if (sum > target) return;
+  if (start == nums.size()) return;
+
+  for (int i = start, sz = nums.size(); i < sz; ++i) {
+    chosen.emplace_back(nums[i]);
+    dfs2(nums, target, i + 1, sum + nums[i]);
+    chosen.pop_back();
+  }
+}
+```
+
+
 ### BFS
 
 #### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
