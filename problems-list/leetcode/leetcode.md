@@ -276,6 +276,12 @@ double val2 = static_cast<double>(1) / 2; // right
         - false, if s[j] == s[i] and dp[j + 1][i - 1] == false
     - 边界：dp[i][i] == 1
     - 目标：for (int i = 0; i < n; ++i) { for (int j = i; j < n; ++j) if (dp[i][j]) ++ans; }
+
+#### [131.Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
+- 这个题用到的点就多了。
+- 首先，dfs没说的，其次利用回文dp的思路，优化搜索中对于回文的判断。当然，终极的dp看了一遍，没看懂。我觉得先放过吧。
+- 回文的核心题目是647，关键是掌握回文类题目建模的核心思路。
+
 ## 搜索
 
 ### DFS
