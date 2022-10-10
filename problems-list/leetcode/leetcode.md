@@ -537,6 +537,65 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
   - 组合型，并不是以元素为视角，而是以chosen的一个试探槽位为视角，不同的元素可以放到这个槽位，所以是组合型。、
     - 对于这个槽位，没办法不放元素。肯定要放一个。所以，这个题组合法做不了
 
+```cpp
+void dfs(int n, int m, int start) {
+  if (chosen.size() == m) {
+    for (const auto& val : chosen) std::cout << val << " ";
+    std::cout << std::endl;
+    return;
+  }
+
+  for (int i = start; i <= n; ++i) {
+    chosen.emplace_back(i);
+    dfs(n, m, i + 1);
+    chosen.pop_back();
+  }
+}
+```
+
+#### [93.递归实现指数型枚举](acwing.com/problem/content/95/)
+
+这个题呢，我在二刷的时候和92题又一起重新看了下。这个题典型的组合体，不同元素对于某一个位置进行试探即可。
+还是注意和指数的区别，指数存在一种不能放的情形，这个是组合没法解决的。并且前者是对于每个元素都是存在不能放的情形。
+
+```cpp
+void dfs(int n) {
+  if (chosen.size() == n) {
+    for (const auto& val : chosen) {
+      std::cout << val << " ";
+    }
+    std::cout << std::endl;
+    return;
+  }
+
+  for (int i = 1; i <= n; ++i) {
+    // pruning
+    if (vis[i - 1]) continue;
+
+    // try current
+    chosen.push_back(i);
+    vis[i - 1] = true;
+
+    // sovle sub recursionly
+    dfs(n);
+
+    // backtracking
+    chosen.pop_back();
+    vis[i - 1] = false;
+  }
+}
+```
+
+#### acwing(92/93/94)小结
+- 指数型和组合/排列型最大的区别
+    - 前者存在当前元素可以不放的case，后两者不行。
+    - 前者的视角是元素，后两者的视角是试探的元素
+- 组合型和排列型的区别
+    - 结合随想录的思路来说，对于搜索，重要的是level/start，即深度和宽度的设定。
+    - 采用vector之后，level信息包含在vector之中，主要考虑宽度[start, stop]
+    - 组合型，元素顺序不考虑，相当于做了去重。所以，每层start是i + 1
+    - 排列型，元素顺序考虑，不能去重。所以每层的潜在宽度即所有元素构成的集合，此时引入visited数组，来标记前面路径的元素
+
 ### BFS
 
 #### [207.Course Schedule](https://leetcode.com/problems/course-schedule/)
