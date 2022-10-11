@@ -286,6 +286,97 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### DFS
 
+这里先讲acwing的三道题，这个非常基础，并且这三道题我反复琢磨，对于理解dfs的一般做法大有裨益。
+
+### [92.递归实现指数型枚举](https://www.acwing.com/problem/content/94/)
+
+- 二刷：说一下这个题，本质还是想统一随想录的方法和算竞的方法。
+    - 这个题按照上面的说法，也是能统一，算竞的每一层[start, end]只有不选或者选当前数，这两种可能。
+    - 算竞给出[start, end]这个区间，本质也是要枚举当前层所有可能的选择。
+    - 但是，这个题不会像上个题一样，有两种写法。上个题本质上可以用指数型枚举/组合型枚举求解，但是这个题只有指数型求解这一个思路。
+    - 可以考虑n = 3的情形，就会发现这个题用组合型枚举在思路上的根本错误。所以，写法只有一种。
+
+- 三刷：主要是在二刷的基础上，再此思考枚举型和组合型的区别
+  - 枚举型，每一个元素选或者不选，它是以元素为视角
+  - 组合型，并不是以元素为视角，而是以chosen的一个试探槽位为视角，不同的元素可以放到这个槽位，所以是组合型。、
+    - 对于这个槽位，没办法不放元素。肯定要放一个。所以，这个题组合法做不了
+- 四刷：本以为确实搞明白了，看样子又是搞混了，我的问题主要还是出在统一算竞和随想录的方法上。
+    - 首先，新一轮复习，我做dfs的思路主要是按照随想录的办法，核心就是关注树的层次和宽度。
+    - 其次，我下意识的使用了这个办法来做题。我们可以看下面的代码
+    - 紧接着说以下思路：   
+        - 这个题初看，组合题，因为在乎顺序，所以考虑采用组合题的模板。不放，可以理解为放一个空元素，所以还是组合题。
+        - 当然，或者可以cn1 + cn2 + ... cnn，这样也可以，问题就是这种选多少个不定的题目，边界没法确定
+        - 但是，存在不放的情形，树的深度不会向下。那么通过chosen来获取level就不可以，可以显示指定level
+        - 同时，因为不考虑顺序，每一层的宽度[start,stop]，start需要从上一层试探的元素下一个开始
+        - 最后，发现start和level同质，保留一个。
+    - 这里说下问题：
+        - 对于组合题，核心思路是以元素为视角，试探每一个槽位。
+        - 那么问题来了，每一个元素试探某一个位置的的时候，都有不放的情形，这样显然会造成重复。所以，下面的代码有问题。
+    - 正解
+        - 就是指数型的思路，以每个元素作为搜索树的一层，每一层有两个选择，放或者不放。
+        - 从搜索树的角度，一下就清楚了。
+            - 指数型，每一层的宽度是2，对于某个元素，就是放或者不放。
+            - 组合型，每一层的宽度是[start,stop]，通常start = i + 1;
+            - 指数型，每一层的宽度是[1,n]，所以，需要引入vis数组标记之前的元素是否放入
+            - 组合型和指数型宽度的差异在于他们是否去重。
+
+```cpp
+#include <iostream>
+#include <vector>
+
+void solve(int n);
+std::vector<int> chosen;
+
+int main(void) {
+  int n;
+  std::cin >> n;
+  solve(n);
+  return 0;
+}
+
+/**
+// wrong answer
+void dfs(int n, int start) {
+  if (start > n) {
+    for (const auto& val : chosen) std::cout << val << " ";
+    std::cout << std::endl;
+    return;
+  }
+
+  for (int i = start; i <= n; ++i) {
+    // not choosen
+    dfs(n, i + 1);
+
+    // choose
+    chosen.push_back(i);
+    dfs(n, i + 1);
+    chosen.pop_back();
+  }
+}
+*/
+
+// right answer
+void dfs(int n, int level) {
+  if (level > n) {
+    for (const auto& val : chosen) std::cout << val << " ";
+    std::cout << std::endl;
+    return;
+  }
+
+  dfs(n, level + 1);
+
+  chosen.push_back(level);
+  dfs(n, level + 1);
+  chosen.pop_back();
+}
+
+void solve(int n) {
+  chosen.clear();
+  chosen.reserve(n);
+  dfs(n, 1);
+}
+```
+
 #### [46.Permutations](https://leetcode.com/problems/permutations/)
 
 - 排列型枚举，dfs基本题
@@ -523,78 +614,6 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
   }
 }
 ```
-
-#### [92.递归实现指数型枚举](https://www.acwing.com/problem/content/94/)
-
-- 二刷：说一下这个题，本质还是想统一随想录的方法和算竞的方法。
-    - 这个题按照上面的说法，也是能统一，算竞的每一层[start, end]只有不选或者选当前数，这两种可能。
-    - 算竞给出[start, end]这个区间，本质也是要枚举当前层所有可能的选择。
-    - 但是，这个题不会像上个题一样，有两种写法。上个题本质上可以用指数型枚举/组合型枚举求解，但是这个题只有指数型求解这一个思路。
-    - 可以考虑n = 3的情形，就会发现这个题用组合型枚举在思路上的根本错误。所以，写法只有一种。
-
-- 三刷：主要是在二刷的基础上，再此思考枚举型和组合型的区别
-  - 枚举型，每一个元素选或者不选，它是以元素为视角
-  - 组合型，并不是以元素为视角，而是以chosen的一个试探槽位为视角，不同的元素可以放到这个槽位，所以是组合型。、
-    - 对于这个槽位，没办法不放元素。肯定要放一个。所以，这个题组合法做不了
-
-```cpp
-void dfs(int n, int m, int start) {
-  if (chosen.size() == m) {
-    for (const auto& val : chosen) std::cout << val << " ";
-    std::cout << std::endl;
-    return;
-  }
-
-  for (int i = start; i <= n; ++i) {
-    chosen.emplace_back(i);
-    dfs(n, m, i + 1);
-    chosen.pop_back();
-  }
-}
-```
-
-#### [93.递归实现指数型枚举](acwing.com/problem/content/95/)
-
-这个题呢，我在二刷的时候和92题又一起重新看了下。这个题典型的组合体，不同元素对于某一个位置进行试探即可。
-还是注意和指数的区别，指数存在一种不能放的情形，这个是组合没法解决的。并且前者是对于每个元素都是存在不能放的情形。
-
-```cpp
-void dfs(int n) {
-  if (chosen.size() == n) {
-    for (const auto& val : chosen) {
-      std::cout << val << " ";
-    }
-    std::cout << std::endl;
-    return;
-  }
-
-  for (int i = 1; i <= n; ++i) {
-    // pruning
-    if (vis[i - 1]) continue;
-
-    // try current
-    chosen.push_back(i);
-    vis[i - 1] = true;
-
-    // sovle sub recursionly
-    dfs(n);
-
-    // backtracking
-    chosen.pop_back();
-    vis[i - 1] = false;
-  }
-}
-```
-
-#### acwing(92/93/94)小结
-- 指数型和组合/排列型最大的区别
-    - 前者存在当前元素可以不放的case，后两者不行。
-    - 前者的视角是元素，后两者的视角是试探的元素
-- 组合型和排列型的区别
-    - 结合随想录的思路来说，对于搜索，重要的是level/start，即深度和宽度的设定。
-    - 采用vector之后，level信息包含在vector之中，主要考虑宽度[start, stop]
-    - 组合型，元素顺序不考虑，相当于做了去重。所以，每层start是i + 1
-    - 排列型，元素顺序考虑，不能去重。所以每层的潜在宽度即所有元素构成的集合，此时引入visited数组，来标记前面路径的元素
 
 ### BFS
 
