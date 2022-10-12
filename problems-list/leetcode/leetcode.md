@@ -377,6 +377,97 @@ void solve(int n) {
 }
 ```
 
+### [93.递归实现组合型枚举](https://www.acwing.com/problem/content/95/)
+
+- 有了上面的铺垫，这个题就清楚多了。
+- 其实，搜索这一块，主要的思路就是组合型和枚举型。指数型还是比较特殊。
+- 对于该题，那就是试探的思路。
+- 组合和排列最大的差异在于，是否有序，组合这里按照一个顺序遍历，保证了有序性。
+
+```cpp
+#include <iostream>
+#include <vector>
+
+void solve(int n, int m);
+std::vector<int> chosen;
+
+int main(void) {
+  int n, m;
+  std::cin >> n >> m;
+  solve(n, m);
+  return 0;
+}
+
+void dfs(int n, int m, int start) {
+  if (chosen.size() == m) {
+    for (const auto& val : chosen) std::cout << val << " ";
+    std::cout << std::endl;
+    return;
+  }
+
+  for (int i = start; i <= n; ++i) {
+    chosen.push_back(i);
+    dfs(n, m, i + 1);
+    chosen.pop_back();
+  }
+}
+
+void solve(int n, int m) {
+  chosen.clear();
+  chosen.reserve(m);
+  dfs(n, m, 1);
+}
+```
+
+#### [94.递归实现排列型枚举](https://www.acwing.com/problem/content/96/)
+
+- 组合的思路，已经总结完了。排列因为考虑顺序，所以每层都是最大宽度，同时引入vis标记之前选过的元素。
+- 排列这里，level和start都不用
+
+```cpp
+#include <iostream>
+#include <vector>
+
+void solve(int n);
+std::vector<int> chosen;
+std::vector<bool> vis;
+
+int main(void) {
+  int n;
+  std::cin >> n;
+  solve(n);
+  return 0;
+}
+
+void dfs(int n) {
+  if (chosen.size() == n) {
+    for (const auto& val : chosen) std::cout << val << " ";
+    std::cout << std::endl;
+    return;
+  }
+
+  for (int i = 1; i <= n; ++i) {
+    if (vis[i]) continue;
+
+    chosen.push_back(i);
+    vis[i] = true;
+
+    dfs(n);
+
+    chosen.pop_back();
+    vis[i] = false;
+  }
+}
+
+void solve(int n) {
+  chosen.clear();
+  chosen.reserve(n);
+  vis.clear();
+  vis.resize(n, false);
+  dfs(n);
+}
+```
+
 #### [46.Permutations](https://leetcode.com/problems/permutations/)
 
 - 排列型枚举，dfs基本题
