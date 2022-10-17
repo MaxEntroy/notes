@@ -495,18 +495,73 @@ void solve(int n) {
 
 - 这个题是组合基础题，根据模板，剪枝条件一定要确定清楚。
 - 模板的起点下界是递增的，但是该题是非递减。模板的终点是n - (k - chosen.size()) + 1，但是该题是n，因为该题的区间长度不限，所以起点的上界是n
+- 二刷
+    - 二刷做起来反而没有那么轻松，想了一会
+    - 组合题，单向遍历，去重
+    - 但是这个题还有一个重复的可能，就是如果元素重复，又因为这个题可以重复选。
+        - 比如，[2,2,3],target=6。可能造成[2,2,2],[2,2,2]这样重复的序列
+        - 所以，题目的要求很重要，元素去重。这样不会造成上面的情形。
+    - 序列重复可能有多重原因，一种是排列导致的，比如[2,2,3]/[3,2,2]，本质是一个排列
+    - 另一个就是元素重复。所以，要学到处理他们的技巧
+    - 思路：一上来，没有搞太明白。最后的解题的钥匙在于，确定每层的宽度，深度这两个突破口来进行思考
+        - 组合去重，用单向遍历。
+        - 元素可以重复选，单向不递增即可。
+        - 同时，题目要求了元素不重复，可以避免重复组合的生成。
 
 #### [40.Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)
 
 - 这个题对应47题，重复元素的组合生成。上面是重复元素的排列生成。
 - 方式一样，避免相同元素在同一个层次的试探。
 - 注意，vis的用法和排列不同，前者两种剪枝用到了这个结构，但是组合只用到了一种。使用过的元素不会重复使用，这个在排列中用startIndex保证。
+- 二刷
+    - 思路采用了随想录的做法，我觉得随想录讲的也非常的清楚。即同一层的试探需要剪枝，同一树枝的试探则不用。
+    - 同时，随想绿优化的做法更好，不用used数组，就是判断同层即可。
+    - 备选集需要排序。
+    - 剪枝start边界不要判断(start >= sz)，这里会漏解
+    - 总结：对于元素重复的处理，主要是利用排序+同层剪枝
 
 #### [216.Combination Sum III](https://leetcode.com/problems/combination-sum-iii/)
 
 - 这个题和前两个兄弟题的区别是，前两个题也是产生组合，但是对于组合的长度没有限制。这个题给了限制。
 - 此时，可以用acwing的模板。
 - 注意，由于组合的长度有限制，注意宽度的剪枝。
+- 二刷
+    - 整体来说，比上一题简单。主要是很多限制都没有
+    - 元素重复的限制。
+    - 元素可以重复用的限制。
+    - 增加了一个k层的限制，这个比较好处理，同时k层的限制有剪枝优化。
+
+```cpp
+// 组合型
+void dfs(int k, int target, int sum, int start) {
+    int level = chosen.size();
+    if (sum > target or level > k) return;
+    if (sum == target and level == k) {
+        ret.push_back(chosen);
+        return;
+    }
+
+    for (int i = start; i <= 9 - (k - level) + 1; ++i) {
+        chosen.push_back(i);
+        dfs(k, target, sum + i, i + 1);
+        chosen.pop_back();
+    }
+}
+// 指数型
+void dfs(int k, int target, int level, int sum) {
+    if (target == sum and chosen.size() == k) {
+        ret.push_back(chosen);
+        return;
+    }
+    if (level > 9) return;
+
+    dfs(k, target, level + 1, sum);
+
+    chosen.push_back(level);
+    dfs(k, target, level + 1, sum + level);
+    chosen.pop_back();
+}
+```
 
 #### [17.Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
 
