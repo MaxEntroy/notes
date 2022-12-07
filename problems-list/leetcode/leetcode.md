@@ -218,6 +218,18 @@ double val2 = static_cast<double>(1) / 2; // right
     - 更新的时候，肯定只更新某一个桶，显著的降低了更新的复杂度。如果是dp的思路，更新的复杂度在O(N).
     - 查询的时候，中间区间桶的sum可以直接累加，这里的时间复杂度从O(N)降低到了O(sqrt(N))，首位的两个桶需要单独sum
 
+#### [27.Remove Element](https://leetcode.com/problems/remove-element/description/)
+
+- 一刷
+    - 方法一：双指针，一个从前找，一个从后找，发现一个匹配时，交换。
+        - 思路不难，但是这个题花了我一点时间，主要是在数组元素的计算上。
+            - 从前找，不等target，++ans
+            - 循环跳出后，需要判断跳出的条件，即i==k时，该元素是否为target，也有可能++ans
+    - 方法二：这个题的考点，我觉得就是数组元素的删除。
+        - 链表可以直接删，但是数组删除的时候，需要移动元素。
+        - 此时，可以记住需要移动的位置，直接移动到对应的位置即可。
+        - 这个办法理解上最容易，也好写。
+
 ### Hash
 
 #### [36.Valid Sudoku](https://leetcode.com/problems/valid-sudoku/)
