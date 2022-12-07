@@ -50,7 +50,7 @@
     - 如果越界，high < low(low = high + 1)，此时high + 1/low为越界下标
     - 优点：mid计算公式统一
     - 缺点：会漏解，比如mid处的解。
-- 方法二：也是算竞赛的思路，使用[low, high)作为循环区间，注意，这里high是合法下标边界。
+- 方法二：也是算竞赛的思路，**下标区间(合法区间)[low, high]，二分区间[low, high)**。注意，这里high是合法下标边界。
     - 优点：
         - 二分的终止条件是low == high，该点即为答案所在，始终落在二分区间内。
         - 后面可以看到，如果我们拓宽了非法下标，终止条件也不变。即终止条件始终唯一，不受越界的限制。可以很自然的处理无解的情形
@@ -58,16 +58,29 @@
         - mid有两种计算公式，主要是避免向左/向右寻找时造成mid和l/r重合
 - 实际的写法：采用方法二的拓展版本，即[low, high + 1)，引入一个非法下标。处理无解的情形。同时采用lower_bound作为主搜索算法，同时处理相等和大于的情形。
     - 注意，如果直接使用std::lower_bound需要注意，这个库函数没有引入非法下标，所以要先判断迭代器非法的情形，即找不到的情形，否则直接解引用会出问题。
+    - 注意，如果用higher_bound作为主算法，下标区间拓展为[-1, high)
     - 细节
-        - 不管找到，找不到，都有low==high，落在[low, high]这个区间内，所以两分的区间是[low, high)
+        - **不管找到，找不到，都有low==high**，落在[low, high]这个下标区间内，所以两分的区间是[low, high)
         - 如果以lower_bound作为主搜索算法，需要小心两种找不到的情形
             - target大于序列中所有数字，即找不到第一个比target大的位置，此时落到了边界
             - 存在element > target，但不等于。此时也是找不到，但是找到了插入位置，所以还需要check
 ```cpp
-while (low < high) {
-    int mid = low + (high - low)/2;
-    if (x <= a[mid]) high = mid;
+int lower_bound(const std::vector<int>& nums, int low, int high, int x) {
+  while (low < high) {
+    int mid = low + (high - low) / 2;
+    if (nums[mid] >= x) high = mid;
     else low = mid + 1;
+  }
+  return low;
+}
+
+int higher_bound(const std::vector<int>& nums, int low, int high, int x) {
+  while (low < high) {
+    int mid = low + (high - low) / 2 + 1;
+    if (nums[mid] <= x) low = mid;
+    else high = mid - 1;
+  }
+  return low;
 }
 ```
 
@@ -76,6 +89,12 @@ while (low < high) {
 - 两分查找的基本实现
 - 前提数组有序
 - 递归实现，注意两个边界条件。非递归实现也需要掌握
+- 二刷：这里采用算竞的模板
+    - 核心：主算法采用lower_bound实现
+    - 注意：下标区间[low, high]，二分区间[low, high)
+    - 注意：无解存在两种可能
+        - 其一，搜寻到右边界。it == nums.end(); (右边界纳入了一个非法点)
+        - 其二，寻找到插入位置，但是元素不等。*it != target
 
 #### [349.Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/)
 
@@ -295,7 +314,7 @@ double val2 = static_cast<double>(1) / 2; // right
 
 这里先讲acwing的三道题，这个非常基础，并且这三道题我反复琢磨，对于理解dfs的一般做法大有裨益。
 
-### [92.递归实现指数型枚举](https://www.acwing.com/problem/content/94/)
+#### [92.递归实现指数型枚举](https://www.acwing.com/problem/content/94/)
 
 - 二刷：说一下这个题，本质还是想统一随想录的方法和算竞的方法。
     - 这个题按照上面的说法，也是能统一，算竞的每一层[start, end]只有不选或者选当前数，这两种可能。
@@ -384,7 +403,7 @@ void solve(int n) {
 }
 ```
 
-### [93.递归实现组合型枚举](https://www.acwing.com/problem/content/95/)
+#### [93.递归实现组合型枚举](https://www.acwing.com/problem/content/95/)
 
 - 有了上面的铺垫，这个题就清楚多了。
 - 其实，搜索这一块，主要的思路就是组合型和枚举型。指数型还是比较特殊。
@@ -820,8 +839,6 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
 #### [363.Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
 
 - 参见暴力搜索
-
-## 动态规划
 
 #### [118. Pascal's Triangle](https://leetcode.com/problems/pascals-triangle/)
 
