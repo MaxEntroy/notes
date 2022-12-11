@@ -4,6 +4,24 @@
 
 这一类题目的思路一般比较朴素，题目中一般会给出，直接用代码模拟实现即可。
 
+#### [977.Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/description/)
+
+- 一刷
+    - 方法一：这个是我的办法，找到分界点，分别处理。因为单调递增，所有二分很容易找。
+    - 方法二：随想录的办法，更简单。不找分界点，前者找是因为插入的时候先插较小的数字，所以需要找。
+        - 直接从两头遍历，从后向前插入，即可避免找分界点的问题。
+
+#### [59.Spiral Matrix II](https://leetcode.com/problems/spiral-matrix-ii/)
+
+- 一刷
+    - 方法一：模拟 + 状态机
+        - 我的思路我觉得还是比较简单的，代码量也少，大思路就是模拟。
+        - 首先是确定外部循环
+        - 其次，内部是状态机的思路。每个点，其实就是4个方向，方向定了，向前stepping即可。之后，更新状态。
+    - 方法二：随想录
+        - 这个办法我觉得也没啥问题，但是很明显我的做法更间接。
+        - 我们的区别主要在于对于边界的处理，我是通过越界判断。随想录是通过确定好每一圈的边界范围。
+
 #### [13.Roman to Integer](https://leetcode.com/problems/roman-to-integer/)
 
 - 基本思路照着实现即可。
@@ -187,6 +205,18 @@ double val2 = static_cast<double>(1) / 2; // right
 这一套题目，我觉得非常的好，加深了对于二分的认知，因为不直接依赖二分的技巧，而是锻炼了二分的思路，即每次抛弃一半的解。同时，旋转数组这里，二分的技巧不要用闭区间，尤其是针对有重复元素的情形，
 只能用开区间。
 
+#### [209.Minimum Size Subarray Sum]https://leetcode.com/problems/minimum-size-subarray-sum/description/)
+
+- 一刷
+    - 缪解：我用暴力法求解的，结果超时。
+    - 方法一：sliding window. 这个方法我第一次见，掌握的也不太好。本质思路是在一个循环里调整首尾边界
+        - 当然，形式上还是两个循环
+        - 时间复杂度O(n)，这个考虑的不是很清楚。随想录的解释不够直接。
+    - 方法二：参考了[前缀和+二分算法](https://blog.csdn.net/weixin_60466670/article/details/123363464)
+        - 这题很核心是要想到前缀和，因为都是正数。前缀和一定是单调递增数列，可以用两分。
+        - 本质也是一个两种循环，和暴力法很接近。但是因为使用了二分查找，降低了时间复杂度量级
+
+
 ### 暴力搜索
 
 #### [363.Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
@@ -229,6 +259,8 @@ double val2 = static_cast<double>(1) / 2; // right
         - 链表可以直接删，但是数组删除的时候，需要移动元素。
         - 此时，可以记住需要移动的位置，直接移动到对应的位置即可。
         - 这个办法理解上最容易，也好写。
+
+#### 
 
 ### Hash
 
