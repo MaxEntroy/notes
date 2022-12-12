@@ -19,7 +19,7 @@
         - 首先是确定外部循环
         - 其次，内部是状态机的思路。每个点，其实就是4个方向，方向定了，向前stepping即可。之后，更新状态。
     - 方法二：随想录
-        - 这个办法我觉得也没啥问题，但是很明显我的做法更间接。
+        - 这个办法我觉得也没啥问题，但是很明显我的做法思路更简单。
         - 我们的区别主要在于对于边界的处理，我是通过越界判断。随想录是通过确定好每一圈的边界范围。
 
 #### [13.Roman to Integer](https://leetcode.com/problems/roman-to-integer/)
@@ -260,8 +260,30 @@ double val2 = static_cast<double>(1) / 2; // right
         - 此时，可以记住需要移动的位置，直接移动到对应的位置即可。
         - 这个办法理解上最容易，也好写。
 
-#### 
+### 链表
 
+这里整体比较熟悉，所以不特别介绍方法论。
+
+#### [206.Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/)
+
+- 一刷：和203类似，需要pre和cur配合解决。这个题还需要一个next.
+
+#### [203.Remove Linked List Elements](https://leetcode.com/problems/remove-linked-list-elements/description/)
+
+- 一刷：没太多好说的，处理好head的情形即可
+
+#### [707.Design Linked List](https://leetcode.com/problems/design-linked-list/description/)
+
+- 一刷：这个题做的不好，花了一些时间。
+    - 思路比较简单，设计也不多说，增加head_/tail_指针。
+    - 做的不好的地方在于，对于边界情况考虑不周到，所有操作都要考虑head_/tail_异常时，这两个指针如何更新。
+    - 主要就是addAtIndex/deleteAtIndex这两个函数
+        - 如果节点只有一个，此时头尾在一起。
+        - 删除头时的情形
+        - 删除尾时的情形。
+        - 由于还有头尾在一起的情形，增加了后两种的处理复杂度。
+    - 随想录的办法增加dummyNode这个是好的方式，避免了头尾在一起，二刷的时候可以试一下
+    
 ### Hash
 
 #### [36.Valid Sudoku](https://leetcode.com/problems/valid-sudoku/)
