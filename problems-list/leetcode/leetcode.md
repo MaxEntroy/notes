@@ -264,6 +264,22 @@ double val2 = static_cast<double>(1) / 2; // right
 
 这里整体比较熟悉，所以不特别介绍方法论。
 
+#### [142.Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/description/)
+
+- 一刷：没思路。
+    - 随想录的办法正解，快慢指针，同时论证了环的入口点位置。数学题
+        - 相遇，有环
+        - 从头开始，从相遇点开始，下次相遇即为入口
+
+#### [19.Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/)
+
+- 一刷：没有正确的思路。
+    - 随想录的办法正解：快慢指针。fast先走n步，slow在跟着一起走，当fast结束时，slow的位置就是倒数第n位
+
+#### [24.Swap Nodes in Pairs](https://leetcode.com/problems/swap-nodes-in-pairs/description/)
+
+- 一刷：比较简单，pre配合cur解决。我看了随想录的办法，交换指针的做法实在是不怎么样。
+
 #### [206.Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/)
 
 - 一刷：和203类似，需要pre和cur配合解决。这个题还需要一个next.
