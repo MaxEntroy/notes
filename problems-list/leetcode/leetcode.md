@@ -302,6 +302,11 @@ double val2 = static_cast<double>(1) / 2; // right
     
 ### Hash
 
+- Hashing is the process of **transforming** any given key or a string of characters into another value.
+- A hash function is any function that can be used to map data of arbitrary size to fixed-size values.
+
+最后，我们再来看哈希表：哈希表是根据关键码的值而直接进行访问的数据结构。其中，对关键码的值进行hashing，得到一个hash value。然后根据这个哈希值去完成对应的检索。
+
 #### [36.Valid Sudoku](https://leetcode.com/problems/valid-sudoku/)
 
 - 存储对应的数独有效位状态即可。
