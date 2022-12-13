@@ -305,7 +305,35 @@ double val2 = static_cast<double>(1) / 2; // right
 - Hashing is the process of **transforming** any given key or a string of characters into another value.
 - A hash function is any function that can be used to map data of arbitrary size to fixed-size values.
 
-最后，我们再来看哈希表：哈希表是根据关键码的值而直接进行访问的数据结构。其中，对关键码的值进行hashing，得到一个hash value。然后根据这个哈希值去完成对应的检索。
+最后，我们再来看哈希表：哈希表是根据关键码的哈希值而直接进行访问的数据结构。其中，对关键码的值进行hashing，得到一个hash value。然后根据这个哈希值去完成对应的检索。
+
+#### [1.Two Sum](https://leetcode.com/problems/two-sum/description/)
+
+- 一刷：虽然easy题，但是没那么容易，需要考虑的点还有一些。
+    - 我的办法是先建立映射关系。然后处理
+    - 这种办法的问题是，如果重复元素，不好弄。所以，我的哈希表value放了一个vector用来处理重复元素的下表
+    - 这种办法，还要判断vector长度。比如,[3,2], target=6。3 + 3 = 6，但是3只有一个
+    - 这题随想录的办法最简单，最优雅，采用了in-place的做法。
+        - 3和3自己，这种就不会出问题。
+        - 3和另一个3，下表也不会冲突。非常优雅，同时解决了两个不好搞的地方。
+
+#### [202.Happy Number](https://leetcode.com/problems/happy-number/description/)
+
+- 一刷：题目不难，最后代码写的也行。问题是题没看懂，英文的循环终止那句没看懂，后来我又仔细看了下，发现当时脑袋掉线了，in a cycle没看懂
+    - 循环如果成环了，就不行，这个是not happy number的判断依据
+
+#### [349.Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/description/)
+
+- 一刷：题目很简单。老实说，做的不满意，因为都不能一遍过。又是漏了题目的条件。
+    - 结果是要去重的，这个信息没有get到
+    - 看了其他题解，这个题还有两根指针，两分的办法，都非常好。核心还是要看一看怎么去重。
+    - 排序预处理是常见的操作
+
+#### [242.Valid Anagram](https://leetcode.com/problems/valid-anagram/description/)
+
+- 一刷：题目很简单，但是审题审的不好。没有一遍过。
+    - 都是小写字母，空间可以节省。
+    - 每个字母只能用一次。这么重要的题目信息，都没有读到。还是不够耐心。
 
 #### [36.Valid Sudoku](https://leetcode.com/problems/valid-sudoku/)
 
