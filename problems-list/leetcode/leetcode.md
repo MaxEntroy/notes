@@ -240,6 +240,27 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 数组
 
+#### [18.4Sum](https://leetcode.com/problems/4sum/)
+
+- 一刷
+    - 方法一：缪解。不到黄河心不死，还是上来dfs，结果最后差10个case
+    - 方法二：正解。双指针，暴力法四重循环，这个降到三重。
+        - 外部两重循环，固定i和k
+        - 内部移动left/right，和3sum一样
+        - 但是，这个题数据设计的有技巧
+            - target可能是负数，这回导致，从小到达的负数，越加越小。所以，必须判断是正数，才可以剪枝。
+            - 数据会越界，转一下int64_t
+        - 最后，预处理的排序。刚开始忘了，这个预处理很重要。
+
+#### [15.3Sum](https://leetcode.com/problems/3sum/description/)
+
+- 一刷
+    - 方法一：缪解。我采用了dfs的办法，对于相同元素的去重，上来先排序。代码很简单，也没有问题。最后有2个case超时。
+    - 方法二：正解。双指针。还是比较巧妙的做法，我没有想出来。随想录的办法
+        - 固定i
+        - 移动left/right，去凑一个三元组，判断是否为0
+        - 同时，i/left/right全部需要去重。
+
 #### [307.Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/)
 
 - 这个题和303一脉相承，但是超时，表明每次O(N)的更新时间复杂度无法接受。
@@ -306,6 +327,19 @@ double val2 = static_cast<double>(1) / 2; // right
 - A hash function is any function that can be used to map data of arbitrary size to fixed-size values.
 
 最后，我们再来看哈希表：哈希表是根据关键码的哈希值而直接进行访问的数据结构。其中，对关键码的值进行hashing，得到一个hash value。然后根据这个哈希值去完成对应的检索。
+
+#### [454.4Sum II](https://leetcode.com/problems/4sum-ii/description/)
+
+- 一刷：没过。尝试把4重降3重，同时考虑到了重复元素会产生多个解的情形。
+    - 但是，正解是2重。
+    - 两个两重，计算局部和。同时考虑重复元素的情形。
+
+#### [383.Ransom Note](https://leetcode.com/problems/ransom-note/description/)
+
+- 一刷：简单题，但是也没一把过。
+    - 主要是数据结构定义的有问题， char cha_map[26];
+    - 这个类型不行，每一个元素是char，0-255。如果都是一样的字母，且长度高于255，这里会溢出。
+    - 换成int即可。有时候也不用太省空间，只要题目不是严格要求节省的，没必要。
 
 #### [1.Two Sum](https://leetcode.com/problems/two-sum/description/)
 
