@@ -205,7 +205,7 @@ double val2 = static_cast<double>(1) / 2; // right
 这一套题目，我觉得非常的好，加深了对于二分的认知，因为不直接依赖二分的技巧，而是锻炼了二分的思路，即每次抛弃一半的解。同时，旋转数组这里，二分的技巧不要用闭区间，尤其是针对有重复元素的情形，
 只能用开区间。
 
-#### [209.Minimum Size Subarray Sum]https://leetcode.com/problems/minimum-size-subarray-sum/description/)
+#### [209.Minimum Size Subarray Sum](https://leetcode.com/problems/minimum-size-subarray-sum/description/)
 
 - 一刷
     - 缪解：我用暴力法求解的，结果超时。
@@ -377,6 +377,41 @@ double val2 = static_cast<double>(1) / 2; // right
     - 其次，字符和下标需要区分，因为都是数字，不区分无法区别。比如把数字9放在第9行和第9列，如果不区分数字和下标，都是99，看不出来。
 
 ### 字符串
+
+#### [459.Repeated Substring Pattern](https://leetcode.com/problems/repeated-substring-pattern/description/)
+
+- 一刷：暴力法。不过这题衍生出一道更有意思的题，即如果找最小的循环子串，怎么找？那遍历的方向就是从1开始反过来。
+    - 这个题我看了下随想录的解法，有依赖的kmp的，准备二刷再看。
+
+#### [28. Find the Index of the First Occurrence in a String](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/description/)
+
+- 一刷：暴力法，kmp看了一眼，差不多明白了，回头看看算法的讲解再来二刷。
+    - [从头到尾彻底理解KMP](https://blog.csdn.net/v_july_v/article/details/7041827)
+    - july讲的不错，但是我用了他的方法，发现有case不过。再研究一下。
+
+#### [剑指 Offer 58 - II. 左旋转字符串](https://leetcode.cn/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/submissions/)
+
+- 一刷：简单题，也是使用了额外空间。
+    - 随想录的办法最简单，就地翻转。需要三次翻转。
+    - 这个题应该是固定的思路，对于部分翻转，或者说循环移动，采用这个办法。
+
+#### [剑指 Offer 05. 替换空格](https://leetcode.cn/problems/ti-huan-kong-ge-lcof/)
+
+- 一刷：简单题，按照条件模拟即可。只不过不要用lambda处理。
+    - 这个题随想录办法简单。双指针，本质是快慢指针，并且二者最终合二为一。
+
+#### [541.Reverse String II](https://leetcode.com/problems/reverse-string-ii/description/)
+
+- 一刷：花了点时间。刚开始的思路最简单，直接就地，但是另一边的下标我一直算不对。
+    - 然后换了思路，使用while循环来驱动。时间复杂度不变，代码更好写。
+
+#### [344.Reverse String](https://leetcode.com/problems/reverse-string/description/)
+
+- 一刷：两根指针翻转，相对简单好写。
+
+#### [151.Reverse Words in a String](https://leetcode.com/problems/reverse-words-in-a-string/description/)
+
+- 一刷：思路比较简单，借助stringstream进行空格划分
 
 #### [125.Valid Palindrome](https://leetcode.com/problems/valid-palindrome/)
 
