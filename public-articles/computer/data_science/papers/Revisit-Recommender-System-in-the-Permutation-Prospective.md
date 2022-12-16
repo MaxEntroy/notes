@@ -38,3 +38,65 @@ point-wise ctr主要对用户和物品的喜好进行建模，lise-wise refining
     - 评估完成后，选择lr metric分数最高的序列，作为最终的推荐结果。
 
 <img width="500"  src="img/architecture.png"/>
+
+### PMatch
+
+离线这里，主要是训练了两个point-wise打分模型
+
+- the CTR prediction model $M^{CTR}$
+- the NEXT prediction model $M^{NEXT}$
+
+关于NEXT Score作者给出如下解释
+>we first design the NEXT score, which predicts the probability whether the user will continue browsing after the item. Items with higher NEXT scores can increase the user’s desire for continuous browsing, which improves the probability of subsequent items being browsed and clicked.
+
+在线这里，作者提出了一个FPSA算法，这个算法本身没什么好说的，其内部就是beam-search的实现，这里主要看下如何结合上面两个分数，选择top k的序列。作者给出了如下的评估公式：
+
+<img width="500"  src="img/pmatch-reward.png"/>
+
+这一组公式理解的一个基本思路来自于上面的next score，即我们要明白作者设计这个分数的意义在哪里？简单说，就是要把上下文因素放进来。我们对于某一篇文章是否消费，一方面取决于我们和这篇文章的相关性，即这篇文章我是否感兴趣。另一方面也取决于这篇文章出现在怎样的一个上下文当中。比如，我喜欢看nba，如果某一篇nba文章上面已经有好几篇nba相关的文章，并且我都消费了，那么这篇nba相关的文章我可能选择不看，因为之前看够了。如果这篇之前一篇nba相关的都没有，那我就有极大的可能消费这篇文章。
+
+说回公式
+
+- $p^{expose}$: 这个可以理解为上下文影响因素，我们对每一篇是否消费，都是在一个上下文环境中决定，那么这因素由它给出。
+    - 这个值初始化为1，即第一篇文章，没有能影响它的，就看它本身的质量。
+    - 每当某一位置，消费了某一篇文章，那么形成了所谓的行为上下文。
+    - 此时，需要next score去更新这个分数。
+- $r^{IPV}$: 这个公式可以理解为，对于每一篇文章的分数，在上下文环境下的修正。
+    - 这个值初始化为0
+    - 每一次修正文章的分数，然后累加。最终形成整个序列的item page view sum
+- $r^{PV}$: 这个公式类似，只不过修正的是每一篇文章的next score
+- $r^{sum}$: 这个是融合后的一个序列分数，最后用来评估序列效果。
+    - 注意区分这里和prank的区别。
+
+真个FPSA的算法流程如下：
+- step1: 初始化，获取每一篇文章的ctr score/next score
+- step2: beam search
+    - expand sequences
+    - select top k sequence based on Estimated-Reward
+- step3: 拿到最后的待选序列
+
+<img width="500"  src="img/fpsa.png"/>
+
+最后，再强调下PMatch的核心做法
+- 使用了beam-search而不是greedy search，这保证了每一步的选择不是贪心选择。
+- 同时，提供了序列评估的方法，保证选出k个还不错的待选序列。
+
+### PRank
+
+离线这里，作者提出了Deep Permutation-Wise Network model，主要用来对最终文章列表当中的序列因素进行捕捉和建模。具体结构如下：
+
+<img width="500"  src="img/dpwn.png"/>
+
+作者特别强调到，dpwn和传统的list-wise model最大的区别在于，前者是对于最终的文章列表进行建模，而后者是对于整个ranking的输入文章列表进行建模。
+
+在线这里，作者提出了统一的list reward评估方法，借助dpwn模型，对这个列表进行分数评估，公式如下:
+
+<img width="500"  src="img/lr.png"/>
+
+PRank在PMatch产生序列的基础上，选出分数最高的序列，作为最终的返回结果。
+
+## 一些架构上的思考
+
+上面是论文的部分，下面是我的一些私货。其实看这篇文章的起因是，最近在帮算法同学迁移这个东西，发现了目前架构中一些不适配的地方，或者说做的不好的地方。尤其是目前prs的做法在各个bg已经是主流的做法，所以怎么更好的适配，协助算法同学高效的开发，变成了新的挑战。
+
+重温了这篇论文之后，一个非常清晰的思路在我脑海中形成，这个就是rerank本质是一组search算法的结合。我们一路从exhausive search, point-wise greedy search，list-wise greedy search，融合diversity search的做法走过来，再到现在的beam-search，已经非常明显了。无论如何，这里就是各种search，你可以改良各种search算法，也可以加prank这样的流程，但是n2k这个过程，一定是会依赖search算法的。想到这一点之后，我就认为，目前的重排过程，可以朝着尝试把各种searcher抽出来的方式去试一试。当然，这个东西我觉得不见得会提升性能，主要是这里的代码需要治理。并且，各种searcher怎么能更好的和规则融合到一起，也就具有挑战性的工作。明天可以尝试做一下吧。
