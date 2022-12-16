@@ -492,6 +492,17 @@ double val2 = static_cast<double>(1) / 2; // right
     - 最后，按照pruning-try-solve recusionly-backtracking的思路，才写对了。
     - dp的思路不太知道，先不急，把搜索扎实刷完，再看dp
 
+### 栈/队列
+
+#### [225.Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues/description/)
+
+- 一刷：一把过。没什么大问题，一个队列就够了。
+
+#### [232.Implement Queue using Stacks](https://leetcode.com/problems/implement-queue-using-stacks/description/)
+
+- 一刷：一把过，就得达到这个标准。
+    - 思路，两个栈模拟即可。
+
 ## 搜索
 
 ### DFS
