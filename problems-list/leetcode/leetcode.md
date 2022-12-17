@@ -494,6 +494,18 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 栈/队列
 
+#### [150.Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/description/)
+
+- 一刷：简单题，按照思路做即可。一遍没过，卡在数据类型，还是没考虑到。越界的问题碰到很多次了，都没有考虑到。
+
+#### [1047. Remove All Adjacent Duplicates In String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/description/)
+
+- 一刷：简单题。一遍过。用stack没问题，这个题就是栈的思路，只不过栈最后不好操作。我用了deque，随想了直接用了string，最简单。
+
+#### [20.Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/)
+
+- 一刷：简单题，但是也没有一把过。没有考虑都是右括号的情形。
+
 #### [225.Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues/description/)
 
 - 一刷：一把过。没什么大问题，一个队列就够了。
