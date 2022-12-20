@@ -4,6 +4,14 @@
 
 这一类题目的思路一般比较朴素，题目中一般会给出，直接用代码模拟实现即可。
 
+#### [67.Add Binary](https://leetcode.com/problems/add-binary/description/)
+
+-  一刷：这个题不好处理的地方在于需要反向变量，处理下标的时候小心点即可
+
+#### [66.Plus One](https://leetcode.com/problems/plus-one/description/)
+
+- 一刷：模拟进位即可。刚开始使用了and_one标记，后来发现不用。
+
 #### [977.Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/description/)
 
 - 一刷
@@ -378,6 +386,10 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 字符串
 
+#### [58.Length of Last Word](https://leetcode.com/problems/length-of-last-word/description/)
+
+- 一刷：这个题考察识别单词的办法，利用stringstream。
+
 #### [459.Repeated Substring Pattern](https://leetcode.com/problems/repeated-substring-pattern/description/)
 
 - 一刷：暴力法。不过这题衍生出一道更有意思的题，即如果找最小的循环子串，怎么找？那遍历的方向就是从1开始反过来。
@@ -494,13 +506,53 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 栈/队列
 
+#### [347.Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/description/)
+
+- 一刷：一把过。我的思路比较常规，计数-排序-拿topk，借助了priority_queue，不过看以前的办法，直接用pair，定义cmp，对vector排序也很方便。
+    - 这个题还有桶排序的思路，因为桶排序每个桶是递增的，所以倒着找到k个即可。
+    - 这里的排序，本质是hash的过程。即元素出现次数，当做hash key
+
+#### [239.Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)
+
+- 一刷：这个题也有点意思，没过。
+    - 缪解
+        - 说下我的思路，pop的思路很简单。就是判断一下，移除的元素是否最大，如果最大移除最大，同时更新最大。
+        - 所以，我的设计是一个三元组。[left, max, second_max]
+        - 每次移除left，同时判断是否和max相等，不等自然简单。相等就用second_max更新max
+        - 但是，这个思路有个问题，那么你的second_max怎么更新呢？这个是问题，我就卡在这了。
+        - 我总不能再存third_max吧。即使存了，如果max/second_max/third_max均通过left移除了，你怎么办
+        - 最终这个题没有做出来。
+    - 正解
+        - 随想录先提了priority_queue，这个的问题是，移除不能移除。我要移除left，但是结构不支持。
+        - 核心的办法是：比我多走了一步，只要是单调递减的序列，我全部都存下来。
+            - 这个办法的好处是，我存了单调递减序列，我就不怕你移除。反正我有backup元素
+            - 注意，一定是单调递减，是因为有可能移除max，如果单调递减，队尾不能操作。如果是队列，队尾入，队头出。
+            - 对于pop元素来说，已经不关注left元素，只要不和max相等，我就no-op
+            - 对于push元素，保证单调递减的能力。此时，队尾也需要支持pop。所以，需要deque。那么，这个队列单调递增也行。反正你用了deque
+    - 简单总结下，正解的办法，比我多考虑一步，即把整个单调递减序列存下来，我只是想了存max/second_max，没有考虑到这一步。
+    
+
+#### [841.Keys and Rooms](https://leetcode.com/problems/keys-and-rooms/description/)
+
+- 一刷：花了几次才过，也是挺有意思的一道题。
+    - 这个题基本思路是队列的思路，有过层序遍历的经验，写这个相对容易点。
+    - 同时，需要辅助hash的思路。因为这里需要快速的知道，某一个key以前是否访问过。hash可以把O(n)的时间复杂度，降低到O(1)
+    - 这个题，做的不好的地方在于，没有考虑到重复元素。因为重复元素形成环之后，不断的添加，会导致死循环。需要去重。
+
+#### [739.Daily Temperatures](https://leetcode.com/problems/daily-temperatures/description/)
+
+- 一刷：这个题两次过，第一次忽略了相同元素存下表覆盖的问题，引入queue，问题解决。
+    - 这个题我觉得出的挺好的，挺巧妙。
+    - 核心思想是利用栈，暂存尚未找到warmer tempertature的元素。所以，这个题也揭示了栈的核心思路，即暂存数据。
+    - 需要结合hash一起解决。
+
 #### [150.Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/description/)
 
 - 一刷：简单题，按照思路做即可。一遍没过，卡在数据类型，还是没考虑到。越界的问题碰到很多次了，都没有考虑到。
 
 #### [1047. Remove All Adjacent Duplicates In String](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/description/)
 
-- 一刷：简单题。一遍过。用stack没问题，这个题就是栈的思路，只不过栈最后不好操作。我用了deque，随想了直接用了string，最简单。
+- 一刷：简单题。一遍过。用stack没问题，这个题就是栈的思路，只不过栈最后不好操作。我用了deque，随想录直接用了string，最简单。
 
 #### [20.Valid Parentheses](https://leetcode.com/problems/valid-parentheses/description/)
 
