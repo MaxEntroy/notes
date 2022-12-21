@@ -571,7 +571,7 @@ double val2 = static_cast<double>(1) / 2; // right
 
 #### [111.Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/description/)
 
-一刷：没过。一时没想明白，直接看了过去的办法。
+- 一刷：没过。一时没想明白，直接看了过去的办法。
     - 这个题求的高度，是最短路径所代表的树的高度。如果一棵树，只有右子树，显然不能用左右最小+1的方式。因为此时，只有右子树这一条路径，求max可以，但是求min不行。
     - 正解是分别判断。只有当左右子树均存在，才可以std::min求一个最小+1
     - 当然，这个题也悟到了，层序其实提供了非递归的解法。
