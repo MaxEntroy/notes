@@ -569,6 +569,21 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [226.Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/description/)
+
+- 一刷：一遍过。基于递归的方式，直接找到了递归解。
+    - 看了下回想录的解析，发现自己真是稀里糊涂的过了。
+    - 随想录的思路是：遍历每一个节点，把每一个节点的左右孩子交换即可。所以，基于某一种遍历算法即可求解。
+    - 根据回想录的算法，我看了自己的实现，其实就是基于后序遍历的做法。只不过visit函数是交换swap(root->left, root->right);
+
+#### [101.Symmetric Tree](https://leetcode.com/problems/symmetric-tree/description/)
+
+- 一刷：没过。没想到办法。
+    - 树的题目，我能想到的解法大概有两种，第一种基于树的递归结构，给出递归解法。第二种，基于遍历的求解。
+    - 这个题，我尝试直接给出递归解法，发现求解不了。当然，后面我发现，此时我对递归解法的认知还停留在depth of tree这种题目，即参数一定是root，就一颗树。
+    - 正解：左子树，前后中遍历。右子树，右左中遍历。即拆成两颗树，分别用两种遍历方式。虽然代码还是递归的，但是不好想。
+    - 迭代法：还是基于正解给出的思路，outside/inside遍历。那么，层序遍历非常好做这个题目。所以，非递归题目，层序是一个可以尝试的办法。当然，利用栈模拟也是主要的思路。
+
 #### [111.Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/description/)
 
 - 一刷：没过。一时没想明白，直接看了过去的办法。
