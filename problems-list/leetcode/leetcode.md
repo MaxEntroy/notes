@@ -567,6 +567,90 @@ double val2 = static_cast<double>(1) / 2; // right
 - 一刷：一把过，就得达到这个标准。
     - 思路，两个栈模拟即可。
 
+### 树
+
+#### [111.Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/description/)
+
+一刷：没过。一时没想明白，直接看了过去的办法。
+    - 这个题求的高度，是最短路径所代表的树的高度。如果一棵树，只有右子树，显然不能用左右最小+1的方式。因为此时，只有右子树这一条路径，求max可以，但是求min不行。
+    - 正解是分别判断。只有当左右子树均存在，才可以std::min求一个最小+1
+    - 当然，这个题也悟到了，层序其实提供了非递归的解法。
+    - 随想录的办法也学习了：即找最低点。在层序遍历时，如果一个节点，左右孩子都没有，那么找到了最低点。此时的深度即为最短路所代表的深度。
+
+#### [104.Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/description/)
+
+- 一刷：本质就是求树的高度。
+    - 树是具备递归结构的，所以首选办法递归解决。非常简单，考虑好递归的边界即可。
+    - 随想录还是采用了层序的办法，也行。
+
+#### [117.Populating Next Right Pointers in Each Node II](https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/description/)
+
+- 一刷：层序。解法同116，看样子我采用了非常通用的办法。
+
+#### [116.Populating Next Right Pointers in Each Node](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/description/)
+
+- 一刷：层序。
+
+#### [515.Find Largest Value in Each Tree Row](https://leetcode.com/problems/find-largest-value-in-each-tree-row/description/)
+
+- 一刷：层序。
+
+#### [429.N-ary Tree Level Order Traversal](https://leetcode.com/problems/n-ary-tree-level-order-traversal/description/)
+
+- 一刷：层序。
+
+#### [637.Average of Levels in Binary Tree](https://leetcode.com/problems/average-of-levels-in-binary-tree/description/)
+
+- 一刷：层序。
+
+#### [199.Binary Tree Right Side View](https://leetcode.com/problems/binary-tree-right-side-view/description/)
+
+- 一刷
+    - 缪解：我开始尝试preOrder解决，以为只是把右孩子打出来，那么久正常遍历，不操作左子树。后来发现，这个题真正问的是，把每一层最后一个节点打出来。
+    - 正解：层序，打出每一层最后的节点。这个题我记录了last去处理。当然随想录的办法也简单，主要是通用
+        - 没有一遍过。
+        - 层序遍历的基本算法掌握好，要会灵活调整。比如，这个题先入队左右孩子，才能尝试更新last
+        - 别老忘了**队头出队 + 有效指针才入队**
+
+#### [107.Binary Tree Level Order Traversal II](https://leetcode.com/problems/binary-tree-level-order-traversal-ii/description/)
+
+- 一刷：和102思路一样，头插法即可。
+
+#### [102.Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/description/)
+
+- 一刷：没过。我对层序并不陌生，问题是，每一层的节点怎么获取？
+    - 随想录给出了解法，while刚开始时，队列中待出队的元素个数，即为当前层的节点个数。
+    - 这个办法怎么想到的呢？其实，我觉得是通过递推，找规律发现的。这里应该试一些case，尝试从一般的例子出发，看能不能找到一般性的结论，大致是这样的方法。
+    - 这个题还有个问题，指针这里，不要用const auto&这样的方式获取top元素。直接auto获取，没有性能开销的。
+    - coredump的原因在于，拿了引用，相当于拿到了top的地址。但是，pop结束之后，top就失效了，可以随意操作。所以不能拿引用
+    - 只能是auto拿一个值，这个变量的值放了node地址。
+    - 这个题我看了我以前的做法，会记录一个last节点，也行。
+
+#### [94.Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/description/)
+
+- 一刷：递归法。没什么好说的，注意递归的边界。
+- 二刷：非递归。
+    - 模拟递归的思路，不断先访问节点，然后向左走。再向右即可。
+
+#### [144.Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/description/)
+
+- 一刷：递归法。
+- 二刷：非递归。
+    - 模拟递归的思路。不断向左走。出栈时访问。然后向右走。
+
+#### [145.Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal/description/)
+
+- 一刷：递归法。
+- 二刷：非递归。
+    - 模拟递归的思路。不断向左走。然后出栈，向右走，再入栈。最后第二次出栈，访问节点。
+    - 所以这里，每个节点出栈两次，第一次出栈是为了拿到节点的右指针，由于还不能访问，所以继续入栈。
+    - 等到第二次出栈时，即可访问。
+    - 这里需要增加一个辅助数据结构，表明节点到底第几次出栈。由于有了出栈次数表示，也不用真的出栈。
+    - 代码实现的注意点
+        - 先判断第二次出栈的情形。并且是while判断，只要有第二次出栈的，一定要先全部真的出栈。
+        - 这里的判断条件是and
+        - 这里没有使用随想录的办法，我的办法整体形式统一，好理解。好理解的原因在于，就是模拟递归。
+
 ## 搜索
 
 ### DFS
