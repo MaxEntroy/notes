@@ -569,6 +569,11 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [222.Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes/description/)
+
+- 一刷：层序。
+    - 不过没有基于完全二叉树的性质做题，随想录给了类似的解法。
+
 #### [226.Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/description/)
 
 - 一刷：一遍过。基于递归的方式，直接找到了递归解。
@@ -591,12 +596,15 @@ double val2 = static_cast<double>(1) / 2; // right
     - 正解是分别判断。只有当左右子树均存在，才可以std::min求一个最小+1
     - 当然，这个题也悟到了，层序其实提供了非递归的解法。
     - 随想录的办法也学习了：即找最低点。在层序遍历时，如果一个节点，左右孩子都没有，那么找到了最低点。此时的深度即为最短路所代表的深度。
+- 二刷：层序遍历。最低点即为最小深度。最低点的判断：叶子即为最低点。
 
 #### [104.Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/description/)
 
 - 一刷：本质就是求树的高度。
     - 树是具备递归结构的，所以首选办法递归解决。非常简单，考虑好递归的边界即可。
     - 随想录还是采用了层序的办法，也行。
+- 二刷：用了非递归的办法，即层序遍历。
+    - 这个题求最大深度，其实没有多余要考虑的，最大深度就是树的深度。
 
 #### [117.Populating Next Right Pointers in Each Node II](https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/description/)
 
