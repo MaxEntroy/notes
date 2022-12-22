@@ -248,6 +248,13 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 数组
 
+#### [88.Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/description/)
+
+- 一刷：一遍过。
+    - 思路没什么好说的，归并即可。
+    - 不过我做的不好的地方在于，这个题目真正的考点没有发现，即就地怎么解决。
+    - 最优解：倒着放。既然nums1空间足够大(这个信息没有get)，不用resize，不会破坏nums1，那么从后向前放即可。非常巧妙。
+
 #### [18.4Sum](https://leetcode.com/problems/4sum/)
 
 - 一刷
@@ -335,6 +342,11 @@ double val2 = static_cast<double>(1) / 2; // right
 - A hash function is any function that can be used to map data of arbitrary size to fixed-size values.
 
 最后，我们再来看哈希表：哈希表是根据关键码的哈希值而直接进行访问的数据结构。其中，对关键码的值进行hashing，得到一个hash value。然后根据这个哈希值去完成对应的检索。
+
+#### [205.Isomorphic Strings](https://leetcode.com/problems/isomorphic-strings/description/)
+
+- 一刷：没过。题没看懂。
+    - 看了题解，才明白啥意思。s->t只能是单射，反之也必须是单射。
 
 #### [454.4Sum II](https://leetcode.com/problems/4sum-ii/description/)
 
@@ -569,6 +581,37 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [257.Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/description/)
+
+- 一刷：dfs过。
+    - 因为有dfs的基础，所以这个题理解上并不难，就是dfs即可。
+    - 但是dfs实现的时候，一开始没写对。dfs的模板pruning-try-solve recursionly-backtracking，一开始没有适配
+    - 不能适配的原因在于，到底处理当前节点，还是处理left/right child。
+    - 最终决定，处理child。因为child是每层的试探，所以处理了child。
+    - 每一层child就两种可能，所以这题也是指数型枚举。
+    - 后来觉得，不能处理当前节点的原因在于，处理当前节点没有用，因为需要判断叶子。当然，随想录应该是这么做的。不过这个题，我的原则是，找一种最容易理解的思路过了即可。
+
+#### [110.Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/description/)
+
+- 一刷：没过。
+    - 说下思路：对于树的题目，递归的结构，自然有递归的算法。我尝试规约问题，看能不能把问题，递归的划分为子问题。
+        - 求左右子树的高度，然后相减判断。根节点是否平衡。
+        - 但问题是，左右子树本来可能不平衡。
+        - 即，平衡二叉树，要求每一个节点为根的子树，都是平衡的。所以，直接规约失败。
+        - 其次，我考虑遍历算法解决，那我想到的是遍历每一个节点，然后计算该节点左右子树的高度，计算该节点的左右树高差异即可。
+            - 其实这个办法是正解，但是我没有坚持，时间复杂度比O(N)高一个量级。所以，放弃了。
+            - 我看了之前的解法，也确实这么做的。
+    - 正解：其实规约问题的思路没有变。只不过返回值设计的巧妙。
+        - 对于根节点，计算左右子树高度，计算该节点的avl值。但是没法保证左右子树是否平衡。
+        - 所以，左右子树计算高度时，判断他们是否平衡。
+        - 对于每个节点，递归函数如下写法
+            - 计算高度，本质对于avl的计算依赖高度。
+            - 如果avl不平衡，返回-1。否则，返回高度。给高层节点计算avl使用。
+            - getHeight这个函数的语义是这样：root为根的二叉树，如果平衡，返回高度。否则，返回-1.
+        - 随想录强调了深度和高度的区别。
+            - 深度：top-down manner，决定了可以层序。
+            - 高度：bottom-up manner，决定了只能后序。
+
 #### [222.Count Complete Tree Nodes](https://leetcode.com/problems/count-complete-tree-nodes/description/)
 
 - 一刷：层序。
@@ -588,6 +631,10 @@ double val2 = static_cast<double>(1) / 2; // right
     - 这个题，我尝试直接给出递归解法，发现求解不了。当然，后面我发现，此时我对递归解法的认知还停留在depth of tree这种题目，即参数一定是root，就一颗树。
     - 正解：左子树，前后中遍历。右子树，右左中遍历。即拆成两颗树，分别用两种遍历方式。虽然代码还是递归的，但是不好想。
     - 迭代法：还是基于正解给出的思路，outside/inside遍历。那么，层序遍历非常好做这个题目。所以，非递归题目，层序是一个可以尝试的办法。当然，利用栈模拟也是主要的思路。
+- 二刷：尝试了非递归求解，层序。
+    - 非常直接。当然我也没做出来，问题出在还是忘了要当做两个子树来做。
+    - 所以，虽然还是层序，但是写法迥异。每次需要入队两个节点，出队两个节点进行比较。
+    - 出入的顺序，本质是遍历两棵子树的顺序。
 
 #### [111.Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/description/)
 
