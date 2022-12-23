@@ -343,6 +343,15 @@ double val2 = static_cast<double>(1) / 2; // right
 
 最后，我们再来看哈希表：哈希表是根据关键码的哈希值而直接进行访问的数据结构。其中，对关键码的值进行hashing，得到一个hash value。然后根据这个哈希值去完成对应的检索。
 
+#### [219.Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii/description/)
+
+- 一刷：没有一遍过，题目没审清楚。就匆匆上手。
+    - 这个题hash，hash的本质是为了快速检索。
+        - 比如，某一个string，是否反复出现。借助现有的数据结构，比如数组，根据下标可以直接访问。但是，string无法充当下标。
+        - 所以，hash(string)->hash value(int)，借助这个hash value在数组中的值，我们可以快速访问
+    - 说回来，这个题一样，用value当key，来判断idx是否在范围内。由于idx都是递增，所以只需和上一个idx比较即可。
+    - 这种题也是要多做，多做的目标是：保持手感，同时，增进思维的严谨程度。
+
 #### [205.Isomorphic Strings](https://leetcode.com/problems/isomorphic-strings/description/)
 
 - 一刷：没过。题没看懂。
@@ -535,7 +544,7 @@ double val2 = static_cast<double>(1) / 2; // right
         - 我总不能再存third_max吧。即使存了，如果max/second_max/third_max均通过left移除了，你怎么办
         - 最终这个题没有做出来。
     - 正解
-        - 随想录先提了priority_queue，这个的问题是，移除不能移除。我要移除left，但是结构不支持。
+        - 随想录先提了priority_queue，这个的问题是，不能移除期望的元素。我要移除left，但是结构不支持。
         - 核心的办法是：比我多走了一步，只要是单调递减的序列，我全部都存下来。
             - 这个办法的好处是，我存了单调递减序列，我就不怕你移除。反正我有backup元素
             - 注意，一定是单调递减，是因为有可能移除max，如果单调递减，队尾不能操作。如果是队列，队尾入，队头出。
@@ -581,6 +590,44 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [113. Path Sum II](https://leetcode.com/problems/path-sum-ii/description/)
+
+- 一刷：preOrder+backtracking，单路型枚举。
+    - 这个题要求是到叶子的路径，第一遍没看清，以为有路径就ok
+
+#### [112.Path Sum](https://leetcode.com/problems/path-sum/description/)
+
+- 一刷：这个题在513的基础上，悟到了preOrder+backtracking，以及与dfs模板的异同，直接用preOrder+backtracking，非常快。
+- 二刷：这个题在一刷的基础上进行改进，改进的地方类似于dfs回溯中，找到一个解后，如何直接返回？一刷的办法在找到解后，还是会继续遍历。由于不影响bool返回值，对结果没有影响，只是影响性能。
+    - 对preOrder增加返回值，如果返回true，直接返回。否则，继续preOrder试探。
+    - 随想录的办法我看了，它是dfs的模板，指数型枚举。
+
+#### [513.Find Bottom Left Tree Value](https://leetcode.com/problems/find-bottom-left-tree-value/description/)
+
+- 一刷：层序非常简单。一遍过。
+- 二刷：这题看了随想录的办法，提供了递归的做法，我觉得也很好，所以二刷。
+    - 对于题意的理解，不是一定是左孩子。而是，最下面一层的第一个节点，可能是左孩子，也可能是右孩子。
+    - 所以，不能直接preOrder，因为此时找到了最左孩子，但不一定是最下层。
+    - 随想录的核心思想是：先找到最下层，再找本层的第一个节点
+        - 遍历即可，同时记录最大高度，最大高度更新时，更新此时的最大值即可。
+        - 还有一个问题，怎么保证left tree？用preOrder保证，该种遍历保证可以先访问左节点。
+        - 即我们在不断向下试探的过程中，先找左孩子。从而，既能保证找到最下层，也能保证找到改层第一个节点。
+        - 这个题由于记录状态，需要回溯状态变量。在preOrder退出时，回溯即可。
+    - 写法上，我完全基于preOrder，理解起来比随想录的办法简单。
+    - 对比一下preOrder和dfs的区别
+        - 从思路上来说，都是dfs，找到一个节点就一直向下试探。
+        - 写法上有区别
+            - dfs的写法，按照随想录的办法，level/start，每一层试探start所有可能值，然后向下走，回溯。
+            - 但是，preOrder的写法是，试探就一个值，就是root。即start就一个，但是dfs的时候，有两条路。这就没对上。
+            - 我在做257时，每一层的start由root->left,root->right充当，迈步子-试探-回溯。很好写。
+            - 那么经过513的实践，我发现，这里的dfs写法是，迈步子-两路试探-回溯。基本架构还是对齐的，只不过试探的时候不太一样，但是二叉树的题目又很固定，也没问题。同时，preOrder的写法，也不算指数型枚举，是单路型枚举。
+
+#### [404.Sum of Left Leaves](https://leetcode.com/problems/sum-of-left-leaves/description/)
+
+- 一刷：一遍过。
+    - 整体思路比较简单，基于遍历来做就行。我基于preOrder做，对于左右叶子，自己不能知道，需要父节点传进来即可。
+    - 随想录的办法简单看了下，有点麻烦。不如我的方式简单直接。不过，提到了非递归的栈方法，其实还是模拟递归遍历。
+
 #### [257.Binary Tree Paths](https://leetcode.com/problems/binary-tree-paths/description/)
 
 - 一刷：dfs过。
@@ -590,6 +637,10 @@ double val2 = static_cast<double>(1) / 2; // right
     - 最终决定，处理child。因为child是每层的试探，所以处理了child。
     - 每一层child就两种可能，所以这题也是指数型枚举。
     - 后来觉得，不能处理当前节点的原因在于，处理当前节点没有用，因为需要判断叶子。当然，随想录应该是这么做的。不过这个题，我的原则是，找一种最容易理解的思路过了即可。
+- 二刷：preOrder过
+    - 这个题我受到了513的启发。昨天一刷的时候，dfs的思路很明显。
+    - 今天再做的时候，完全受遍历思路的影响，尝试用遍历的思想解决。不管哪种遍历都行，选择preOrder
+    - 问题就是，昨天用dfs，backtracking代码好写，但是preOrder怎么写？也非常简单，稍微改动下遍历代码，在最后backtracking即可。很简单，但昨天一直没想到。
 
 #### [110.Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/description/)
 
