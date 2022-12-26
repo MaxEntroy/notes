@@ -597,7 +597,7 @@ double val2 = static_cast<double>(1) / 2; // right
         - 所以，很自然的按照之前avl的递归写法，用preOrder做了。
         - 结果发现，这个题有一个没考虑到的点是：只判断左右子树根节点和当前根节点的关系是不够的。因为右子树最左下节点可能不满足。
         - 发现这个问题，我意识到preOrder肯定是不行的。
-    - 正解：调整思路。对于bst，中序一定单调递增。所有中序遍历，拿到序列，最后判断单调递增即可。
+    - 正解：调整思路。对于bst，中序一定单调递增。中序遍历，拿到序列，最后判断单调递增即可。
     - 随想录的办法：强调了bst就是借助中序做。看了递归的思路，存储了prev非常巧妙，基于inOrder的递归求解，二刷试试。
 
 #### [700.Search in a Binary Search Tree](https://leetcode.com/problems/search-in-a-binary-search-tree/description/)
