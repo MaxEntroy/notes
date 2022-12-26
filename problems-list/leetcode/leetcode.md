@@ -590,6 +590,28 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [98.Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/description/)
+
+- 一刷：一遍没过，调整了思路才过。
+    - 缪解：这个题我拿到，发现和avl那个题很像，需要判断左右子树，同时左右子树的节点和root需要判断。
+        - 所以，很自然的按照之前avl的递归先发，用preOrder做了。
+        - 结果发现，这个题有一个没考虑到的点是：只判断左右子树根节点和当前根节点的关系是不够的。因为右子树最左下节点可能不满足。
+        - 发现这个问题，我意识到preOrder肯定是不行的。
+    - 正解：调整思路。及时bst，中序一定单调递增。所有中序遍历，拿到序列，最后判断单调递增即可。
+    - 随想录的办法：强调了bst就是借助中序做。看了递归的思路，存储了prev非常巧妙，基于inOrder的递归求解，二刷试试。
+
+#### [700.Search in a Binary Search Tree](https://leetcode.com/problems/search-in-a-binary-search-tree/description/)
+
+- 一刷：一遍过。
+    - bst的思路很简单，当然，整个代码的写法基于遍历的写法。
+
+#### [617.Merge Two Binary Trees](https://leetcode.com/problems/merge-two-binary-trees/description/)
+
+- 一刷：没有一遍过，调整了几次才过。
+    - 整个也是递归的思路，其实遍历一棵树和两棵树没有区别。采用PreOrder
+    - 没处理好的地方在于，递归实参没有判断非空的情形，导致run time coredump.
+    - 其实，上面这个问题的本质是，如果两颗树的root不都有效，怎么继续操作。还是递归处理，但是要给nullptr
+
 #### [654.Maximum Binary Tree](https://leetcode.com/problems/maximum-binary-tree/description/)
 
 - 一刷：同106。递归的结构，用递归的算法处理。
