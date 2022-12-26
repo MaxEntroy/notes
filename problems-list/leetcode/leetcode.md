@@ -590,6 +590,31 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [654.Maximum Binary Tree](https://leetcode.com/problems/maximum-binary-tree/description/)
+
+- 一刷：同106。递归的结构，用递归的算法处理。
+    - 找root
+    - 划分区间
+    - 递归处理左右子区间，即生成左右子树
+
+#### [105.Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+- 一刷：同106，小心边界的划分。主要是麻烦在vector根据区间构造的参数这里，第二个参数是长度。
+
+#### [106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+
+- 一刷：直接看了随想录的题解。
+    - 说下思路，树的问题，我目前总结大概就两种思路
+        - 思路1：递归的结构，用递归的算法求解。这里本质是要理解题目和递归的结构的关系。
+        - 思路2：基于遍历算法求解。
+    - 说回本题，本题的理论求解不难，关键是代码怎么写？
+        - 对于递归问题/递推问题，直接想不好想明白了。其实写几个递归/递推的例子，就明白了。
+        - 这个题一样，直接写代码不好写。但是，根据题目的case，尝试写几个从0-1，从1-2，从2-3的例子，就很清楚了。
+        - 使用递归求解。通过递归处理前序/中序区间，来进行树的构造。
+            - 题目的核心点在于，通过后根序列，找到root。
+            - 然后划分序列
+            - 最后归处理划分后的前序/中序区间，即处理左右子树。
+
 #### [113. Path Sum II](https://leetcode.com/problems/path-sum-ii/description/)
 
 - 一刷：preOrder+backtracking，单路型枚举。
