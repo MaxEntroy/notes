@@ -590,6 +590,18 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [501.Find Mode in Binary Search Tree](https://leetcode.com/problems/find-mode-in-binary-search-tree/description/)
+
+- 一刷：一遍过。
+    - 但是我的思路不好，没有利用bst的特性。我用了最朴素的办法，遍历记录counter和max。最后遍历counter。
+    - 看了随想录的办法，非常好，利用到了bst的特性，bst在中序遍历中有序，这个性质太重要了。
+        - 对于一个有序向量，容易统计众数。
+
+#### [530.Minimum Absolute Difference in BST](https://leetcode.com/problems/minimum-absolute-difference-in-bst/description/)
+
+- 一刷：一遍过。
+    - 这个题目的思路来自于98递归的解法，看样子这个技巧比较常见，即保存路径中prev节点。
+
 #### [98.Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/description/)
 
 - 一刷：一遍没过，调整了思路才过。
@@ -599,6 +611,7 @@ double val2 = static_cast<double>(1) / 2; // right
         - 发现这个问题，我意识到preOrder肯定是不行的。
     - 正解：调整思路。对于bst，中序一定单调递增。中序遍历，拿到序列，最后判断单调递增即可。
     - 随想录的办法：强调了bst就是借助中序做。看了递归的思路，存储了prev非常巧妙，基于inOrder的递归求解，二刷试试。
+- 二刷：中序递归，一遍过。整体思路还是挺清晰的。引入prev非常巧妙
 
 #### [700.Search in a Binary Search Tree](https://leetcode.com/problems/search-in-a-binary-search-tree/description/)
 
