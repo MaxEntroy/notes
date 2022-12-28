@@ -590,6 +590,18 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [701.Insert into a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/)
+
+- 一刷：没一遍过，调整了一下才过。
+    - 思路：找到插入节点即可，基于preOrder遍历。处理上有一些细节
+        - 需要保存prev，因为插入除了开辟节点，还需要维护bst关系，需要prev
+        - 同时，需要保存方向。
+        - 没一遍过是因为，pass by value，如果更新root，失效，pass by reference
+        - 这个题其实可以更难，即avl你怎么插入？
+    - 看了随想录的办法，两种解法， 第二种和我的一致。说下第一种。
+        - 第一种办法比价简单，我觉得简单的地方，在于不用保留parent以及direcion.
+        - 思路主要是，需要返回插入节点。
+
 #### [235.Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/)
 
 - 一刷：没思路。
