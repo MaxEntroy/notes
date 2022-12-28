@@ -590,12 +590,54 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [235.Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/)
+
+- 一刷：没思路。
+    - 真惭愧，刚做完236，这个题依然没思路。当然236的办法肯定适用。本质还是不知道怎么利用bst的特性。
+    - 随想录的讲解依然非常清晰。
+        - 首先，我们利用bst的特性，分析题目，即对于lca root，一定有p->val < lca root->val < q->val
+            - 这里，随想录还强调了一个细节： q->val < lca root->val < p->val
+            - p和q的大小不确定谁大，谁小， 这个细节需要考虑。
+        - 其次，考虑是否为充要条件。如果root满足:p->val < root->val < q->val or q->val < lca root->val < p->val,它就一定是lca root嘛？
+            - 不一定，比如讲解中的例子，3/8都满足在区间[1,9]内，但不是lca root
+            - 通过归纳总结(这个其实是精髓，需要证明)发现：从top-down递归时，遇到的第一个满足上述条件的节点，即为lca root
+        - 紧接着，递归写法：接口设计/返回条件/单层逻辑
+            - 这里的写法其实有些技巧，上面思路已经说清楚了，就是top-down manner第一个满足条件的节点。
+            - 但是实际编写代码时，不能正面求解。因为p/q不能区分大小，所以反向判断，不满足遍历左子树/右子树
+        - 最后，这个题减治法，根拿到解，根返回。左子树拿到解，左子树返回，右子树拿到解，右子树返回。
+
+#### [236.Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/)
+
+- 一刷：没思路。
+    - 树的题目，我就两个思路，其一是利用递归结构分析出递归算法，其二是基于遍历算法求解。看到题目后，没有反应出应该用哪一个思路求解。
+    - 看了随想录的解法，讲的非常好
+        - 首先，需要bottom up manner traversal，怎么办？发现postOrder是bottom up manner，所以利用postOrder
+        - 其次，其次讨论了最近公共祖先的两种情况，并说明第一种情况包含第二种，借此，统一了做法。
+        - 紧接着，确定了递归的写法，接口/边界/单层逻辑
+            - 这个题最终的写法，看起来并不像postOrder，因为如果要看访问root和访问left/right的时机，看起来像preOrder
+            - 但本题先访问root是因为那是边界条件。所以，这里的判断依据是需要在单层逻辑中查看。
+            - 同时，单层逻辑中是先访问left/right，再访问root。但话说回来，即使不访问root也没有关系。
+            - 这里很明显的就是bottom up manner，到不用纠结是不是postOrder
+        - 最后，强调了这个题为什么要遍历整个树。
+            - 因为本题虽然有返回值，但是拿了返回值不能返回，需要做进一步判断。
+            - 理论上，我们找到了lca就可以返回，但是对于单返回值的函数，目前不支持这种做法
+                - 回想avl的题目，返回值即表明深度，也表明是否balanced，有多重语义，通过int可以整合，放在一起ok
+                - 但是，本题的返回值root，是找到等于p/q的节点，返回了节点的地址，没有更多的语义能表明返回值是否已经是成功的lca
+                    - 如果改了返回值接口，那么自然是没问题。
+                    - 但是，如果用现有的接口，不行。还是需要遍历整棵树。
+                    - 所以，实践不能做，只是这种接口设计下的实践不能做。
+        - 总结：回溯从底向上搜索，遇到一个节点的左子树里有p，右子树里有q，那么当前节点就是最近公共祖先
+
 #### [501.Find Mode in Binary Search Tree](https://leetcode.com/problems/find-mode-in-binary-search-tree/description/)
 
 - 一刷：一遍过。
     - 但是我的思路不好，没有利用bst的特性。我用了最朴素的办法，遍历记录counter和max。最后遍历counter。
     - 看了随想录的办法，非常好，利用到了bst的特性，bst在中序遍历中有序，这个性质太重要了。
         - 对于一个有序向量，容易统计众数。
+- 二刷：一遍没过，调整了几次才过。
+    - 用了随想录的思路：中序遍历bst有序，同时维护最大连续长度，为绕后者进行更新。
+    - bst惯用的idiom：保存prev指针，借助这个我们才可以判断最大连续长度。
+    - 没有一遍过是因为对于逻辑处理的细节不好，prev/continuous_cnt是每次更新的，其余的需要判断更新。
 
 #### [530.Minimum Absolute Difference in BST](https://leetcode.com/problems/minimum-absolute-difference-in-bst/description/)
 
