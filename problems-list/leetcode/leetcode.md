@@ -590,6 +590,25 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [450.Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst/description/)
+
+- 一刷：这个题真是折磨人啊，没过。
+    - 缪解：其实也算不上缪解，这个题我的思路没问题，问题一直出在接口设计上。
+        - 我是采用引用的做法，结果引发了血案，指针和引用配合使用，太容易出错，查这个问题，查了一天。
+        - 回过头，我还是尝试用引用的方式做，但是这么多指针和引用配合，看的头晕了，决定不采用这个方法。回到指针本身来做。
+        - 借鉴701的接口设计，但是第一遍一直没有理解删除为什么能这么做。因为插入，肯定会插入新节点，返回ok。那么删除呢？返回谁呢？
+        - 一直没有搞明白，在不使用引用的前提下，如何做接口设计。
+        - 这个题我尽力了，其实引用有希望，但是实在不想再搞了，因为我觉得这种方式即使过了也意义不大，因为这是最繁琐的方式，且没有学到什么。对于指针的方式，一直又没搞明白接口设计。
+- 二刷：一遍过。这次系统学习了随想录的办法
+    - 首先是接口设计，不管是插入，还是删除，都可以通过返回值来做。
+        - 插入好理解，返回插入的节点就行。但其实不然，因为插入的题目，本质返回的也是root。如果你插在非root节点，更新有什么意义？
+            - 要这么理解，如果不插入在root节点，不用更新root，但是root的左子树，有子树，是不是有可能更新。
+            - 顺着这个思路去理解，每次返回更新的节点，上层更新left/right
+        - 此时，删除就是一样的道理。删除节点，不一定删除root，不用更新root，但是你左子树，右子树，是不是有更新的可能
+        - 插入，每次返回新插入的节点；删除，返回谁呢？
+            - 返回本次的要删除位置被替换后的位置，比如root->left充当了新root，那么返回这个节点即可，简单说，新root
+    - 其次，删除逻辑，这个我梳理的比较好，没什么问题。
+
 #### [701.Insert into a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/)
 
 - 一刷：没一遍过，调整了一下才过。
@@ -599,7 +618,7 @@ double val2 = static_cast<double>(1) / 2; // right
         - 没一遍过是因为，pass by value，如果更新root，失效，pass by reference
         - 这个题其实可以更难，即avl你怎么插入？
     - 看了随想录的办法，两种解法， 第二种和我的一致。说下第一种。
-        - 第一种办法比价简单，我觉得简单的地方，在于不用保留parent以及direcion.
+        - 第一种办法比较简单，我觉得简单的地方，在于不用保留parent以及direcion.
         - 思路主要是，需要返回插入节点。
 
 #### [235.Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/)
