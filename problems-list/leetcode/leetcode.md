@@ -590,6 +590,32 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ### 树
 
+#### [669.Trim a Binary Search Tree](https://leetcode.com/problems/trim-a-binary-search-tree/description/)
+
+- 一刷：没过。
+    - 思路：一开始的思路比较朴素，找到这些不在区间范围的key，借助deleteBSTNode搞定，不过觉得这应该不是正解，没有尝试。
+    - 正解：树的构造题目，考虑如何处理根，以及左右子树。
+        - 首先，如果某个节点不在范围内，不能直接删除。因为它的左枝/右枝可能在范围内，所以，此时删除该节点没有问题，但同时需要更新该节点。
+        - 其次，对于在区间范围的节点，没问题，递归处理左右子树即可。
+
+#### [538.Convert BST to Greater Tree](https://leetcode.com/problems/convert-bst-to-greater-tree/description/)
+
+- 一刷：一遍过。
+    - 思路：bst中序有序，观察题目，右中左累加即可。
+        - 关于接口设计，构造新树，递归处理左右子树。
+        - 引入sum参数，作为累加结果。
+    - 随想录的思路：思路一样，但是代码更简洁
+        - 不构造新树，原树上修改
+        - 引入pre，这个也是bst的常用操作，pre看似只是前一个节点，但是它是累加值，可以达到目的。
+
+#### [108.Convert Sorted Array to Binary Search Tree](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/description/)
+
+- 一刷：没思路，主要是不知道如何处理平衡。看了题解
+    - 正解：随想录的讲解非常好，这题本质是寻找合理的分割点，然后递归处理分割后的子区间即可。
+    - 其实，这个题属于构造二叉树的题目，这一类题目都是要寻找一个合理的划分点，然后递归处理。
+    - 这个题没做出来，还有一点做的不好的是，没有很好的观察题目，比如树的根节点和区间的关系。
+    - 划分点来自于二分的思路。取闭区间即可。
+
 #### [450.Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst/description/)
 
 - 一刷：这个题真是折磨人啊，没过。
