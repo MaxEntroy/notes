@@ -933,6 +933,26 @@ double val2 = static_cast<double>(1) / 2; // right
 
 ## 搜索
 
+搜索这里的知识点我说一下，没有按照随想录的方式来汇总，是因为后者的范畴较小，而是按照算竞的思路来汇总。
+
+- 搜索本质上是穷举法，对问题进行求解时，需要在问题对应的状态空间进行映射与遍历。
+    - 我们讨论各种搜索算法，其实是在讨论采用何种策略对状态空间进行遍历。
+    - 对于随想录而言，只讨论dfs这一种搜索策略，同时给出该种实现的模板。
+    - 当然，还有bfs以及其他启发式搜索策略，不在随想录的讨论范围内。
+- 何谓回溯？
+    - 随想录的讨论以回溯展开，回溯和我们上面说的搜索算法有什么区别？是不是一回事？
+    - Backtracking is a class of algorithms for finding solutions to some computational problems, notably constraint satisfaction problems, that incrementally builds candidates to the solutions, and abandons a candidate ("backtracks") as soon as it determines that the candidate cannot possibly be completed to a valid solution
+    - 上面是wiki的解释，从这个角度来说，是搜索无疑，逐步试探，构造最终的解。
+    - 为什么叫回溯？就是在搜索试探过程中，如果发现某一步的试探，已经不可能构成最终的解，那么会放弃在当前分支的试探，回到搜索树的上一层，尝试新的试探。这个放弃-回到上一层-新试探的方式，是回溯的核心。本质是剪枝，优化搜索效率。
+- 递归又是什么？搜索，回溯，递归这三个术语放到一起的时候，究竟表达什么？
+    - 递归/递推是程序设计技巧，和回溯，搜索这些算法思想没有直接关系。
+    - 递归多和回溯，搜索有联系的原因在于，它求解问题的方式符合后者遍历解空间的方式。
+    - 递推 vs 递归
+        - 以己知的"问题边界"为起点向"原问题"正向推导的扩展方式就是递推，bottom-up manner.
+        - 然而 在很多时候，推导的路线难以确定。
+        - 这时以"原问题"为起点尝试寻找把状态空间缩小到己知的"问题边界"的路线，再通过该路线反向回溯的遍历方式就是递归，top-down manner
+        - fib数列就是最好例子来理解这两种方式的差异
+
 ### DFS
 
 这里先讲acwing的三道题，这个非常基础，并且这三道题我反复琢磨，对于理解dfs的一般做法大有裨益。
@@ -968,6 +988,12 @@ double val2 = static_cast<double>(1) / 2; // right
             - 组合型，每一层的宽度是[start,stop]，通常start = i + 1;
             - 指数型，每一层的宽度是[1,n]，所以，需要引入vis数组标记之前的元素是否放入
             - 组合型和指数型宽度的差异在于他们是否去重。
+- 五刷：看了四刷的讲解，已经非常清楚了。我再补充一下
+    - 对于指数型：完全以元素为视角，对于每一个元素，就是放或者不放。即存在不放的可能，这个显著区别于其他题目。
+    - 对于非指数型，其实是以槽位为视角。对于每一个槽位，用所有可能的当前元素，进行试探。
+        - 从这个角度理解，wrong answer除了之前说的，每一个元素试探，都有不放的情形，导致重复。
+        - 还有另一个问题是，既然以槽位为视角。每次试探的是可行解，可行解位于[start, stop]，不试探不是一个可行解，所以这么做也不行。
+        - 所以，对于不放的情形，非指数型没法做，是因为可行解理解，不能表达没法放的情形，因为无论如何需要在槽位进行试探。
 
 ```cpp
 #include <iostream>
@@ -994,7 +1020,7 @@ void dfs(int n, int start) {
 
   for (int i = start; i <= n; ++i) {
     // not choosen
-    dfs(n, i + 1);
+    dfs(n, i + 1);  // 每一个元素试探当前位置，都会有不放的情形，造成重复。
 
     // choose
     chosen.push_back(i);
@@ -1137,8 +1163,13 @@ void solve(int n) {
 
 #### [77.Combinations](https://leetcode.com/problems/combinations/)
 
-- 基础题，利用acwing的模板求解即可。
-- 方法二，利用公式。但是公式这里注意，公式只说了个数是一样的，但是这个题求的是排列集合这个元素，所以不一样。这个题的求解逻辑需要单独推到。详见[77. Combinations](https://grandyang.com/leetcode/77/)
+- 一刷
+    - 基础题，利用acwing的模板求解即可。
+    - 方法二，利用公式。但是公式这里注意，公式只说了个数是一样的，但是这个题求的是排列集合这个元素，所以不一样。这个题的求解逻辑需要单独推到。详见[77. Combinations](https://grandyang.com/leetcode/77/)
+- 二刷
+    - 思路上没问题，做的也很快。但，不是最优解。漏了一个剪枝
+    - 为啥没想到呢？因为忽略了一个重要因素，组合不考虑元素顺序，所以我们只能按照线性顺序，这单一的顺序进行遍历。
+        - 这会产生剪枝的条件，比如我当前槽位试探最后一个元素，那意味着，下一层没有可试探的元素。
 
 #### [39.Combination Sum](https://leetcode.com/problems/combination-sum/)
 
