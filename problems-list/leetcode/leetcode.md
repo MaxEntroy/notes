@@ -1279,6 +1279,11 @@ void dfs(int k, int target, int level, int sum) {
     - 二刷时没有一刷的考虑，感觉思路上，尤其是搜索的思路还是比较简单的。
     - 因为每一层的备选集都不一样，所以我觉得其实是排列的思路，没有剪枝的逻辑。
     - 组合本质还是剪枝了重复元素构成的序列
+- 三刷
+    - 思路非常简单，还是没有一遍过。
+    - 空串的情况没有处理正确，如果不特殊处理，最终集合会加入一个空串，但题目要求是空集
+    - static const member initialization一开始也没写对
+    - 这个题不需要start，组合的办法，可以理解为按照线性顺序遍历是做了剪枝
 
 #### [131.Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
 
