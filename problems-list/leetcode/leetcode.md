@@ -1187,6 +1187,11 @@ void solve(int n) {
         - 组合去重，用单向遍历。
         - 元素可以重复选，单向不递增即可。
         - 同时，题目要求了元素不重复，可以避免重复组合的生成。
+- 三刷
+    - 一遍没过，调整了下。题目会意错了。
+    - 题目的意思是，每个元素可以用多次，但是组合的搜索顺序不能变。
+    - start的更新是i，常规组合题是i + 1
+    - 这个题还有一个点是，没有level的限制，如果元素有0，肯定会stackoverflow，不过题目给了限制，所以不用考虑
 
 #### [40.Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)
 
