@@ -1419,11 +1419,21 @@ void dfs(int k, int target, int level, int sum) {
     - vis数组，我最初的实现是一个二维的，但其实一维就够。index代表row, vis[index]代表col。不过，其实没有也ok，因为有chosen数组，可以还原vis
     - 对角线的判断，采用了以前的办法。
     - 如果使用chosen数组，其实level不必要。如果是acm直接开数组，则需要level
+- 二刷
+    - 整个搜索的流程没有感觉到难度，主要是剪枝条件的实现。
+    - 行不用处理，列也比较好处理，主要是对角线。
+    - 我的办法是，列单独放了哈希表处理，对角线把之前的皇位位置存下来，然后和当前试探比较。
+        - 这个不是最好的办法，时间复杂度O(1) + O(N)，没有上升量级，但是可以优化
+        - 最好的办法是，存一个列放置位置即可。因为，数组offset是行位置，每一个元素是列位置，等价于存储了之前放置的皇后位置。
+        - 对角线的判断是看行差异和列差异是否一致即可。
 
 #### [52.N-Queens II](https://leetcode.com/problems/n-queens-ii/)
 
 - 这个题在51的基础上，不需要chosen and ret.
 - 但是必须有vis
+- 二刷
+    - 同51二刷，不过这个题有返回值，但是递归不能有返回值，因为这个题并不是只找一条路。
+    - 还是需要找到所有路。
 
 #### [37.Sudoku Solver](https://leetcode.com/problems/sudoku-solver/)
 
