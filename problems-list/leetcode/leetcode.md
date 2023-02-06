@@ -1646,6 +1646,11 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
 #### [509.Fibonacci Number](https://leetcode.com/problems/fibonacci-number/)
 
 - 同climbling stairs
+- 二刷
+    - 做的不好，讨论这个题目时，我觉得也不用说dp，因为太明显了。
+    - 做的不好的的地方在于，如果只使用两个变量，没有把变量的赋值顺序搞清楚。
+        - 每次迈一步
+        - 需要先计算下一次的f1值
 
 #### [5.Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
 
