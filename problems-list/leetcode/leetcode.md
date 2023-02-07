@@ -1561,6 +1561,43 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
 
 ## 动态规划
 
+#### [746. Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/)
+
+- 一刷：思路学习。
+    - 这个题用dp没有太多问题，直接是最优化问题。
+    - 对于状态定义，没有一瞬间想到的原因在于，原问题和子问题的关系，没有找到，因此推不出来。
+        - 如果要换回搜索，很容易就想到了，还是迈步子。第n阶，只能从第n-1阶和n-2阶过来。
+        - 但是，这两种方法，有成本了。所以，有一个决策在。非常典型的dp
+    - 多说下dp的思路，其实重叠子问题，最优子结构，暂时我都没有意识。只是从题面看是最优化，所以决定这个方向。
+    - 随想录在后面强调了遍历的顺序，也即推到顺序，这个挺重要的。
+        - 算竞将这种推到方式归纳为线性dp
+    - 这个题的理解上，也需要仔细点。比如，刚开始的初值怎么定义，最终求解的到底是dp[?].
+    - 这个题和climbing stairs一脉相承，一起做有助于理解dp
+
+#### [70.Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
+
+- 一刷
+    - 朴素的思路：枚举所有的情形，关键就是怎么枚举？我的思路还是，从子问题和原问题的关系入手，发现有关系，直接找到了原问题和子问题的关系。直接递归求解即可，注意，此时我并没有直接反映到用dp做，但是这么做会超时。
+    - 正确的思路：沿着朴素的思路，发现超时，即子问题存在重叠性。没有一开始就考虑dp是因为不是最优化问题，很明显是计数问题即排列组合。我是通过重叠子问题，发现了dp的特性。用dp求解即可。
+    - 方法：和fib数的方法一模一样。
+- 二刷
+    - 这题做的不好，因为没有一遍过。对于dp的边界没有考虑好，犯了和fib类似的问题。
+    - 说下思路，上来一看，就全部可行解，那自然的想法是枚举。
+    - 至于怎么能转换到dp，有如下思路：
+        - dp具有重叠子问题，和最优子结构两个性质。
+        - 先尝试划分下子问题，不管是否重叠，然后推到一下，子问题和原问题是否存在转换关系，从而工程转化方程。
+        - 对于第n阶，只有两种办法你能过来，从n-1阶，迈一步。从n-2阶，迈两步。这是固定的。所以有，dp[n] = dp[n - 1] + dp[n - 2]
+        - 这里需要注意的事，从n-2阶，除了迈两步，还可以迈一步。但是，这么考虑不对，因为我是从原问题出发来的，迈一步的情形会合并到n-1阶中，所以不能这么看
+
+#### [509.Fibonacci Number](https://leetcode.com/problems/fibonacci-number/)
+
+- 同climbling stairs
+- 二刷
+    - 做的不好，讨论这个题目时，我觉得也不用说dp，因为太明显了。
+    - 做的不好的的地方在于，如果只使用两个变量，没有把变量的赋值顺序搞清楚。
+        - 每次迈一步
+        - 需要先计算下一次的f1值
+
 #### [303.Range Sum Query - Immutable](https://leetcode.cn/problems/range-sum-query-immutable/)
 
 - 动态规划第一题
@@ -1635,22 +1672,6 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
     - 转移方程：dp[i][j] = min(dp[i-1][j], dp[i-1][j-1]) + tri[i][j]
     - 边界：这里要注意，上一层可能dp[i-1][j]越界。同时，我增加了行列，来避免对于下标的特殊处理，但是行和列的初值不一样。
     - 目标：最后一层的最短路。
-
-#### [70.Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
-
-- 思路
-    - 朴素的思路：枚举所有的情形，关键就是怎么枚举？我的思路还是，从子问题和原问题的关系入手，发现有关系，直接找到了原问题和子问题的关系。直接递归求解即可，注意，此时我并没有直接反映到用dp做，但是这么做会超时。
-    - 正确的思路：沿着朴素的思路，发现超时，即子问题存在重叠性。没有一开始就考虑dp是因为不是最优化问题，很明显是计数问题即排列组合。我是通过重叠子问题，发现了dp的特性。用dp求解即可。
-    - 方法：和fib数的方法一模一样。
-
-#### [509.Fibonacci Number](https://leetcode.com/problems/fibonacci-number/)
-
-- 同climbling stairs
-- 二刷
-    - 做的不好，讨论这个题目时，我觉得也不用说dp，因为太明显了。
-    - 做的不好的的地方在于，如果只使用两个变量，没有把变量的赋值顺序搞清楚。
-        - 每次迈一步
-        - 需要先计算下一次的f1值
 
 #### [5.Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
 
