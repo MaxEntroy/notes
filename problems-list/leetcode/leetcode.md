@@ -1561,6 +1561,29 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
 
 ## 动态规划
 
+#### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
+
+- 一刷：思路学习
+    - 这个题还挺好的，比较清晰的展现搜索和dp的区别。
+    - 搜索思路
+        - 题意是求总和，很自然想到搜索，枚举解空间即可。
+        - 这个题怎么枚举？采用随想录模板，确定好level和start
+            - level就是(i, k)
+            - start就是向右和向下
+            - 和sudoku的方向一致
+            - 这个题我刚开始没反应过来枚举的写法，会想到sudoku，一下豁然开朗
+    - 当然，这个题会超时。超时的原因在于时间复杂度，另一个重要的原因是重叠子问题。
+    - 所以，虽然是求总和类题目，但是因为重叠子问题的情形，我们采用dp来做。
+    - dp思路
+        - 状态怎么找？因为有了fib的基础，反向找，发现最后一个状态，只能是两个方向来，都是迈一步，所以有dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+        - 初值定义，边界都是1
+        - 状态转移，这个题已经不是线性dp，正常行优先即可。
+        - 最后结果，是dp[m - 1][n - 1]
+    - 滚动数组
+        - 先系统学习了下滚动数组，简言之，考虑到dp在进行状态转移时，当前状态只依赖之前的一个或某几个状态，没有必要把全部状态都存储下来。这种进行空间优化，节约存储的一种办法叫做滚动数组。
+        - dp[k] = dp[k] + dp[k - 1](dp[k] += dp[k - 1])
+
+
 #### [746. Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/description/)
 
 - 一刷：思路学习。
