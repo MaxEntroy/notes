@@ -1561,6 +1561,25 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
 
 ## 动态规划
 
+关于最优子结构，wiki有如下解释
+
+>In computer science, a problem is said to have optimal substructure if an optimal solution can be constructed from optimal solutions of its subproblems. This property is used to determine the usefulness of greedy algorithms for a problem
+
+我做如下理解
+- 原问题的最优解包含子问题的最优解。从而我们可以通过子问题的最优解推导出原问题的最优解。
+- 也即dp中后面的状态，可以通过前面的状态推到出来。
+- 这点很重要的原因在于，如果没有这个性质，那么状态之间无法推到，就无法决策。所以，dp状态的寻找很关键。
+
+#### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/description/)
+
+- 一刷：有了63的基础，很容易过了。
+    - 这个题如果是搜索，思路非常简单。碰到不满足的情形，执行对应的剪枝即可。
+    - dp这里，对于状态转移要做调整。
+        - 如果不好直接分析，我们可以分析最后一个点，如果它的上面路被堵死了，那么dp[i - 1][j] == 0。同理，左面的处理方式一样
+        - 说会状态转移本身，看起来dp[i][j] = dp[i - 1][j] + dp[i][j - 1]不用变，只要前面的状态根据障碍物更新即可。
+        - 很显然，刚开始分析这么看没问题，但实际，这么做行不通。
+        - 还是考虑状态本身dp[i][j]，表示有多少条路可以到(i, j), 如果当前点有障碍物，肯定到不了。否则，就依赖于(i - 1, j)和(i, j - 1)的状态即可。他们都有障碍物，那就是0，也没问题。
+
 #### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
 
 - 一刷：思路学习
@@ -1596,6 +1615,13 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
         - 算竞将这种推到方式归纳为线性dp
     - 这个题的理解上，也需要仔细点。比如，刚开始的初值怎么定义，最终求解的到底是dp[?].
     - 这个题和climbing stairs一脉相承，一起做有助于理解dp
+- 二刷
+    - 这个题的突破口，其实是最优子结构，重叠子问题还不好直接看出来。
+    - 到底第n阶的最优解，肯定是第n - 1的最优解 + 迈一步的开销 and n - 2的最优解 + 迈两步的开销
+    - 所以，你能看出来，这个问题具有最优子结构的性质。
+    - 可以考虑，如果第n阶，不一定是n - 1阶的最优解或者n - 2阶的最优解，那就不是最优子结构。
+    - 从这个角度看，这个性质有点类似贪心。但是贪心的问题是，不向前看的，只看当前，所以它和原问题没有关系。
+    - 但是dp的最优子结构，要求看原问题，这点有别贪心。只不过，当前问题的最优，需要原问题也是最优。
 
 #### [70.Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
 
