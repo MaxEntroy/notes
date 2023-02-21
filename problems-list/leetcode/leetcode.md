@@ -1577,6 +1577,19 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
     - 每一次操作仅保存有用信息
     - 新的元素不断循环更新，使数组空间看上去像被滚动利用
 
+#### [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/description/)
+
+- 一刷：随想录学习。但是也没过。
+    - 思路主要学习了随想录的办法，0-1背包，和指数型枚举具备内在一致性。所以指数型枚举的搜索题也可以考虑背包。
+    - 这个题的解法还是比较巧妙的，即容量为sum/2的背包，看它的价值能否是 sum/2
+        - 如果可以，找到了一个集合划分
+        - 如果不可以，没找到。
+        - 容量和价值一样，是这个题最大的特点。
+    - 做的不好的地方
+        - 背包的模板给忘了，滚动数组dp[k] = max(dp[k], dp[k - nums[i]] +nums[i])，我写成了dp[k] = max(dp[k - 1], ...)
+        - 想想滚动数组怎么更新的，nums[i]不放，不用更新的。
+        - 还有初始化的vector大小开多少，可以优化。这个也是没考虑到的点
+
 #### [96.Unique Binary Search Trees](https://leetcode.com/problems/unique-binary-search-trees/)
 
 - 一刷：随想录学习。状态定义比较难想到。
