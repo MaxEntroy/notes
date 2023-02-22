@@ -1577,7 +1577,20 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
     - 每一次操作仅保存有用信息
     - 新的元素不断循环更新，使数组空间看上去像被滚动利用
 
-#### [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/description/)
+#### [494.Target Sum](https://leetcode.com/problems/target-sum/description/)
+
+- 一刷：随想录学些。但是没过。
+    - 说下思路，没有理解。只能强行记住。
+    - 没过的原因在于，忽略了负数绝对值的情形，这也是我觉得这题做的不好的地方。这其实和dp无关，考察对于边界情况的处理
+- 二刷：参考了[494. Target Sum](https://leetcode.com/problems/target-sum/description/)
+    - 这里我说一下，由于目前在学习dp，所以和之前的办法还不能融合的特别好，即这个题，到底用搜索还是dp来做。
+    - 在这一章，肯定是dp了。但是这样往往会错失最容易理解的办法。
+    - 说回题目，看了下上面的题解，很快启发我。因为搜索我觉得我搞得比较透，所以对于背包来说，其实就是指数型枚举。
+        - 先可以尝试搜索，一题多解。这样也能更好的理解各种方法的差异。
+        - 这个题典型的指数型枚举，每个数都必须放，只不过以前的是放或者不放，这次是必须放，选择在于放本身以及相反数。
+        - 这个题没处理好的是边界，不过自己最后debug解决了。
+
+#### [416.Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/description/)
 
 - 一刷：随想录学习。但是也没过。
     - 思路主要学习了随想录的办法，0-1背包，和指数型枚举具备内在一致性。所以指数型枚举的搜索题也可以考虑背包。
