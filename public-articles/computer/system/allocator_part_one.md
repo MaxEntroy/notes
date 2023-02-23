@@ -83,3 +83,39 @@ we do with the remainder of the free block?(紧接着上面的问题，怎么处
 - Coalescing. What do we do with a block that has just been freed?(对于被释放的块，怎么合入？)
 
 其实allocated block，归app管。allocator主要就是考虑free block
+
+#### 9.9.6 Implicit Free Lists
+
+Implicit Free Lists这个方法更多的是从Free block organization角度来说的。为什么说更多，因为这种方法肯定也涉及placement/splitting/coalescing。但是其他的方法也涉及，这个方法和其他方法根本的差异还是block organization.
+
+- for each block we need both size and allocation status(这个很自然，heap通过block组织起来，block通过chunk组织，自然也需要类似的header信息)
+    - chunk(分配的最小单位)，按8字节对齐。
+    - block肯定是若干个chunk，所以size一定是对齐位数的倍数。
+    - 比如block size may be 8(1000)/16(10000)/24(11000)
+    - low 3 bits are zero -> 我们可以用低3位存储别的信息
+        - 同时，在计算size时需要用mask
+
+关于为什么叫implicit free lists，原因在于相比explicit free lists，这些free block并不是通过pointer显示的连接在一起。allocated和free block按照初始顺序连接在一起，通过标记位来判断是不是free block。
+
+- The advantage of an implicit free list is simplicity.
+- Asignificant disadvantage is that the cost of any operation that requires a search of the free list, such as placing allocated blocks, will be linear in the total number of allocated and free blocks in the heap.
+
+所以，由于是隐式的连接free block。所以，拿到free block需要线性时间。
+
+最后，block是通过implicit lists连接，每一个block的结构header + payload + padding(optional)，并且memory alignment要求minimus block size。比如，8字节对齐，最小的block就是8字节.这意味着
+- auto p = malloc(1)。
+- 但是实际分配了一个最小块，8字节。
+    - 其中前4个字节for header，(3 for block size and 1 for flag)
+    - 后4个字节for payload，1 for user and 3 for padding
+
+#### 9.9.7 Placing Allocated Blocks(finding a free block)
+
+- First fit: 最简单的想法，最快。类似于greedy策略
+- Next fix: 在上一次搜索的结尾，接着搜索(if we found a fit in some free block the last time, there
+is a good chance that we will find a fit the next time in the remainder of the block)
+- Best fix: 恰恰好的问题是，时间开销大。优点自然是利用率高。
+
+#### 9.9.8 Splitting Free Blocks(allocating in a free block:splitting)
+
+这块我理解错了，之前理解成，分配出去之后，剩余块怎么组织。其实不是，比如我们现在找到了一个block(不管用什么策略，假如first fit)
+此时有个问题，就是需要的字节可能比这个块小很多。怎么处理？可以全分配出去，造成internal fragment。也可以把这个block分解了，再分配出去给user，提升使用率。
