@@ -119,3 +119,7 @@ is a good chance that we will find a fit the next time in the remainder of the b
 
 这块我理解错了，之前理解成，分配出去之后，剩余块怎么组织。其实不是，比如我们现在找到了一个block(不管用什么策略，假如first fit)
 此时有个问题，就是需要的字节可能比这个块小很多。怎么处理？可以全分配出去，造成internal fragment。也可以把这个block分解了，再分配出去给user，提升使用率。
+
+#### Ref
+
+[CSAPP 深入理解计算机系统（七）：虚拟内存和动态内存分配](https://zhuanlan.zhihu.com/p/406893820)<br>
