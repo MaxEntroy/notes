@@ -74,4 +74,3 @@ int main(void) {
   static_poly::Test();
   return 0;
 }
-

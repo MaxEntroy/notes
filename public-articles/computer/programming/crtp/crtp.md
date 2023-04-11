@@ -1,12 +1,8 @@
-### 题外话
-
-一晃两个月过去，自己一篇文章没写，啥都没沉淀。上半年到目前为止，其实东西到是看了一些，pb arena allocation(done)，csapp allocator(pending)，coroutine related(done)，the art of writting efficient programmes(underway)，线上的问题复盘(总共两次，写了一篇，pending)。除了这些，自己手头还有工作，也准备系统总结前一阶段的工作，发篇km，多线并行，其实不写，就是觉得自己着实抽不出时间，再加上反正都看懂了嘛，就不愿意再沉淀了。
-
-当然，说白了还是借口，我心里其实明白，又开始拖延症，觉得自己看懂了就行。技术细节，觉得自己看懂了和实现明白还是两回事，得逼自己都沉淀下来才行。
-
 ### 引子
 
 最近的一项任务觉得可以用crtp来搞，准备研究一下这个东西。其实这玩意没少用，内部的rpc框架单例就是用crtp手法做的。会用没问题，但是对于其背后的设计思路，最佳实践，不甚了解，决定出手搞一下。
+
+### 用法
 
 下面直接上wiki的内容[Curiously recurring template pattern](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern)
 
@@ -101,8 +97,6 @@ void Test() {
 ```cpp
 #include <iostream>
 
-#include <iostream>
-
 template <typename T>
 class Base{
  public:
@@ -158,42 +152,274 @@ void fun(T& base){
 }
 ```
 
-所以上面代码的问题是，派生类当中的实现应该都是private限定，那么就没问题了，看起来和NVI idiom一致。只不过前者的实现是虚函数，后者的实现是模板。
+所以上面的代码，看起来好像有点多此一举。那么用private限定符修饰impl可以吗？这样不就好了，只能通过```interface```调用。但这么做也不行，基类将this指针转化为派生类的指针后，只能调用public接口。因此，如果采用crtp来实现static poly，那么派生类的impl方法只能是public接口，看上去是多此一举，但是也没办法。
 
-我再总结下静态多态的用法。
+这里再说一点，也是我之前一直没理解到的地方，我们看一下它这个多态的调用，即```fun```的设计，为什么是个模板？
+
+我们看下面的类图
+
+<img width="600"  src="static-poly-vs-dyn-poly.png"/>
+
+其实对于crtp(static-poly)来说，这些派生类并不像dyn-poly那样，位于一个继承体系中，即彼此之间没有关系。对于dyn-poly，由于所有派生类在一个继承体系中，所以可以通过一个基类的指针，来实现多态。由于static-poly的派生类没有这种关系，不过他们的父类接口一样，因此可以通过模板来复用代码，模板实例化之后，还是不同的父类。这也是为什么```fun```的设计是个模板的原因。
+
+最后，给一组对比代码，看看static-poly和dyn-poly的实现。
+
 ```cpp
-template <class T> 
-class Base {
-  public:
-    void interface()
-    {
-        // ...
-        static_cast<T*>(this)->implementation();
-        // ...
-    }
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace dyn_poly {
+
+class Filter {
+ public:
+  virtual ~Filter() = default;
+
+  virtual std::string Name() const = 0;
 };
 
-class Derived1 : Base<Derived1> {
-  private:
-    void implementation() {}
+class CatFilter : public Filter {
+ public:
+  std::string Name() const override { return "CatFilter"; }
 };
 
-class Derived2 : Base<Derived2> {
-  private:
-    void implementation() {}
+class TagFilter : public Filter {
+ public:
+  std::string Name() const override { return "TagFilter"; };
 };
 
-template <typename T>
-void fun(T& base) {
-    base.interface();
+void Test() {
+  std::vector<std::unique_ptr<Filter>> filters;
+  filters.emplace_back(std::make_unique<CatFilter>());
+  filters.emplace_back(std::make_unique<TagFilter>());
+
+  for (const auto& filter : filters) {
+    std::cout << filter->Name() << std::endl;
+  }
 }
 
-void test() {
-    Derived1 der1;
-    Derived2 der2;
-    fun(der1);
-    fun(der2);
+}  // namespace dyn_poly
+
+namespace static_poly {
+
+template<typename T>
+class Filter {
+ public:
+  std::string Name() {
+    return static_cast<T*>(this)->GetName();
+  }
+};
+
+class CatFilter : public Filter<CatFilter> {
+ public:
+   std::string GetName() const { return "CatFilter"; }
+};
+
+class TagFilter : public Filter<TagFilter> {
+ public:
+   std::string GetName() const { return "TagFilter"; }
+};
+
+template<typename T>
+void PolyCall(T& filter) {
+  std::cout << filter.Name() << std::endl;
+}
+
+void Test() {
+  CatFilter cat_filter;
+  TagFilter tag_filter;
+
+  PolyCall(cat_filter);
+  PolyCall(tag_filter);
+}
+
+}  // namespace static_poly
+
+int main(void) {
+  dyn_poly::Test();
+  static_poly::Test();
+  return 0;
 }
 ```
 
-这里我最后再说一点，也是我之前一直没理解到的地方，我们看一下它这个多态的调用，即```fun```的设计，为什么是个模板？
+最后，根据我自己的实践经验，如果插件较多，需要指针数组来组织的时候，只能是dyn-poly，如果是run time才构造对象，也只能是dyn-poly。否则，可以考虑static-poly，我最近写的diffchecker使用了static-poly,原因在于，不需要run time才构造对象，同时插件较少。
+
+#### Object counter
+
+The main purpose of an object counter is retrieving statistics of object creation and destruction for a given class.
+
+```cpp
+template <typename T>
+struct counter
+{
+    static inline int objects_created = 0;
+    static inline int objects_alive = 0;
+
+    counter()
+    {
+        ++objects_created;
+        ++objects_alive;
+    }
+    
+    counter(const counter&)
+    {
+        ++objects_created;
+        ++objects_alive;
+    }
+protected:
+    ~counter() // objects should never be removed through pointers of this type
+    {
+        --objects_alive;
+    }
+};
+
+class X : counter<X>
+{
+    // ...
+};
+
+class Y : counter<Y>
+{
+    // ...
+};
+```
+
+这种用法的另一个常见实现是singleton，不再赘述。对于这个例子，也有一些点需要注意：
+
+-  It is important to note that counter<X> and counter<Y> are two separate classes and this is why they will keep separate counts of Xs and Ys
+- In this example of CRTP, this distinction of classes is the only use of the template parameter (T in counter<T>) and the reason why we cannot use a simple un-templated base class.
+
+这里强调的和上一小节最后的部分一致，即强调了派生类的独立性，彼此之间没什么关系。最好的例子来自于对于单例的理解，每一个想成为单例的类，彼此之间没什么关系。倘若是dyn-poly，不可能是单例，不同派生类中的基类都会重叠。
+
+#### Polymorphic copy construction
+
+When using polymorphism, one sometimes needs to create copies of objects by the base class pointer. A commonly used idiom for this is adding a virtual clone function that is defined in every derived class. The CRTP can be used to avoid having to duplicate that function or other similar functions in every derived class.
+
+这个点我说下，就是实现Clone接口，传统的办法是基类声明```virtual Clone```接口，然后派生类自己实现。缺点是每个派生类都需要定义，重复的工作。crtp可以解决，不过再看crtp的办法前，我先给出一般的解法。因为我去年碰到了这个问题，看了folly/oneflow的实现，大家没有借用crtp去做，而是用宏来解决，一样很便捷。
+
+ ```cpp
+ // common.h
+ #define DECLARE_CLONE(BaseClass) \
+  virtual std::shared_ptr<BaseClass> Clone() const = 0;
+
+#define DECLARE_SET_DATA(BaseClass) \
+  virtual void SetData(const std::shared_ptr<BaseClass>& other) = 0;
+
+#define DECLARE_CLONE_AND_SET_DATA(BaseClass) \
+  DECLARE_CLONE(BaseClass)                    \
+  DECLARE_SET_DATA(BaseClass)
+
+#define DEFINE_CLONE(BaseClass, SubClass)             \
+  std::shared_ptr<BaseClass> Clone() const override { \
+    return std::make_shared<SubClass>(*this);         \
+  }
+
+#define DEFINE_SET_DATA(BaseClass, SubClass)                           \
+  void SetData(const std::shared_ptr<BaseClass>& other) override {     \
+    const auto& mirrored = std::dynamic_pointer_cast<SubClass>(other); \
+    *this = *mirrored;                                                 \
+  }
+
+#define DEFINE_CLONE_AND_SET_DATA(BaseClass, SubClass) \
+  DEFINE_CLONE(BaseClass, SubClass)                    \
+  DEFINE_SET_DATA(BaseClass, SubClass)
+
+// rule_base.h
+class RuleBase {
+ public:
+  virtual ~RuleBase() = default;
+
+  DECLARE_CLONE_AND_SET_DATA(BasicRule);
+};
+#define DEFINE_RULE_CLONE_AND_SET_DATA(SubClass) \
+  DEFINE_CLONE_AND_SET_DATA(RuleBase, SubClass) \
+
+// cat_rule.h
+class CatRule : public RuleBase {
+ public:
+  DEFINE_RULE_CLONE_AND_SET_DATA(CatRule);
+};
+
+// tag_rule.h
+class TagRule : public RuleBase {
+ public:
+  DEFINE_RULE_CLONE_AND_SET_DATA(TagRule);
+};
+ ```
+
+ 宏的办法也非常简洁，不会有大量的冗余代码，目前我工作中使用的是这种办法。下面我们看crtp的解法
+
+ ```cpp
+ class RuleBase {
+  public:
+   virtual ~RuleBase() = default;
+   virtual std::shared_ptr<RuleBase> clone() const = 0;
+ };
+
+template <typename DerivedRule>
+class RuleHelper : public RuleBase {
+ public:
+  std::shared_ptr<RuleBase> clone() const override {
+    return std::make_shared<DerivedRule>(static_cast<Derived const&>(*this));
+  }
+}
+
+class CatRule : public RuleHelper<CatRule> {
+
+};
+
+class TagRule : public RuleHelper<TagRule> {
+
+};
+```
+
+- 这个写法的形式，和之前的两种又不一样，这个是一个三层的结构。因为crtp的继承是相互独立的，派生类之间没有关系。但是，题目的要求又需要有，因此又加了一层。
+- 我们看这个第二层，本质它是对派生类的类型做了抽象，否则无法通用化clone代码。wiki特别强调了必须是三层，两层是显然不行的。因为派生类的父类，没有关系。
+- 总体来说，这种办法没有宏的办法简洁。
+
+#### Polymorphic chaining
+
+直接看wiki给出的代码
+
+```cpp
+class Printer
+{
+public:
+    Printer(ostream& pstream) : m_stream(pstream) {}
+ 
+    template <typename T>
+    Printer& print(T&& t) { m_stream << t; return *this; }
+ 
+    template <typename T>
+    Printer& println(T&& t) { m_stream << t << endl; return *this; }
+private:
+    ostream& m_stream;
+};
+Printer(myStream).println("hello").println(500);
+
+class CoutPrinter : public Printer
+{
+public:
+    CoutPrinter() : Printer(cout) {}
+
+    CoutPrinter& SetConsoleColor(Color c)
+    {
+        // ...
+        return *this;
+    }
+};
+CoutPrinter().print("Hello ").SetConsoleColor(Color.red).println("Printer!"); // compile error
+```
+
+问题出在，派生类想复用基类的代码，但是其返回值返回的是基类的对象，后者无法调用派生类的方式，从而无法channing.
+
+#### 小结
+
+我想有以下几个点是需要格外注意的：
+- 对于static-poly这种用法
+  - static-poly vs dyn-poly，我个人理解最重要的区别在于继承体系的差异。
+  - 继承的使用上，复用了基类的interface接口，派生类需要实现impl方法。基类和派生类一起实现了某一种功能。
+- 对于object counter这种用法
+  - 引入模板的继承，和普通继承的区别，同static-poly用法的第一点，即是多个继承体系，不是一套。模板使能了多套这个能力，这是模板的作用。
+  - 继承的使用上，派生类和基类更像是一种A is implementated in terms of B的关系，派生类也使用基类的接口，这是一部分功能。但派生类的接口会实现另一部分功能，他们是相对独立的，而不是一起实现了某种功能。
