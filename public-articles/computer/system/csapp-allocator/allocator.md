@@ -15,34 +15,35 @@
 - 再者，说了allocator分两类
 - 最后，说了怎么用standart allocator + application-specific allocator
 
+- Adynamic memory allocator maintains an area of a process’s virtual memory
+known as the heap (Figure 9.33).
+- We will assume that the heap is an area of demand-zero memory
+that begins immediately after the uninitialized data area and grows upward
+(toward higher addresses).
+- An allocator maintains the heap as a collection of various-size blocks.
+- Each block is a contiguous chunk of virtual memory that is either allocated or free. 
+    - chunk是内存(heap)组织的最小单元
+    - block是内存(heap)分配的最小单元，每次至少分配一个block，后者由连续的chunk组成
+
+- We often use the standard allocator to acquire a large block of virtual memory
+and 
+- then use an application-specific allocator to manage the memory within that
+block as the nodes of the graph are created and destroyed.
+
+<img width="300"  src="img/heap.png"/>
+
 #### 9.9.1 The malloc and free Functions
 
-0000 0000 0000 0000  0  0x0000
+内存按字节组织
+
+00000000 byte 0 (0x00000000)
+00000000 byte 1 (0x00000001)
 ...
-...
-0000 0000 0000 1111 15  0x00015
-
-结合上面的图我们可以知道
-- 左面的内存块，和右边的内存地址没有关系，就是个标识
-- 至于这个标识，一次都读几个？cpu定，上面的图里是4个，所以内存对齐是，地址是4的倍数
-- 但是csapp里面说是8，也行。看怎么读？
-    - 如果是4个，每个是一个字节，相当于一次读4字节
-    - 如果是8个，每个是一个字节，相当于一次读8字节
-
-然后讲了一个例子，cpu如果每次读双字，一个字4-bytes，那么内存对齐也必须按照这个来。
-所以，分配的时候，考虑到内存对齐，就必须padding.
-比如，2 words是cpu读取的长度，那么malloc每次至少是2 words，如果少于这个值，padding.
-
-二刷，上面说的不太对。有关连，内存按字节组织
-
-0000 0000 byte 0 (0x00000000)
-0000 0000 byte 1 (0x00000001)
-...
-0000 0000 byte 15 (0x000000015)
+00000000 byte 15 (0x000000015)
 
 左边是按纯二进制来组织内存数据，右边是地址。cpu32位，那么地址一定32位。
 发现一个规律，带十六进制表示的，都是内存地址。
-
+因为寄存器就那么大
 #### 9.9.2 Why Dynamic Memory Allocation?
 
 The most important reason that programs use dynamic memory allocation is that
