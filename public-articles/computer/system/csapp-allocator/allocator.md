@@ -1,4 +1,4 @@
-### 前期杂记
+### Requirements
 
 #### memory alignment
 
@@ -99,7 +99,7 @@ Implicit Free Lists这个方法更多的是从Free block organization角度来�
 关于为什么叫implicit free lists，原因在于相比explicit free lists，这些free block并不是通过pointer显示的连接在一起。allocated和free block按照初始顺序连接在一起，通过标记位来判断是不是free block。
 
 - The advantage of an implicit free list is simplicity.
-- Asignificant disadvantage is that the cost of any operation that requires a search of the free list, such as placing allocated blocks, will be linear in the total number of allocated and free blocks in the heap.
+- A significant disadvantage is that the cost of any operation that requires a search of the free list, such as placing allocated blocks, will be linear in the total number of allocated and free blocks in the heap.
 
 所以，由于是隐式的连接free block。所以，拿到free block需要线性时间。
 
@@ -121,6 +121,37 @@ is a good chance that we will find a fit the next time in the remainder of the b
 这块我理解错了，之前理解成，分配出去之后，剩余块怎么组织。其实不是，比如我们现在找到了一个block(不管用什么策略，假如first fit)
 此时有个问题，就是需要的字节可能比这个块小很多。怎么处理？可以全分配出去，造成internal fragment。也可以把这个block分解了，再分配出去给user，提升使用率。
 
-#### Ref
+这里主要是针对header做出初始化的调整。
+#### 9.9.9 Getting Additional Heap Memory
 
-[CSAPP 深入理解计算机系统（七）：虚拟内存和动态内存分配](https://zhuanlan.zhihu.com/p/406893820)<br>
+- One option is to try to create some larger free blocks by merging (coalescing) free
+blocks that are physically adjacent in memory (next section).
+- if the free blocks are already maximally
+coalesced, then the allocator asks the kernel for additional heap memory by calling
+the sbrk function.
+
+两种方式，如果是一些外部碎片，想办法通过merging解决。如果空间已经不够了。那只能向kernel(system allocator)申请，获取更多的内存给application allocator.
+
+#### 9.9.10 Coalescing Free Blocks
+
+空闲块merge，不merge可能导致false fragmentation，比如
+- 前一个块4字节
+- 后一个块也4字节，刚才分配，目前释放。如果不merge，两个快看到的都是4个字节。
+- 加入现在一个请求来，要分配6个字节，子找不到这样的快。所以，需要merge
+
+那么，关于merge的时机是个问题。
+- 第一种，每次free后，进行merge
+- 第二种，如果请求的块，大小不够时，才进行merge
+- csapp的说法是，目前性能较好的allocator，都是采用后者。
+
+#### 9.9.11 Coalescing with Boundary Tags
+
+But how would we coalesce the previous block? 
+
+笨办法是，每次free的时候，从头开始遍历到当前节点，记住那些free的块，然后merge。显然free操作的时间复杂度是O(N)
+
+- is to add a footer (the boundary tag) at the end of each block, where the footer is a replica of the header.
+- If each block includes such a footer, then the allocator can determine the starting location and status of the previous
+block by inspecting its footer, which is always one word away from the start of the current block.
+
+#### 9.9.12 Putting It Together: Implementing a Simple Allocator
