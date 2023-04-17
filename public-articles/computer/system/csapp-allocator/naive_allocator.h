@@ -11,11 +11,12 @@ class NaiveAllocator {
   NaiveAllocator(const NaiveAllocator&) = delete;
   NaiveAllocator& operator=(const NaiveAllocator&) = delete;
 
+ private:
   /**
    * @brief Initialize the memory system model
    * @return If successful, return true. Else return false.
    */
-  bool Init();
+  bool InitInternal();
 
   /**
    * @brief Simple model of the sbrk function.
@@ -38,6 +39,18 @@ class NaiveAllocator {
 
   /// The maximum block size
   static constexpr size_t kMaxHeap = (1 << 20);
+
+ private:
+  // Basic constants
+
+  /// Word and header/foot size(bytes)
+  static constexpr int kWordSize = 4;
+
+  /// Double-word size(bytes)
+  static constexpr int kDoubleWordSize = 8;
+
+  /// Chunk size(4K)
+  static constexpr int kChunkSize = (1 << 12);
 };
 
 }  // namespace csapp
