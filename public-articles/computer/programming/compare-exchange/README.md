@@ -72,3 +72,9 @@ else {
     return false;
 }
 ```
+
+### Ref
+
+[C++ 中 std::atomic 类型的 compare_exchange 应该选择哪个版本？](https://www.zhihu.com/question/526769301/answer/2430798890)</br>
+[Understanding std::atomic::compare_exchange_weak() in C++11](https://stackoverflow.com/questions/25199838/understanding-stdatomiccompare-exchange-weak-in-c11)</br>
+[compare_exchange](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
