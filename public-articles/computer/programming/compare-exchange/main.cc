@@ -4,17 +4,14 @@
 #include <thread>
 
 constexpr int kThres = 10;
-std::atomic<int> counter{9};
-
-std::mutex io_mtx;
+std::atomic<int> counter{0};
 
 namespace non_cas {
+// make counter 9
 
 void producer() {
   if (counter < kThres)
     ++counter;
-  std::scoped_lock lock(io_mtx);
-  std::cout << "thread:" << std::this_thread::get_id() << ", counter=" << counter << std::endl;
 }
 
 void test() {
@@ -23,19 +20,20 @@ void test() {
 
   t1.join();
   t2.join();
+
+  std::cout << "counter=" << counter << std::endl;
 }
 
 }  // namespace non-cas
 
 namespace cas {
+// make counter 9
+// make counter 0
 
 void producer() {
   auto cur = counter.load(std::memory_order_relaxed);
   if (cur < kThres)
     counter.compare_exchange_strong(cur, cur + 1);
-
-  std::scoped_lock lock(io_mtx);
-  std::cout << "thread:" << std::this_thread::get_id() << ", counter=" << counter << std::endl;
 }
 
 void test() {
@@ -44,22 +42,45 @@ void test() {
 
   t1.join();
   t2.join();
+
+  std::cout << "counter=" << counter << std::endl;
 }
 
 }  // namespace cas
-
+   //
 namespace cas1 {
+// make counter 9
+// make counter 0
 
 void producer() {
   auto cur = counter.load(std::memory_order_relaxed);
-  if (cur < kThres)
-    counter.compare_exchange_strong(cur, cur + 1);
+  while (cur < kThres and not counter.compare_exchange_strong(cur, cur + 1));
+}
 
-  std::scoped_lock lock(io_mtx);
-  std::cout << "thread:" << std::this_thread::get_id() << ", counter=" << counter << std::endl;
+void test() {
+  std::thread t1(producer);
+  std::thread t2(producer);
+
+  t1.join();
+  t2.join();
+
+  std::cout << "counter=" << counter << std::endl;
 }
 
 }  // namespace cas1
+//
+//namespace cas1 {
+//
+//void producer() {
+//  auto cur = counter.load(std::memory_order_relaxed);
+//  if (cur < kThres)
+//    counter.compare_exchange_strong(cur, cur + 1);
+//
+//  std::scoped_lock lock(io_mtx);
+//  std::cout << "thread:" << std::this_thread::get_id() << ", counter=" << counter << std::endl;
+//}
+//
+//}  // namespace cas1
 
 
 //namespace cas1 {
@@ -120,8 +141,8 @@ void producer() {
 
 int main(void) {
   //non_cas::test();
-  cas::test();
-  //cas1::test();
+  //cas::test();
+  cas1::test();
   //cas2::test();
   return 0;
 }
