@@ -7,7 +7,7 @@ constexpr int kThres = 10;
 std::atomic<int> counter{0};
 
 namespace non_cas {
-// make counter 9
+// make counter 9, wrong result
 
 void producer() {
   if (counter < kThres)
@@ -27,8 +27,8 @@ void test() {
 }  // namespace non-cas
 
 namespace cas {
-// make counter 9
-// make counter 0
+// make counter 9, right result
+// make counter 0, wrong result
 
 void producer() {
   auto cur = counter.load(std::memory_order_relaxed);
@@ -47,10 +47,10 @@ void test() {
 }
 
 }  // namespace cas
-   //
+
 namespace cas1 {
-// make counter 9
-// make counter 0
+// make counter 9, right result
+// make counter 0, right result
 
 void producer() {
   auto cur = counter.load(std::memory_order_relaxed);
@@ -68,41 +68,30 @@ void test() {
 }
 
 }  // namespace cas1
-//
-//namespace cas1 {
-//
-//void producer() {
-//  auto cur = counter.load(std::memory_order_relaxed);
-//  if (cur < kThres)
-//    counter.compare_exchange_strong(cur, cur + 1);
-//
-//  std::scoped_lock lock(io_mtx);
-//  std::cout << "thread:" << std::this_thread::get_id() << ", counter=" << counter << std::endl;
-//}
-//
-//}  // namespace cas1
+
+namespace cas2 {
+// make counter 9, right result
+// make counter 0, right result
+
+void producer() {
+  auto cur = counter.load(std::memory_order_relaxed);
+  while (cur < kThres and not counter.compare_exchange_weak(cur, cur + 1));
+}
+
+void test() {
+  std::thread t1(producer);
+  std::thread t2(producer);
+
+  t1.join();
+  t2.join();
+
+  std::cout << "counter=" << counter << std::endl;
+}
+
+}  // namespace cas2
 
 
-//namespace cas1 {
-//
-//void producer() {
-//  auto cur = counter.load(std::memory_order_relaxed);
-//  while (cur < kThres and not counter.compare_exchange_weak(cur, cur + 1));
-//
-//  std::scoped_lock lock(io_mtx);
-//  std::cout << "thread:" << std::this_thread::get_id() << ", counter=" << counter << std::endl;
-//}
-//
-//void test() {
-//  std::thread t1(producer);
-//  std::thread t2(producer);
-//
-//  t1.join();
-//  t2.join();
-//}
-//
-//}  // namespace cas1
-//
+
 //namespace cas2 {
 //
 //std::atomic<bool> is_running{true};
@@ -142,7 +131,7 @@ void test() {
 int main(void) {
   //non_cas::test();
   //cas::test();
-  cas1::test();
-  //cas2::test();
+  //cas1::test();
+  cas2::test();
   return 0;
 }
