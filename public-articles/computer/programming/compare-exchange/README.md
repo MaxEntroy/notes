@@ -52,7 +52,7 @@ thread:0x16f7bf000, counter=10
 3. Thread 1 increments the counter to 10.
 4. Thread 2 increments the counter to 11.
 
-这段代码是非常经典的没有data race，但有race condition的情形。结果不确定原因在于**counter的条件判断和自增并不是原子的**。
+这段代码是非常经典的没有data race，但存在race condition的情形。结果不确定的原因在于**counter的条件判断和自增并不是原子的**。
 
 常规的办法我们可以通过加锁来解决，但atomic为我们提供了更高效的武器，即```campare_exchange_xxx```操作来实现(本质是CAS).
 
@@ -73,12 +73,12 @@ bool compare_exchange_strong(T& expected,
                              std::memory_order failure ) noexcept;
 ```
 
-其语义可用如下:
+其语义如下: (参见[compare_exchange](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange))
 
 >Atomically compares the object representation (until C++20)value representation (since C++20) of *this with that of expected, 
 and if those are bitwise-equal, replaces the former with desired (performs read-modify-write operation). Otherwise, loads the actual value stored in *this into expected (performs load operation).
 
-可以尝试用如下代码模拟
+具体操作可用如下代码模拟
 ```cpp
 if (*this == expected) {
     *this = desired;
@@ -110,7 +110,7 @@ atomic_var.compare_exchange_xxx(cur, cur + x)
 
 ### Best Practice
 
-最佳实践这里，主要是区分the string froms and the weak forms的使用场景。我这里直接引ref2中的内容，进行展开。
+最佳实践这里，主要是区分the strong forms and the weak forms的使用场景。我这里直接引[Understanding std::atomic::compare_exchange_weak() in C++11](https://stackoverflow.com/questions/25199838/understanding-stdatomiccompare-exchange-weak-in-c11)的内容，进行展开。
 
 #### Typical Pattern A
 
@@ -118,11 +118,11 @@ You need achieve an atomic update based on the value in the atomic variable. A f
 
 A real-world example is for several threads to add an element to a singly linked list concurrently. Each thread first loads the head pointer, allocates a new node and appends the head to this new node. Finally, it tries to swap the new node with the head.
 
-说一下这块的理解，用法A的要求是：
+说一下对这部分的理解，用法A的要求是：
 - 线程判断原子变量的状态(compare)并确保完成更新(update)，一般适用于非bool变量。
-- 相较于Typical Pattern B，后者只要求判断原子变量的状态，达到要求时，不在更新，一般适用于bool变量。
+- 相较于Typical Pattern B，后者只要求判断原子变量的状态，达到要求时，不再更新，一般适用于bool变量。
 
-上文提到了一个最典型的例子就是Ref3当中的链表插入的例子，由于每个线程都需要保证自己的节点插入，但是因为头结点会不断更新。所以需要保证在拿到最新头结点的前提下，进行更新。所以，compare and update都需要执行。但是```compare_exchange```函数不一定可以成功，所以需要一个while-loop来确保最终一定可以更新成功。
+上文提到了一个最典型的例子就是官方文档当中的链表插入的例子，由于每个线程都需要保证自己的节点插入，但是因为头结点会不断更新。所以需要保证在拿到最新头结点的前提下，进行更新。所以，compare and update都需要执行。但是```compare_exchange```函数不一定可以成功，所以需要一个while-loop来确保最终一定可以更新成功。
 
 代码写法如下
 ```cpp
@@ -179,7 +179,7 @@ int main(void) {
 
 In contrary to pattern A, you want the atomic variable to be **updated once**, but you don't care who does it. As long as it's not updated, you try it again. This is typically used with boolean variables. E.g., you need implement a trigger for a state machine to move on. Which thread pulls the trigger is regardless.
 
-说一下这块的理解，用法B的要求是：
+说一下这部分的理解，用法B的要求是：
 - 线程判断原子变量的状态(compare)并确保完成一次更新(update)，一般适用于bool变量。
 - 相较于Typical Pattern A，后者并不要求当前线程需要完成更新，只要有线程完成更新即可。
 
@@ -188,7 +188,7 @@ In contrary to pattern A, you want the atomic variable to be **updated once**, b
 - fail spuriously，此时没有更新原子变量，继续更新。
 - 整体写法还是需要while-loop，同时条件判断需要加上**对于当前原子变量是否更新**的判断，用来区别上面的两种情形。
 
-所以，这种情形，string from就简单多了
+所以，这种情形使用strong form会简单很多
 ```cpp
 auto cur = atomic_var.load(std::memory_order_relaxed);
 atomic_var.compare_exchange_strong(cur, cur + x);
@@ -196,7 +196,7 @@ atomic_var.compare_exchange_strong(cur, cur + x);
 
 我们甚至都不关心返回值，因为不管返回值如何，这个原子变量肯定更新了。 
 
-进一步，我们再看一个Ref1当中的例子，bool型atomic，但是它有一个不同时，原子变量更新之后，需要再执行一个操作。
+进一步，我们再看一个[C++ 中 std::atomic 类型的 compare_exchange 应该选择哪个版本？](https://www.zhihu.com/question/526769301/answer/2430798890)当中的例子，bool型atomic，但是它有一个不同点，原子变量更新之后，需要再执行一个操作。
 
 ```cpp
 State cur_state = State::Ready;
@@ -226,9 +226,3 @@ if (cur_state = State::Ready) {
 - 最后，不能像strong form那样用返回值判断的原因在于，后者存在fail spuriously。只能通过cur_state是否更新判断。
 
 最后的最后，一定要理解好```compare_exchange_xxx```的函数语义，以及其内部的操作。更新旧值，是一个看起来非常奇怪，但非常精髓的操作。
-
-### Ref
-
-[C++ 中 std::atomic 类型的 compare_exchange 应该选择哪个版本？](https://www.zhihu.com/question/526769301/answer/2430798890)</br>
-[Understanding std::atomic::compare_exchange_weak() in C++11](https://stackoverflow.com/questions/25199838/understanding-stdatomiccompare-exchange-weak-in-c11)</br>
-[compare_exchange](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
