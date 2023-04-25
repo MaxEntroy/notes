@@ -5,7 +5,7 @@
 
 namespace csapp {
 
-bool NaiveAllocator::InitInternal() {
+bool NaiveAllocator::MemInit() {
   mem_heap = new(std::nothrow) char[kMaxHeap];
   if (not mem_heap) {
     std::cerr << "Allocation returned nullptr.\n";
@@ -16,7 +16,7 @@ bool NaiveAllocator::InitInternal() {
   return true;
 }
 
-void* NaiveAllocator::Sbrk(int incr) {
+void* NaiveAllocator::MemSbrk(int incr) {
   auto* old_sbrk = mem_brk;
   if (incr < 0 or mem_brk + incr > mem_max_addr) {
     std::cerr << "Sbrk failed. Ran out of memory.\n";
