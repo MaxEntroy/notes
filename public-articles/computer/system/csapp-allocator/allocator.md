@@ -108,6 +108,19 @@ Implicit Free Lists这个方法更多的是从Free block organization角度来�
 - 但是实际分配了一个最小块，8字节。
     - 其中前4个字节for header，(3 for block size and 1 for flag)
     - 后4个字节for payload，1 for user and 3 for padding
+    
+说一下9.36
+- 每个正方形表示4个字节，表示一个字(32bit)
+- 一个chunk是8个字节，表示2个字。由于是按照double-word对齐，所以其作为最小的分配单位，表示一个chunk
+- block自然是多个chunk构成，具体的大小，在header中给出。
+
+结合9.35来说
+- 这里的画法和9.36不一样，这里一个字用一行表示。
+- 由于一个chunk是double-word对齐
+    - 所以对于任意一个block而言，第一个chunk的第一个字，用来充当header
+    - 所以，任意一个block，大小一定是8字节的整数倍，8/24/32，(1000/11000/1111000)
+    - 剩下3位可以用来编码其他信息，高29位用来编码block size(nice touch)
+    - 注意，block size是整个chunk的大小，自然包含header+payload+padding
 
 #### 9.9.7 Placing Allocated Blocks(finding a free block)
 
@@ -155,3 +168,4 @@ But how would we coalesce the previous block?
 block by inspecting its footer, which is always one word away from the start of the current block.
 
 #### 9.9.12 Putting It Together: Implementing a Simple Allocator
+
