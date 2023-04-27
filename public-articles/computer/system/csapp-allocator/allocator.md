@@ -169,3 +169,26 @@ block by inspecting its footer, which is always one word away from the start of 
 
 #### 9.9.12 Putting It Together: Implementing a Simple Allocator
 
+说下9.42这个图，这个是最终的结构
+
+- word: 代表图中的一个小块，4bytes.
+- double-workd: 代表图中的两个小块，8bytes, 1 chunk，对齐的单位，最小的分配单位
+- first padding block: The first word is an unused padding word aligned to a double-word boundary.
+- prologue block
+    - which is an 8-byte allocated block consisting of only a header and a footer.
+    - which is created during initialization and is never
+- regular blocks
+- epilogue block,which is a zero-size allocated block that consists of only a header.
+
+- The prologue and epilogue blocks are tricks that eliminate the edge conditions during coalescing.
+- 由于prologue和epilogue大小不一样，8bytes/4bytes，所以搞了一个first padding block，凑齐aligned to a double-word boundary.
+
+```cpp
+15 /* Read the size and allocated fields from address p */
+16 #define GET_SIZE(p) (GET(p) & ~0x7)
+17 #define GET_ALLOC(p) (GET(p) & 0x1)
+```
+
+这两个宏我说一下，32位，高29位为size，低3位自用，其中最低位表示是否分配。
+- 所以，GET_ALLOC好理解，拿最低位
+- GET_SIZE需要拿高29位，低3位是0x7(0000 0000 0000 0000 0000 0000 0000 0111)，这个数取反就是高29位

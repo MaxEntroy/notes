@@ -41,14 +41,13 @@ class NaiveAllocator {
   static constexpr size_t kMaxHeap = (1 << 20);
 
  private:
-  // Basic constants
   /// Word and header/foot size(bytes)
   static constexpr int kWordSize = 4;
 
   /// Double-word size(bytes)
   static constexpr int kDoubleWordSize = 8;
 
-  /// Chunk size(4K)
+  /// Extend heap by this amount(bytes)
   static constexpr int kChunkSize = (1 << 12);
 };
 
