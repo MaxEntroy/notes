@@ -14,3 +14,11 @@ function parameters.
 template <typename T, typename... Args>
 void foo(const T &t, const Args& ... rest);
 ```
+
+####  Writing a Variadic Function Template
+
+Best practice: Variadic functions are used when we know neither the number nor the types of the arguments
+we want to process. 
+
+Variadic functions are often recursive (§ 6.3.2, p. 227). The first call processes the
+first argument in the pack and calls itself on the remaining arguments.

@@ -4,7 +4,7 @@ LDFLAGS=
 LIBS= -pthread 
 
 ALL_T= main
-ALL_O= main.o
+ALL_O= variatic_template.o
 
 RM= rm -rf
 
@@ -20,4 +20,4 @@ clean:
 
 .PHONY: t clean
 
-main.o: main.cc
+variatic_template.o: variatic_template.cc
