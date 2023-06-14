@@ -20,5 +20,16 @@ void foo(const T &t, const Args& ... rest);
 Best practice: Variadic functions are used when we know neither the number nor the types of the arguments
 we want to process. 
 
-Variadic functions are often recursive (§ 6.3.2, p. 227). The first call processes the
-first argument in the pack and calls itself on the remaining arguments.
+- Variadic functions are often recursive (§ 6.3.2, p. 227). The first call processes the
+first argument in the pack and calls itself on the remaining arguments
+- A declaration for the nonvariadic version of print must be in scope when
+the variadic version is defined. Otherwise, the variadic function will recurse
+indefinitely.
+
+#### Pack Expansion
+
+Aside from taking its size, the only other thing we can do with a parameter pack is to
+expand it.
+
+Expanding a pack separates the pack into its constituent elements,
+applying the pattern to each element as it does so.
