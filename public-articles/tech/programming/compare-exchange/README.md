@@ -131,6 +131,8 @@ while(!atomic_var.compare_exchange_xxx(cur, cur + x));
 // the body of the loop is empty
 ```
 
+这里我补充下，因为二刷的时候发现有点误会。这里得强调下，对于strong form它也是会失败的，只不过weak from失败的情形多了一种，即除了常规的失败，还有fail spuriously。所有，对于typical pattern，不管strong form还是weak form，都是while-loop的写法。此时，weak form可能性能会更好，下面是解释。
+
 好，那么对于weak form/strong form，我们该选哪一种呢？
 
 标准的建议如下:
@@ -194,9 +196,11 @@ auto cur = atomic_var.load(std::memory_order_relaxed);
 atomic_var.compare_exchange_strong(cur, cur + x);
 ```
 
+这里还是二刷的补充，对比Typical Pattern A的写法，一目了然。因为此时不用每个线程都保证执行成功，所以不用while-loop.这里甚至都不用返回值，因为肯定有线程可以更新成功。即lock-free，程序不会全速前进，但至少有一个线程在前进。
+
 我们甚至都不关心返回值，因为不管返回值如何，这个原子变量肯定更新了。 
 
-进一步，我们再看一个[C++ 中 std::atomic 类型的 compare_exchange 应该选择哪个版本？](https://www.zhihu.com/question/526769301/answer/2430798890)当中的例子，bool型atomic，但是它有一个不同点，原子变量更新之后，需要再执行一个操作。
+进一步，我们再看一个[C++ 中 std::atomic 类型的 compare_exchange 应该选择哪个版本？](https://www.zhihu.com/question/526769301/answer/2430798890)当中的例子，bool型atomic，但是它有一个不同点，原子变量更新之后，需要再执行一个操作。即，哪一个线程完成了更新，哪一个线程来操作。
 
 ```cpp
 State cur_state = State::Ready;
@@ -211,14 +215,15 @@ if (state_.compare_exchange_strong(cur_state, State::Closing)) {
 
 ```cpp
 State cur_state = State::Ready;
-while (!state_.compare_exchange_strong(cur_state, State::Closing) and cur_state == State::Ready);
+while (!state_.compare_exchange_weak(cur_state, State::Closing) and cur_state == State::Ready);
 if (cur_state = State::Ready) {
   CloseAndCleanUp();
 }
 ```
 
 这个代码看起来就没有那么直观了
-- 首先，while-loop没什么好说，同时条件判断加上了对于当前原子变量是否更新的判断。
+- 首先，while-loop，这是因为weak form因为fail spuriously的原因，必须搭配while-loop使用。否则，可能所有线程都更新不成功。
+  - 但此时会导致一个问题，到底是哪个线程真正完成了更新呢，需要通过别的形式判断。
   - 如果旧值(cur_state)没有更新，就证明是fail spuriously,可以继续更新。
   - 如果旧值更新了，那证明，其余线程更新了，此时cur_state也会被原子变量重新加载，更新为当前值。跳出循环，不更新。
 - 其次，如果当前线程更新，那么cur_stage不会被重新加载，可以保证是当前线程的更新，从而可以继续执行对应的函数。
@@ -226,3 +231,9 @@ if (cur_state = State::Ready) {
 - 最后，不能像strong form那样用返回值判断的原因在于，后者存在fail spuriously。只能通过cur_state是否更新判断。
 
 最后的最后，一定要理解好```compare_exchange_xxx```的函数语义，以及其内部的操作。更新旧值，是一个看起来非常奇怪，但非常精髓的操作。
+
+同时，记住如下结论
+- Typical Pattern A使用weak form with while loop
+- Typical Pattern B使用strong form without while loop
+- weak form只能搭配while-loop使用(因为fail spuriously的原因)，strong from可以搭配while-loop使用，也可以不搭配。
+- strong form也会更新失败，所以Typical Pattern A如果使用strong form，也需要搭配while-loop。只不过这种场景weak form的性能可能会更好，所以使用weak form with while loop.
