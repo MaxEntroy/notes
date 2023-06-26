@@ -33,3 +33,15 @@ expand it.
 
 Expanding a pack separates the pack into its constituent elements,
 applying the pattern to each element as it does so.
+
+### Understand template type duction
+
+#### Case1: ParamType is a Reference or Pointer, but not a Universal Reference
+
+- If expr's type is a reference, ignore the reference part.
+- Then pattern-match expr's type against ParamType to determine T.
+
+#### Case2: ParamType is a Universal Reference
+
+- If expr is an lvalue, both T and ParamType are deduced to be lvalue reference(T&).
+- If expr is an rvalue, the normal rules apply.
