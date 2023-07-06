@@ -59,10 +59,32 @@ void test() {
 
 namespace cps {
 
+void test() {
+  auto sum_of_squares_direct_style = [](int lhs, int rhs) {
+    return lhs * lhs + rhs * rhs;
+  };
+  std::cout << sum_of_squares_direct_style(3, 4) << std::endl;
+
+  auto add_cps = [](int lhs, int rhs, auto&& continuation) {
+    return continuation(lhs + rhs);
+  };
+  auto mul_cps = [](int lhs, int rhs, auto&& continuation) {
+    return continuation(lhs * rhs);
+  };
+  auto sum_of_squares_cps_style = [&](int lhs, int rhs) {
+    return mul_cps(lhs, lhs, [&](int lhs_sum){
+        return mul_cps(rhs, rhs, [&](int rhs_sum){
+            return add_cps(lhs_sum, rhs_sum, [&](int ans) { return ans;});
+        });
+    });
+  };
+  std::cout << sum_of_squares_cps_style(3, 4) << std::endl;
+}
 
 }  // namespace cps
 
 int main(void) {
   tail_call::test();
+  cps::test();
   return 0;
 }
