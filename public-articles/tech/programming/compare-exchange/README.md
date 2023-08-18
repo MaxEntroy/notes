@@ -235,5 +235,5 @@ if (cur_state = State::Ready) {
 同时，记住如下结论
 - Typical Pattern A使用weak form with while loop
 - Typical Pattern B使用strong form without while loop
-- weak form只能搭配while-loop使用(因为fail spuriously的原因)，strong from可以搭配while-loop使用，也可以不搭配。
+- weak form只能搭配while-loop使用(因为fail spuriously的原因)，strong from可以搭配while-loop使用，也可以不搭配。更进一步，weak form返回失败的情形，可能是真的不一致(atomic变量的值在上一次读取和当前发生了变化)，也有可能是假的不一致(即值是一致的，但是返回了false)，由于返回失败的情形我们不能判断真假，所以只能依赖它返回true的情形，这就是为什么它一定要搭配while-loop
 - strong form也会更新失败，所以Typical Pattern A如果使用strong form，也需要搭配while-loop。只不过这种场景weak form的性能可能会更好，所以使用weak form with while loop.
