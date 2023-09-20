@@ -87,7 +87,7 @@ UBT就是对于用户长序列建模的数据结构，这个是核心。这个�
 - After hard search, the length of user behaviors(items) could be reduced from over ten thousands to hundred.
 - Thus the storage pressure of lifelong behaviors in online system could be released.
 
-<img width="500"  src="img/hard search.png"/>
+<img width="500"  src="img/hard-search.png"/>
 
 整个长序列的模型是UBT，对于每一次请求来说。
 - uid充当第一级key
