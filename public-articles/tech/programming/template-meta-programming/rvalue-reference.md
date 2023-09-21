@@ -126,12 +126,12 @@ void test() {
 
 ```cpp
 template<typename T>
-typename remove_reference<T>::type&& move(T&& t) {
-  return static_cast<typename remove_reference<T>::type&&>(t);
+typename std::remove_reference<T>::type&& move(T&& t) {
+  return static_cast<typename std::remove_reference<T>::type&&>(t);
 }
 ```
 
-当我们调用```std::move(rr)```时，类型推断的结果是[T = int]，从而返回```T&&```类型，既然返回的是引用类型,那么我们```Bar```中所绑定的变量，便不是原始值的副本，从而对其的修改可以反映到原始值上。
+当我们调用```std::move(rr)```时，类型推断的结果是[T = int&]，最终返回```T&&```类型，既然返回的是引用类型,那么我们```Bar```中所绑定的变量，便不是原始值的副本，从而对其的修改可以反映到原始值上。
 
 所以，```std::move```的好处在于，即产生了右值，又保持了其引用类型的能力。而```GetRValue```则只能产生右值，而不能保证引用类型。
 
@@ -139,8 +139,8 @@ typename remove_reference<T>::type&& move(T&& t) {
 
 ```cpp
 template<typename T>
-typename remove_reference<T>::type& move(T&& t) {
-  return static_cast<typename remove_reference<T>::type&>(t);
+typename std::remove_reference<T>::type& move(T&& t) {
+  return static_cast<typename std::remove_reference<T>::type&>(t);
 }
 ```
 
@@ -212,9 +212,24 @@ void test() {
 
 一个简单的解决办法是，再提供一个new wrapper，来完成对于第二个形参的强制转换。这么做当然可以，但是不优雅。因为
 - wrapper的参数是universal reference，表明其可以接受lvalue/rvalue reference，是一种通用的类型。
-- 但是函数内部却无法自动的保持形参的左右值属性，而是需要根据实际调用的函数，来支持特定版本的转换，实现不通用。
+- 但是函数内部却无法自动的保持实参的左右值属性，而是需要根据实际调用的函数，来支持特定版本的转换，实现不通用。
 
-```std::forward```就是为了解决这个问题而存在的，它可以保持参数在传递过程中的左右值属性。我们再看下面的实现
+```std::forward```就是为了解决这个问题而存在的，它可以保持参数(实参)在传递过程中的左右值属性。因为形参都是左值，需要转化为其对应的实参的左右值属性。
+
+(2023.09 update)这句话怎么理解？
+- 首先，实参可能是左值，也可能是右值。
+- 但是，形参一定是左值，不管它是一个左值引用，还是右值引用。一个变量是左值还是右值，和它是什么类型没有关系。
+  - 这里主要的问题就是```T&& rr = sum(1, 2);```这种表达。右值引用自然可以绑定右值。
+  - 但右值引用```rr```本身是一个左值。这就导致参数继续向下传递时，丢失了实参的右值属性。
+  - 此处并不能使用```std::move```，因为对于```T& r = foo;```左值引用，实参是左值，不能转化为右值引用。
+  - 所以，需要一个工具，可以将这个左值形参(左值引用或者右值引用)，**自动保持和其实参的左右值类型一致**，即：
+    - 形参是左值，类型是左值引用，转化后，还是左值引用。
+    - 形参是左值，类型是右值引用，转化后，变成右值引用。
+    - 注意，这里再次强调，这个形参不管其是左值引用还是右值引用，它都是一个左值。
+    - 所以，我们要将它的左右值属性，转化为其绑定值的左右值属性。
+    - 从而可以继续向下传递。
+
+我们再看下面的实现
 
 ```cpp
 template<typename F, typename T1, typename T2>
@@ -240,12 +255,11 @@ void test() {
 }
 ```
 
-(2023.09.update)很明显，```wrapper3```自动的保持了实参的左右值属性，从而保证实现的通用性。
-- 因为形参都是左值，实参可以是左值，或者右值。
-- 没有```std::forward```之前，相当于形参屏蔽了实参的左右值属性，丢失了这部分信息，导致之后的函数调用不通用，即无法调用形参是右值引用的函数。
-- 如果使用```std::move```可以转为为右值，但是如果实参是左值，形参又把它转化成了右值，亦无法调用形参是左值引用的函数。
+关于```std::forward```，cpp-primer有如下表达：
+- Using ```std::forward``` to Preserve Type Information in a Call
+- ```std::forward``` returns an rvalue reference to that explicit argument type. 
+  - That is, the return type of ```forward<T>``` is T&&.
 
-所以，```std::forward```在函数嵌套调用的过程中，保证了实参的左右值属性。
 
 至于```std::move```为什么做不到，我们需要对比下二者的实现
 
