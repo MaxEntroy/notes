@@ -147,6 +147,14 @@ typename std::remove_reference<T>::type& move(T&& t) {
 std::move本质产生的是引用类型，它绑定的虽然是```rr```，但此时```rr```已经是```sum```结果的临时变量。不能写成上面的原因在于，```rr```虽然是一个左值，但其绑定值是右值。
 同理，```move```这里产生的引用类型，需要绑定右值，只能是右值引用。
 
+换句话说，如果返回了```T&```，语意上并不会说明这是一个可以被窃取资源的对象，相当于改变了value category. ```T&&```在保证引用类型的同时，没有改变value category.
+
+最后，我们看下```std::move```的官方说明：
+>std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
+In particular, std::move produces an xvalue expression that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
+
+所以，我理解使用```std::move```的场景就是，如果语意上这是个 xvalue，那么我们就可以使用```std::move```来匹配其语意上的value category.
+
 ### why std::forward?
 
 既然我们可以通过```std::move```获得右值引用，那么为什么还需要std::forward?
@@ -312,6 +320,25 @@ void g(int&& v1, int& v2) {
 ```std::forward```产生了xvalue，具有identity的能力，自然左值引用可以绑定；同时具有moveable from的能力，右值引用可以绑定。注意，这里其实再说右值引用其实就不对了，
 这里应该说成是可以绑定moveable from的对象的引用。
 
+最后，再看一下```std::forward```的官方说明：
+>forwards the argument to another function with the value category it had when passed to the calling function.
+
+对比一下，```std::move```和```std::forward```都产生xvalue，但是前者只强调moveable from这个属性。后者同时强调identity和moveable from这两个属性，所以它通用，那么自然可以配合universal reference来接受左值实参，和右值实参。
+
+```c++
+template<class T>
+void wrapper(T&& arg)
+{
+    // arg is always lvalue
+    foo(std::forward<T>(arg)); // Forward as lvalue or as rvalue, depending on T
+}
+```
+
+这个就是它最经典的例子，融化在血液中
+- universal reference
+- std::forward
+- that makes universal reference a forwarding reference that preserve the **value category** of a function argument.
+
 ### std::forward实现
 
 关于std::forward的实现我们多讨论一点，考虑下面两种std::forward实现
@@ -363,4 +390,5 @@ void test() {
 [Value categories](https://en.cppreference.com/w/cpp/language/value_category)<br>
 [std::move](https://en.cppreference.com/w/cpp/utility/move)<br>
 [std::forward](https://en.cppreference.com/w/cpp/utility/forward)<br>
-[What are rvalues, lvalues, xvalues, glvalues, and prvalues?](https://stackoverflow.com/questions/3601602/what-are-rvalues-lvalues-xvalues-glvalues-and-prvalues)
+[What are rvalues, lvalues, xvalues, glvalues, and prvalues?](https://stackoverflow.com/questions/3601602/what-are-rvalues-lvalues-xvalues-glvalues-and-prvalues)<br>
+[Forwarding references](https://en.cppreference.com/w/cpp/language/reference#Forwarding_references)
