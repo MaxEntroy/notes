@@ -319,7 +319,10 @@ void g(int&& v1, int& v2) {
 最后，再看一下```std::forward```的官方说明：
 >forwards the argument to another function with the value category it had when passed to the calling function.
 
-对比一下，```std::move```和```std::forward```都产生xvalue，但是前者只强调moveable from这个属性。后者同时强调identity和moveable from这两个属性，所以它通用，那么自然可以配合universal reference来接受左值实参，和右值实参。
+对比一下，```std::move```和```std::forward```
+- 都产生xvalue
+  - 但是前者只能生成moveable from这个属性，所以下层function只能使用右值引用参数，来接受右值实参。
+  - 后者可以生成identity和moveable from这两个属性。所以它通用，下层function可以使用左值引用参数，后者右值引用参数，来接受对应的左值实参，和右值实参。
 
 ```c++
 template<class T>
