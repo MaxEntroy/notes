@@ -1,5 +1,23 @@
 ### Item1: Understand template type duction
 
+We can think of a function template as looking like this:
+
+```cpp
+template<typename T>
+void f(ParamType param)
+```
+
+A call can look like this:
+
+```cpp
+f(expr);
+```
+
+During compilation, compilers use ```expr``` to deduce two types: one for ```T``` and one for  ```ParamType```. These types are frequently different, because ```ParamType``` often contains adornments, e.g., const or reference qualifiers.
+
+- It's natural to expect that the type deduced for ```T``` is the same as the type of the argument passed to the function. But it doesn't always work that way.
+- The type deduced for ```T``` is depedent not just on the type of expr, but also on the form of ```ParamType```.
+
 #### Case1: ParamType is a Reference or Pointer, but not a Universal Reference
 
 - If expr's type is a reference, ignore the reference part.
@@ -7,10 +25,55 @@
 
 ps: If param were a pointer(or a pointer to const) instead of a reference, things would work essentially the same way.
 
+```cpp
+template<typename T>
+void f(T& param);
+
+int x = 27;
+const int cx = x;
+const int& rx = x;
+
+f(x);  // x is an int, T is int, ParamType is int&
+f(cx); // cx is a const int, T is const int, ParamType is const int&
+f(rx); // rx is a reference to x as a const int, T is const int, ParamType is const int&
+```
+
+If we change the type of ParamType from ```T&``` to ```const T&```, things change a little, but not in any surprising way.There is no longer a need for const to be deduced as part of ```T```
+
+```cpp
+template<typename T>
+void f(const T& param);
+
+int x = 27;
+const int cx = x;
+const int& rx = x;
+
+f(x);  // x is an int, T is int, ParamType is int&
+f(cx); // cx is a const int, T is int, ParamType is const int&
+f(rx); // rx is a reference to x as a const int, T is int, ParamType is const int&
+
 #### Case2: ParamType is a Universal Reference
+
+They behave differently when lvalue arguments are passed in.
 
 - If expr is an lvalue, both T and ParamType are deduced to be lvalue reference(T&).
 - If expr is an rvalue, the normal rules apply.
+
+```cpp
+template<typename T>
+void f(T&& param); // param is now a universal reference
+
+int x = 27;
+const int cx = x;
+const int& rx = x;
+
+f(x);  // x is an int, T is int&, ParamType is int&
+f(cx); // cx is a const int, T is const int&, ParamType is const int&
+f(rx); // rx is a reference to x as a const int, T is const int&, ParamType is const int&
+f(27); // 27 is a rvalue(int), T is int, ParamType is int&&
+```
+
+The key point here is that the type deduction rules for universal reference parameters are different from those for parameters that are lvalue references or rvalue references.
 
 #### Case3: ParamType is Neither a Pointer nor a Reference
 
