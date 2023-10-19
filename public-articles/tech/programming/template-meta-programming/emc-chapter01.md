@@ -38,7 +38,7 @@ f(cx); // cx is a const int, T is const int, ParamType is const int&
 f(rx); // rx is a reference to x as a const int, T is const int, ParamType is const int&
 ```
 
-If we change the type of ParamType from ```T&``` to ```const T&```, things change a little, but not in any surprising way.There is no longer a need for const to be deduced as part of ```T```
+If we change the type of ParamType from ```T&``` to ```const T&```, things change a little, but not in any surprising way. There is no longer a need for const to be deduced as part of ```T```
 
 ```cpp
 template<typename T>
@@ -51,6 +51,7 @@ const int& rx = x;
 f(x);  // x is an int, T is int, ParamType is int&
 f(cx); // cx is a const int, T is int, ParamType is const int&
 f(rx); // rx is a reference to x as a const int, T is int, ParamType is const int&
+```
 
 #### Case2: ParamType is a Universal Reference
 
@@ -77,19 +78,74 @@ The key point here is that the type deduction rules for universal reference para
 
 #### Case3: ParamType is Neither a Pointer nor a Reference
 
-When ParamType is neither a pointer nor a reference, we’re dealing with pass-by-
-value:
+When ParamType is neither a pointer nor a reference, we’re dealing with pass-by-value:
 
 - As before, if expr’s type is a reference, ignore the reference part.
 - If, after ignoring expr’s reference-ness, expr is const, ignore that, too.
 
+Hence,
+
+```cpp
+template<typename T>
+void f(T param);  // param is now pass by value
+
+int x = 27;
+const int cx = x;
+const int& rx = x;
+
+f(x);  // x is an int, T is int, ParamType is int
+f(cx); // cx is a const int, T is const int, ParamType is int
+f(rx); // rx is a reference to x as a const int, T is int, ParamType is int
+```
+
+- It is importance to recognize that const is ignored only for by-value parameters.
+- As we have seen, for parameters that are references-to- or pointers-to- const, the constness is preserved during type deduction.
+
+```cpp
+template<tyname T>
+void f(param);  
+
+const char* const ptr = "Fun with pointers."  // ptr is const pointer to const object
+
+f(ptr);  // pass arg of type const char* const
+```
+
+- The constness of what ptr points to is preserved during type deduction, but the constness of ptr itself is ignored.
+- The type deduced for params will be ```const char*```
+
 #### Case4: Array Arguments.
 
-Be careful:  array-to-pointer decay rule
+- It's that array types are different from pointer types.
 
-- The type of an array that’s passed to a template function **by value** is deduced to be a pointer type.
+```cpp
+const char name[] = "J, P. Briggs.";  // name's type is const char[13]
 
-Interestingly, the ability to declare references to arrays enables creation of a template that deduces the number of elements that an array contains
+const char* ptrToName = name;  // array decays to pointer
+```
+ 
+Because of the array-to-pointer decay rule, the code compiles.
+
+```cpp
+template<typename T>
+void f(T param);  // template with by-value parameter
+
+f(name);  // what types are deduced for T and param?
+```
+
+Because of the array-to-pointer decay rule, the type of an array that’s passed to a template function **by value** is deduced to be a pointer type.
+
+But now comes a curve ball. Althrough functions can't declare parameters that are truly arrays(because of the array-to-pointer-decay rule), they can declare paremeters that are references to arrays. 
+
+```cpp
+template<typename T>
+void f(T& param);  // template with by-reference parameter
+
+f(name);  // pass array to f
+```
+
+the type deduced for ```T``` is the actual type of the array, ```T``` is deduced to be ```const char[13]``` and ```ParamType``` is ```const char (&)[13]```(reference to this array)
+
+Interestingly, the ability to declare references to arrays enables creation of a template that deduces the number of elements that an array contains:
 
 所谓的编译期计算，其本质就是借助参数推到完成计算。
 
