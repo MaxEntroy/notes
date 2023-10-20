@@ -134,7 +134,15 @@ f(name);  // what types are deduced for T and param?
 
 Because of the array-to-pointer decay rule, the type of an array that’s passed to a template function **by value** is deduced to be a pointer type.
 
-But now comes a curve ball. Althrough functions can't declare parameters that are truly arrays(because of the array-to-pointer-decay rule), they can declare paremeters that are references to arrays. 
+But now comes a curve ball. Althrough functions can't declare parameters that are truly arrays(because of the array-to-pointer-decay rule), 
+
+```cpp
+void myFunc(int param[]);
+
+void myFunc(int* param);  // same function as above
+```
+
+they can declare paremeters that are references to arrays. 
 
 ```cpp
 template<typename T>
@@ -145,50 +153,51 @@ f(name);  // pass array to f
 
 the type deduced for ```T``` is the actual type of the array, ```T``` is deduced to be ```const char[13]``` and ```ParamType``` is ```const char (&)[13]```(reference to this array)
 
-Interestingly, the ability to declare references to arrays enables creation of a template that deduces the number of elements that an array contains:
-
-所谓的编译期计算，其本质就是借助参数推到完成计算。
-
-我总结下，如果实参是数组
-1. 形参传值，推导的是指针类型
-2. 形参传引用，推到的是数组类型，从而计算数组大小
-3. 形参传引用 + 模板非类型参数，推到的是数组类型，非类型参数推到为数组大小
+Interestingly, the ability to declare **references to arrays** enables creation of a template that deduces the number of elements that an array contains:
 
 ```cpp
-template<typename T>
-void goo(T& param) {}
-
-// 这里增加非类型模板参数的目的是，可以进行推到，也即编译期计算
-// T (&)[] 这个是啥类型呢？这个是绑定数组类型T [N]的左值引用类型
 template<typename T, std::size_t N>
-constexpr std::size_t arraySize(T (&)[N]) noexcept {
+constexpr std::size_t arrSize(T (&)[N]) noexcept {
   return N;
 }
 ```
 
+```constexpr``` makes its result available during compilation. That makes it possible to declare an array
+with the same number of elements as a second array whose size is computed from a braced initializer.
+
+```cpp
+int keyVals[] = {1, 3, 5, 7, 9};
+
+int mappedVals[arrSize(keyVals)];
+```
+
+The so-called compile-time computation is actually done with the help of type deduction.
+
 #### Case5: Function Arguments
 
-Function types can also decay into function pointers.
+Arrars are not the only things in c++ that can decay in to pointers. Function types can decay into function
+pointers, everything we've discussed regarding type deduction for arrays applies to type deduction for functions and their decay into function pointers.
 
-函数这里，我觉得和数组有点不同。对于数组而言，形参传值传引用，推导出来的类型不一样。ParamType自然也不一样。
-对于函数，我觉得推到的类型是一样的。只不过ParamType不一样，后者是个引用。
+```cpp
+void someFunc(int, double); // type is void(int, double)
 
-- 数组类型
+template<typename T>
+void f1(T param);   // template with by-value parameter
 
-| 实参类型 | T | ParamType |
-| :-----:| :----: | :----: |
-| 传值 | 指针类型 | 指针类型 |
-| 传引用 | 数组类型 | 绑定数组类型的引用 |
+template<typename T>
+void f2(T& param);  // template with by-reference parameter
 
-- 函数类型
+f1(someFunc)  // type deduced for T is (*)(int, double) and ParamType is (*)(int, double)
 
-| 实参类型 | T | ParamType |
-| :-----:| :----: | :----: |
-| 传值 | 指针类型 | 指针类型 |
-| 传引用 | 指针类型 | 绑定指针类型的引用 |
+f2(someFunc)  // type deduced for T is (*)(int, double) and ParamType is (&)(int, double)
+```
 
 #### Things to Remember
 - During template type deduction, arguments that are references are treated as non-references, i.e., their reference-ness is ignored.
 - When deducing types for universal reference parameters, lvalue arguments get special treatment.
 - When deducing types for by-value parameters, const and/or volatile arguments are treated as non-const and non-volatile.
 - During template type deduction, arguments that are array or function names decay to pointers, unless they’re used to initialize references.
+
+### Item2 Understand auto type deduction.
+
+auto type deduction is template type deduction. That's true, there is a direct mapping between template type deduction and auto type deduction.
