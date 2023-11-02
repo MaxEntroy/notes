@@ -37,11 +37,20 @@ Bar(rr);  // illegal
 这其中，第2点和第3点是对绑定值的要求，即绑定值的类型要匹配，绑定值的左右值属性需要满足。
 
 此时，我们再看上面的代码，
-- 对于```Bar(int&& rr)```来说，形参是一个引用类型，绑定整型变量，绑定右值变量
 - 对于```int&& rr = std::move(val)```来说，rr作为实参，不管他是什么类型，它肯定是一个左值。
+- 对于```Bar(int&& rr)```来说，形参是一个引用类型，绑定整型变量，绑定右值变量
 - 所以，形参需要绑定右值，而实参是一个左值，无法绑定，编译失败
 
-此时，我们再回到引子当中的问题，为什么看似一样的类型，实际却不匹配？因为对于```T&&```类型，我们不能从形式上的类型判断实参和形参类型是否一致，而是要从右值引用类型的语义判断二者是否一致。
+此时，我们再回到引子当中的问题，为什么看似一样的类型，实际却不匹配？因为value category无法体现在类型声明中。
+
+这里其实有一个反直觉的地方，即对于```int&& rr = std::move(val)```来说，rr的绑定值是rvalue，但自身是lvalue。反直觉的地方在于，我们一般认为引用和被绑定的变量融为一体。
+- Declares a named variable as a reference, that is, an alias to an already-existing object or function.
+- 即引用是个别名，本质是同一个东西。
+
+但是，```T&& ref```的问题在于，ref和其被绑定的变量，虽然value type是一致的，但是value category不同。这点和被绑定变量发生了分离，看起来别名的属性减弱了。
+后续的std::move/std::forward的部分作用就是让ref的value category和其绑定值的value category一致。
+
+换句话说，虽然绑定值是rvalue，可以stealing。但是不能通过ref进行stealing。除非进行cast.
 
 ### why std::move?
 
