@@ -48,7 +48,7 @@ Bar(rr);  // illegal
 - 即引用是个别名，本质是同一个东西。
 
 但是，```T&& ref```的问题在于，ref和其被绑定的变量，虽然value type是一致的，但是value category不同。这点和被绑定变量发生了分离，看起来别名的属性减弱了。
-后续的std::move/std::forward的部分作用就是让ref的value category和其绑定值的value category一致。
+后续的std::move/std::forward的作用就是让ref的value category和其绑定值的value category一致。
 
 换句话说，虽然绑定值是rvalue，可以stealing。但是不能通过ref进行stealing。除非进行cast.
 
@@ -163,6 +163,8 @@ std::move本质产生的是引用类型，它绑定的虽然是```rr```，但此
 In particular, std::move produces an xvalue expression that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
 
 所以，我理解使用```std::move```的场景就是，如果语意上这是个 xvalue，那么我们就可以使用```std::move```来匹配其语意上的value category.
+
+(2023.11 update)从语意上来说，```std::move```一定是要stealing的，其参数是一个universal reference，可以绑定 lvalue，也可以绑定rvalue。但是，最后都转化成了rvalue ref。对于rvalue来说，只是让ref和binding value的value category保持了一致。但是对于lvalue来说，确实发生了变化。但是可以这么做的原因是在于，此时的lvalue具备可以被stealing的能力，才能这么做。此处，也可以看出其和```std::forward```的区别，后者参数也是一个universal reference，但它要做的只是让返回值的value category和binding value保持一致，即binding value是lvalue，那么返回值lvalue ref，不具备stealing能力。binding value是rvalue，那么返回值是rvalue ref，具备stealing能力。
 
 ### why std::forward?
 
@@ -322,8 +324,8 @@ void g(int&& v1, int& v2) {
 }
 ```
 
-```std::forward```产生了xvalue，具有identity的能力，自然左值引用可以绑定；同时具有moveable from的能力，右值引用可以绑定。注意，这里其实再说右值引用其实就不对了，
-这里应该说成是可以绑定moveable from的对象的引用。
+```std::forward```产生了xvalue，具有identity的能力，自然左值引用可以绑定；同时具有moveable from的能力，右值引用可以绑定。注意，这里其实再说右值引用其实就不对了，这里应该说成是可以绑定moveable from的对象的引用。
+(2023.11 update:我这里之前的疑问是，对于std::forward的作用：让ref的value categtory和binding value保持一致这个能力，我是清楚的。但是上述函数的写法有一个问题是，它产的引用是一个temp variable，T& ref = std::forward<T>(param)，这个表达式我理解是不对的。因为std::forward<T>(param)这个表达式的value type是T&，没问题。但它自己的value category肯定是rvalue，所以无法绑定。学习完value category之后，知道了这么做可以，因为它产生的是xvalue.)
 
 最后，再看一下```std::forward```的官方说明：
 >forwards the argument to another function with the value category it had when passed to the calling function.
@@ -409,6 +411,10 @@ void test() {
 从最佳实践来说
 - ```std::forward```的使用场景相对固定，和universal reference搭配使用，构成forwarding reference
 - ```std::move```则在强调moveable from属性的场景，均可以使用。
+
+(2023.11 update)
+- 宏观来说```std::move/std::forward```这两个cast的目的是为了让ref的value category和其binding value的value category保持一致。```std::forward```完全是这个作用，```std::move```则是希望保持stealing semantics.
+- 微观来说，这两个cast都产生xvalue，同时具备identity和moveable from的属性，尤其使得```std::forward```作为中转工具，可以在模板函数中将参数向下传递，同时保留其value category.
 
 ### Ref
 
