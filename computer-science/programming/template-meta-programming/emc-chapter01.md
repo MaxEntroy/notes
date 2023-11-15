@@ -200,4 +200,74 @@ f2(someFunc)  // type deduced for T is (*)(int, double) and ParamType is (&)(int
 
 ### Item2 Understand auto type deduction.
 
-auto type deduction is template type deduction. That's true, there is a direct mapping between template type deduction and auto type deduction.
+**auto type deduction is template type deduction**. That's true, there is a direct mapping between template type deduction and auto type deduction.
+
+In item1, template type deduction is explained using this general function template:
+
+```cpp
+template<typename T>
+void f(ParamType param);
+```
+
+and this general call:
+
+```cpp
+f(expr)
+```
+
+In the call to ```f```, compilers use ```expr``` to deduce types for ```T``` and ```ParamType```.
+
+When a variable is declared using ```auto```, ```auto``` plays the role of ```T``` in template, and the type specifier for the variable acts as ParamType.
+
+```cpp
+auto x = 27;
+
+template<typename T>
+void func_for_x(T param);  // conceptual template for deducing x's type
+
+func_for_x(27); // conceptual call
+```
+
+```cpp
+const auto cx = x;
+
+template<typename T>
+void func_for_cx(const T cx);  // conceptual template for deducing cx's type
+
+func_for_cx(x);  // // conceptual call
+```
+
+```cpp
+const auto& rx = x;
+
+template<typename T>
+void func_for_rx(const T& rx);  // conceptual template for deducing rx's type
+
+func_for_rx(x);  // conceptual call
+```
+
+**Deducing types for auto is almost deducing types for template.**
+
+- Item1 divides template type deduction into 3 cases, based on the characteristics of ```ParamType```.
+- There are also 3 cases for auto type deduction, the type specifier take place of the ```ParamType```.
+  - Case 1: The type specifier is a pointer or reference, not a universal reference.
+  - Case 2: Tye type specifier is a universal reference.
+  - Case 3: The type specifier is neither a pointer nor a reference.
+
+We've already seen examples of cases 1 and 3:
+
+```cpp
+auto x = 27;
+const auto cx = x;
+const auto& rx = x;
+```
+
+Case 2 works as you'd expected:
+
+```cpp
+auto&& uref1 = x;  // x is int and lvalue uref1's type is int&
+
+auto&& uref2 = cx;  // cx is int and lvalue, uref2's type is int&
+
+auto&& uref3 = 27;  // 27 is int and rvalue, uref3's type is int&&
+```
