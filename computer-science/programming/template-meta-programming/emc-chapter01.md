@@ -267,7 +267,30 @@ Case 2 works as you'd expected:
 ```cpp
 auto&& uref1 = x;  // x is int and lvalue uref1's type is int&
 
+template<typename T>
+void func_for_uref1(T&& uref1);
+func_for_uref1(x);
+
 auto&& uref2 = cx;  // cx is int and lvalue, uref2's type is int&
+template<typename T>
+void func_for_uref2(T&& uref2);
+func_for_uref2(cx);
 
 auto&& uref3 = 27;  // 27 is int and rvalue, uref3's type is int&&
+template<typename T>
+void func_for_uref3(T&& uref3);
+func_for_uref3(27);
 ```
+
+The treatment of braced initializers is the only way in which auto type deduction and template type deduction differ.
+```cpp
+auto x = {11, 23, 9}; // x's type is std::initializer_list<int>
+```
+
+#### Things to remember
+
+- auto type deduction is usually the same as template type deduction, but auto type deduction assumes that a braced initializer represents 
+```std::initializer_list```, and template type deduction doesn't.
+- auto in a function return type or a lambda parameter implies template type deduction, not auto type deduction.
+
+### Item3: Understand decltype
