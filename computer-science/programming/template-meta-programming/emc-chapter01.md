@@ -294,3 +294,34 @@ auto x = {11, 23, 9}; // x's type is std::initializer_list<int>
 - auto in a function return type or a lambda parameter implies template type deduction, not auto type deduction.
 
 ### Item3: Understand decltype
+
+```decltype``` tells you the name's or the expression's type.
+
+**In c++11, the primary use of ```decltype``` is declaring function templates where the function's return type depends on its parameter types.**
+
+```
+template<typename Container, typename Index>
+auto authAndAssess(Container& c, Index i)
+  -> decltype(c[i]) {
+    authenticateUser();
+    return c[i];
+  }
+```
+
+- Here, use of ```auto``` before the function name has nothing to do with type deduction.
+- Rather, it indicates that c++11's trailing type syntax is being used.
+
+这里我说一下，在c11中，此处用auto，并不能发生模板推导，这也是为什么一定要用```decltype```，因为此时的返回值类型依赖数组元素，没法直接推导，只能用```decltype```。
+所以，此时```decltype```的使用场景是很清晰的，即在模板当中，返回值依赖模板参数类型的情况，使用```decltype```。本质还是```auto```的能力有所欠缺。
+
+到了c++14，情况有所变化，上面的场景可以直接使用```auto```进行type deduction. 因此，代码变成了下面样子：
+
+```cpp
+template<typename Container, typename Index>
+auto authAndAssess(Container& c, Index i) {
+  authenticateUser();
+  return c[i];
+}
+
+// auto ret = c[i];
+```

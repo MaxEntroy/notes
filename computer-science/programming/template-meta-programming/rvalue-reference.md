@@ -166,6 +166,8 @@ In particular, std::move produces an xvalue expression that identifies its argum
 
 (2023.11 update)从语意上来说，```std::move```一定是要stealing的，其参数是一个universal reference，可以绑定 lvalue，也可以绑定rvalue。但是，最后都转化成了rvalue ref。对于rvalue来说，只是让ref和binding value的value category保持了一致。但是对于lvalue来说，确实发生了变化。但是可以这么做的原因是在于，此时的lvalue具备可以被stealing的能力，才能这么做。此处，也可以看出其和```std::forward```的区别，后者参数也是一个universal reference，但它要做的只是让返回值的value category和binding value保持一致，即binding value是lvalue，那么返回值lvalue ref，不具备stealing能力。binding value是rvalue，那么返回值是rvalue ref，具备stealing能力。
 
+所以，从产生的结果来说，虽然```std::move```和```std::forward```都产生xvalue，但是前者只能保留moveable from的属性，而后者，可以保持moveable from的属性，也可以保持identity的属性，至于到底保持哪一个属性，和其binding value 保持一致。
+
 ### why std::forward?
 
 既然我们可以通过```std::move```获得右值引用，那么为什么还需要std::forward?
