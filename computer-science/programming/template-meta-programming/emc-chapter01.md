@@ -325,3 +325,70 @@ auto authAndAssess(Container& c, Index i) {
 
 // auto ret = c[i];
 ```
+
+根据item2的内容，这里会进行template deduction，而不是auto deduction.既然如此，根据 item1，case3的情况，
+很容易理解，这里发生的是类似如下的模板推导
+
+```cpp
+template<typename T>
+void f(T ret);
+
+f(c[i]);
+```
+
+ignore the reference part, ignore the const part.
+
+所以，对于下面的代码
+
+```cpp
+std::vector<int> v;
+authAndAssess(v, 0) = 5;  // this won't compile
+```
+
+- Here, v[0] returns an int&
+- but auto return type deduction for ```authAndAssess``` will strip off the reference, thus yielding a return type of ```int```.
+- That ```int```, being the return value of a function, is a rvalue.
+
+
+To get ```authAndAssess``` to work as we'd like, we need to use ** ```decltype``` type deduction ** for its return type. i.e., to specify that ```authAndAssess``` should return exactly the same type that the expression ```c[i]``` returns.
+
+这里简单总结下
+- ```decltype```这个东西主要和```auto```配合使用，实现```decltype``` type deduction
+- 这个东西存在的原因是
+  - 由于template type deduction的case3存在ignore the reference part, ignore the const part的情形
+  - 类型推导会丢失reference qualifier
+
+```cpp
+template<typename Container, typename Index>
+decltype(auto) authAndAssess(Container& c, Index i) {
+  authenticateUser();
+  return c[i];
+}
+
+// auto ret = c[i];
+```
+
+这里有一些特殊之处
+- Applying ```decltype``` to a name yields the declared type for that name.
+- For lvalue expresion more complicated that names, however, ```decltype``` generally ensures that the
+type reported is an lvalue reference.
+
+```cpp
+decltype(auto) f1() {
+  int x = 0;
+  // ...
+  return x;  // delctype(x) is int, so f1 returns int
+}
+
+decltype(auto) f1() {
+  int x = 0;
+  // ...
+  return (x);  // delctype(x) is int&, so f1 returns int
+}
+```
+
+#### Things to remember
+
+- ```decltype``` almost always yields the type of a variable or expression without any modifications.
+- For lvalue expressions of type ```T``` other that names, ```decltype``` always reports a type of ```T&```
+- c++14 supports ```decltype(auto)```, which, like ```auto```, deduces a type from its initializer, but it performs the type deduction using the ```decltype``` rules.
