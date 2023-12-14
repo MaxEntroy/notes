@@ -70,7 +70,37 @@ In language, a clause is a constituent that comprises a semantic predicand (expr
 
 从句这个翻译我觉得不好，还不如简单句，或者单句，构成一个完整语法单位的最小元素。我觉得还是叫单句比较好。
 
+这一小节其实比较重要，因为它讲了句子是通过怎样的形式，构成更加复杂的句子。如果只是简单的增加一些形容词的修饰，并不会使得句子的结构变复杂。
+真的可以使得句子结构变复杂的，还是句子之间的连接。所以，需要搞明白这种连接方式。即简单句构成复杂句子的连接方式。
+
+```
+He doesn't study makes me angry.(Wrong)
+He doesn't study这是句子，不能直接充当主语。
+一定要变成名词性从句才行。
+
+That he doesn't study makes me angry.
+```
+
+- 分类
+    - 成分角度
+        - subjective clause
+        - objective clause
+        - predicative clause
+        - appositive
+    - 引导词角度
+        - that clause
+        - whether clause
+        - interrogative clause
+
+对于predicative clause做简单展开，
+>A predicative expression (or just predicative) is part of a clause predicate, and is an expression that typically follows a copula or linking verb.
+> The main trait of all predicative expressions is that they serve to express a property that is assigned to a "subject", whereby this subject is usually the clause subject, but at times it can be the clause object.
+
+跟在"系"词之后，用来修饰主语。
+
 #### 5.名词短语做主语
+
+名词短语 = 疑问词 + 不定时短语
 
 #### 6.表距离的地点副词短语做主语
 
