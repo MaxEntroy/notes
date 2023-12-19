@@ -1,6 +1,6 @@
 ## 第一章 句子的形成
 
-### 可做主语的词类
+### 第一节 可做主语的词类
 
 #### 1.名词做主语
 
@@ -104,6 +104,70 @@ That he doesn't study makes me angry.
 
 #### 6.表距离的地点副词短语做主语
 
-### 动词的种类及其形成
+### 第二节 动词的种类及其用法
 
-### 结论
+这一小节非常重要，可以说，动词是英语的灵魂。虽然句子的构成，如何连接，暂时不通过动词起作用。但是对于单句的分析，主要是看动词。
+
+这一小节，厘清了过去的一些错误认知。过去对于修饰词的理解，我是按照名词修饰语和动词修饰语的角度来划分。这个办法帮我容易的分析句子，但是其中有些理解错误。比如object complementary，这个东西可以理解为名词修饰语，但实际上，他是oc。从句子的成分的理解，更容易理解句子的结构。
+
+#### 1.动词基本可以分为五大类
+
+- complete intransitive verb, c.vi
+- incomplete intransitive verb, i.vi
+- complete transitive verb. c.vt
+- incomplete intransitivve verb. i.vt
+- dative verb, d.v
+
+>transitive: able to take a direct object 
+dataive: the form of a noun, pronoun, or adjective that in some languages marks the indirect object of a verb that has two objects
+
+及物这个翻译有点抽象，可带宾语动词。其中，这个dative也比较特殊，双宾语。
+
+当然，从上一小节得知，从另一个角度来说，即一个句子的动词是否反应tense/person/number又可以分为
+- finite verbs
+- infinite verbs
+
+#### 2.如何判断vt/vi
+
+- 我___他(主动)
+- 他被我___(被动)
+- 如果一个动词，可以填入上述结构，且语意正常，那么这是vt.
+
+- 我杀(kill)他/他被我(杀),kill是vt.
+- 我跳(dance)他/他被我(跳), 语意不符，dance是vi.
+
+#### 3/4. 兼做vt/vi
+
+- dream
+    - I dreamed last night.
+    - I dreamed a terrible dream last night.
+- sing
+    - He is singing.
+    - He sings a song.
+
+#### 5.c.vt/c.vi
+
+这里完全，其实就是不加额外的complementary(subject complementary/object complementary)
+
+- c.vt,加了宾语，不加complementary，意思很完整
+    - He killed her.
+    - I love my mom.
+- c.vi,不加宾语，不加complementary，意思很完整
+    - I dance, you dance, she dances.
+    - He laughed.
+
+#### 6.cvt的形态
+
+- a. s + cvt + o
+    - He wrote a book.
+- b. s + be verb + cvt-ing(present participle) + o
+    - He was writing a book.
+- c. s + be verb + cvt-ed(past participle) + o
+    - The book was written by him.
+- d. s + be verb + being + cvt-ed + o
+    - A book was being written by him.
+
+这里介绍participle的概念
+>In linguistics, a participle (from Latin participium 'a sharing, partaking'; abbr. ptcp) is a nonfinite verb form that has some of the characteristics and functions of both verbs and adjectives.[1] More narrowly, participle has been defined as "a word derived from a verb and used as an adjective, as in a laughing face"
+
+这里我觉得从时态的角度讲，可能好一点。不过基于cvt变化的角度讲也行。
