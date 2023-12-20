@@ -171,3 +171,28 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
 >In linguistics, a participle (from Latin participium 'a sharing, partaking'; abbr. ptcp) is a nonfinite verb form that has some of the characteristics and functions of both verbs and adjectives.[1] More narrowly, participle has been defined as "a word derived from a verb and used as an adjective, as in a laughing face"
 
 这里我觉得从时态的角度讲，可能好一点。不过基于cvt变化的角度讲也行。
+
+#### 7.cvi的形态
+
+- a. s + cvi
+    - Something happend.
+- b. s + be + cvi-ing(present participle)
+    - Something was happening.
+    - Something was happened.(wrong!!!). 
+        - vi没有被动语态
+        - 根据 2 中的内容，如果他有被动语态，那么它就是vt.
+    - 可接adv，修饰动词，注意，这是状语，不是宾语。
+        - adv. Something happened yesterday.
+        - adv phrase.He died in an accident.
+        - adv clause.He left because he didn't want to see mary again.
+
+背景知识补充--状语
+
+>An adverbial phrase is a group of words that acts like an adverb – i.e., it modifies a verb, adjective, adverb, or even a whole clause.
+
+- Adverbs (e.g., 'quickly') are one-word adverbials. 
+- Adverbial phrases (e.g., 'after dinner') and 
+- adverbial clauses (e.g., 'although it's raining') are adverbials formed using multiple words
+
+参考<br>
+[Adverbial Phrases](https://www.scribbr.co.uk/syntax/adverbial/)<br>
