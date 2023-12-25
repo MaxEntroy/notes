@@ -196,3 +196,110 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
 
 参考<br>
 [Adverbial Phrases](https://www.scribbr.co.uk/syntax/adverbial/)<br>
+
+#### 8.i.vi
+
+这里有一个非常重要的背景--copula(linking verb)
+
+>In linguistics, a copula (plural: copulas or copulae; abbreviated cop) is a word or phrase that links the subject of a sentence to a subject complement, such as the word is in the sentence "The sky is blue" or the phrase was not being in the sentence "It was not being co-operative." The word copula derives from the Latin noun for a "link" or "tie" that connects two different thing.
+>
+>A copula is often a verb or a verb-like word, though this is not universally the case.[3] A verb that is a copula is sometimes called a copulative or copular verb. In English primary education grammar courses, a copula is often called a linking verb
+
+[Copula (linguistics)](https://en.wikipedia.org/wiki/Copula_(linguistics))<br>
+
+从wiki的解释可知，link and tie，所以中文的翻译连系动词，也合理。其实不如连接动词直接。
+
+所以，正因为它是i.vi，才特别强调这个连接的作用。否则，vt就没有连接这样的语意，因为它是很自然的。
+
+i.vi，以copula为基础，连接subject以及subject complementary.
+
+- n. He looks happy.
+- adj. He became a good student.
+- noun clause. My trouble is that I have no money.
+- adverbial phrase. He is in danger.
+
+#### 9.如何判断i.vi
+
+首先，对于vt/vi的判断方法上面讲了，按照对应的判断即可。
+其次，判断句型：s + vi语意是否完整。
+
+eg: become
+- He becomes(not good, he becomes what?)
+- He became happy.
+- He became a good boy.(a good boy不是object，而是subject complementary)
+    - 最上面已经判断了这是vi.
+    - 其次，这个修饰主语.
+
+#### 10.i.vi的形态
+
+补充一些背景知识。非常base。
+
+谓语--Predicate
+
+>The predicate is one of the two main parts of a sentence (the other being the subject, which the predicate modifies).
+>The predicate must contain a verb, and the verb requires or permits other elements to complete the predicate, or else precludes them from doing so. These elements are objects (direct, indirect, prepositional), predicatives, and adjuncts:
+
+- She dances. — Verb-only predicate.
+- Ben reads the book. — Verb-plus-direct-object predicate.
+- Ben's mother, Felicity, gave me a present. — Verb-plus-indirect-object-plus-direct-object predicate.
+- She listened to the radio. — Verb-plus-prepositional-object predicate.
+- She is in the park. — Verb-plus-predicative-prepositional-phrase predicate.
+- She met him in the park. — Verb-plus-direct-object-plus-adjunct predicate.
+
+**The predicate provides information about the subject, such as what the subject is, what the subject is doing, or what the subject is like.**
+
+- In English, the subject and predicative nominal must be connected by a linking verb, also called a copula.
+- The subject and predicative adjective must also be connected by a copula.
+
+[Predicate (grammar)](https://en.wikipedia.org/wiki/Predicate_(grammar))
+
+这里讲解了一些谓语的基础，其次提到了copula(linking verb)，紧接着，引出下面的内容。
+
+- A predicative expression (or just predicative) is part of a clause predicate, and is an expression that typically follows a copula or linking verb
+- The main trait of all predicative expressions is that they serve to express a property that is assigned to a "subject", whereby this subject is usually the clause subject, but at times it can be the clause object.
+
+[Predicative expression](https://en.wikipedia.org/wiki/Predicative_expression)
+
+这个东西，说的很清楚，主要是为了修饰主语。所以，也叫做主语补足语，当然，更常见的叫法是-表语。至于，为啥翻译成表语，不是很清楚。起码没有主语补足语好理解。
+
+The most widely acknowledged predicative expressions are adjectives and nominals:
+
+- The idea was ridiculous. — Predicative adjective over the subject.
+- He seems nice. — Predicative adjective over the subject.
+- Bob is a postman. — Predicative nominal over the subject.
+- They were all happy campers. — Predicative nominal over the subject.
+- That shrimp dish made him sick. — Predicative adjective over the object.
+- We painted the door white. — Predicative adjective over the object.
+- They elected him president. — Predicative nominal over the object.
+- They called Jill a thief. — Predicative nominal over the object.
+
+总结上面这些：
+- i.vi. 目前我看到的，都是copula(linking verb)
+- i.vi. 形态自然就是Predicative expression的形态。
+
+下面总结下赖老师的讲义：
+- a. noun. He is a big here.
+- b. (noun clause)content clause. 
+    - The trouble with me is that I lack money.
+    - The probles is whether he can join us.
+- c. noun phrase. The question is when to set out.
+- d. gerund. My hobby is collecting stamps.
+- e. infinitive with 'to'. My purpose here is to see him.
+- f. adj. She is beautiful.
+- g. adj(present participle) The story is interesting.
+- h. adj(past participle) T am interested in the story.
+- i. adj(prep phrase) The book is of great value.
+- j. adv. 
+    - She is there.
+    - They are upstairs.
+    - Is he home now?
+
+赖老师的总结，和wiki的一致，主要是n and adj，这两种成分充当主语补足语，后者说是表语。这里还有意外之喜悦，即non-finite verbs的形态，有了进一步认知
+- noun
+    - gerund
+    - infinitive with 'to'
+- adj
+    - present participle
+    - past participle
+
+他们的形式非常类似，但充当的作用不一样。
