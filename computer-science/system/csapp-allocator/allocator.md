@@ -5,7 +5,7 @@
 [Purpose of memory alignment](https://stackoverflow.com/questions/381244/purpose-of-memory-alignment)
 
 -  A memory address is said to be aligned when the data referenced by said address is b bits long, and said address is b-bits aligned.(首先，内存对齐是针对变量的地址而言)
-- The CPU always reads at its word size (4 bytes on a 32-bit processor), so when you do an unaligned address access — on a processor that supports it — the processor is going to read multiple words.(这里说出了根本原因，增加了访存速度。因为cpu每次读取的单位都是word size，如果地址不按32-bits aligned，那么对于某一个变量的读取，需要多次读取操作)
+- The CPU always reads at its word size (4 bytes on a 32-bit processor, aka cache line), so when you do an unaligned address access — on a processor that supports it — the processor is going to read multiple words.(这里说出了根本原因，增加了访存速度。因为cpu每次读取的单位都是word size，如果地址不按32-bits aligned，那么对于某一个变量的读取，需要多次读取操作)
 - 4 bytes alignment means they are positioned in 4 bytes
 
 #### Intro
@@ -110,7 +110,7 @@ Implicit Free Lists这个方法更多的是从Free block organization角度来�
     - 后4个字节for payload，1 for user and 3 for padding
     
 说一下9.36
-- 每个正方形表示4个字节，表示一个字(32bit)
+- 每个正方形表示4个字节，表示一个字(32bit) or a cache-line.
 - 一个chunk是8个字节，表示2个字。由于是按照double-word对齐，所以其作为最小的分配单位，表示一个chunk
 - block自然是多个chunk构成，具体的大小，在header中给出。
 

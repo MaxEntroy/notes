@@ -4,6 +4,7 @@
 
 namespace csapp {
 
+// It is implemented based on implicit free list.
 class NaiveAllocator {
  public:
   NaiveAllocator() = default;
@@ -16,13 +17,11 @@ class NaiveAllocator {
 
  private:
   // Initialize the memory system model
-  // If successful, return true, else return false.
   bool MemInit();
 
   // Simple model of the sbrk function.
   // Extends the heap by incr bytes and returns the start address of the new area.
   // In this model, the heap cannot be shrunk.
-  // return If successful, return a pointer to allocated memory. Else return nullptr
   void* MemSbrk(int incr);
 
  private:
