@@ -70,13 +70,13 @@
 
 ### 二分查找
 
-这里我补充一点方法论，以算竞的知识点为主。我们给出一个序列区间[low, high]，low/high均为数组合法下边的边界
+这里我补充一点方法论，以算竞的知识点为主。我们给出一个序列区间[low, high]，low/high均为数组合法下标的边界
 - 方法一：这个也是我刚开始用的办法，即[low, high]作为循环区间
     - mid = low + (high - low)/2; low = mid - 1 or high = mid + 1
     - 如果越界，high < low(low = high + 1)，此时high + 1/low为越界下标
     - 优点：mid计算公式统一
     - 缺点：会漏解，比如mid处的解。
-- 方法二：也是算竞赛的思路，**下标区间(合法区间)[low, high]，二分区间[low, high)**。注意，这里high是合法下标边界。
+- 方法二：也是算竞的思路，**下标区间(合法区间)[low, high]，二分区间[low, high)**。注意，这里high是合法下标边界。
     - 优点：
         - 二分的终止条件是low == high，该点即为答案所在，始终落在二分区间内。
         - 后面可以看到，如果我们拓宽了非法下标，终止条件也不变。即终止条件始终唯一，不受越界的限制。可以很自然的处理无解的情形
@@ -121,6 +121,10 @@ int higher_bound(const std::vector<int>& nums, int low, int high, int x) {
     - 注意：无解存在两种可能
         - 其一，搜寻到右边界。it == nums.end(); (右边界纳入了一个非法点)
         - 其二，寻找到插入位置，但是元素不等。*it != target
+- 三刷：复习后，采用复习的内容。两种解法，std::lower_bound以及自己实现的lower_bound.
+    - 关于上面代码的if条件判断，以```lower_bound```为例子
+    - Returns an iterator pointing to the first element in the range [first, last) such that element < value (or comp(element, value)) is false
+    - 也就是说在序列中找一个位置，并且是第一个位置，有ele < target，那么只要ele >= target，都要继续寻找。
 
 #### [349.Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/)
 
