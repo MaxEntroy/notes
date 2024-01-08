@@ -93,7 +93,7 @@
 ```cpp
 int lower_bound(const std::vector<int>& nums, int low, int high, int x) {
   while (low < high) {
-    int mid = low + (high - low) / 2;
+    int mid = low + (high - low) / 2;  // (low + high) >> 1
     if (nums[mid] >= x) high = mid;
     else low = mid + 1;
   }
@@ -102,13 +102,17 @@ int lower_bound(const std::vector<int>& nums, int low, int high, int x) {
 
 int higher_bound(const std::vector<int>& nums, int low, int high, int x) {
   while (low < high) {
-    int mid = low + (high - low) / 2 + 1;
+    int mid = low + (high - low) / 2 + 1;  // (low + high + 1) >> 1
     if (nums[mid] <= x) low = mid;
     else high = mid - 1;
   }
   return low;
 }
 ```
+
+cppreference的解释没有问题，只不过我觉得算竞的解释更容易理解，且更贴合函数的语意
+- lower_bound: 在序列中找到ele >= x的数中最小的一个。所以，是下界，lower bound. 向下界寻找。
+- upper_bound: 在序列中找到ele <= x的数中最大的一个。所以，是上界，upper bound. 向上届寻找。
 
 #### [704.Binary Search](https://leetcode.com/problems/binary-search/)
 
@@ -125,11 +129,18 @@ int higher_bound(const std::vector<int>& nums, int low, int high, int x) {
     - 关于上面代码的if条件判断，以```lower_bound```为例子
     - Returns an iterator pointing to the first element in the range [first, last) such that element < value (or comp(element, value)) is false
     - 也就是说在序列中找一个位置，并且是第一个位置，有ele < target，那么只要ele >= target，都要继续寻找。
+- 四刷：
+    - 对于算竞的理解又进一步，算竞的区间，自始至终都是开区间。只不过就是开区间的数值有区别。以长度为len的数组为例
+        - 如果不含非法解，合法区间是[0, len - 1], 那么二分区间是[0, len - 1)
+        - 如果包含非法解，合法区间是[0, len], 那么二分区间是[0, len)
 
 #### [349.Intersection of Two Arrays](https://leetcode.com/problems/intersection-of-two-arrays/)
 
 - 这个题思路非常多，一个启示就是，在进行查找的时候，我们可以用bi-search
 - 另一个问题是需要解决重复的情况
+- 二刷
+    - 二刷用了两种办法，我觉得多用几种办法也有好处，就是可以拓宽思路。后者可以在碰到没有思路的问题时，提供帮助。
+    - 再着，这个题如果用二分的思路，其实很容易计算时间复杂度。
 
 #### [34.Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -145,6 +156,17 @@ int higher_bound(const std::vector<int>& nums, int low, int high, int x) {
     - 同时验证了书中的技巧
         - 合法边界low, high，合法区间则是[low, high)，否则过不了。由于我保证了一定能找到，所以没有拓展边界。
         - (low + high + 1) >> 1，我调整为low + (high - low) / 2 + 1; 这个没有问题。
+- 四刷心得
+    - 用了算竞的思路，非常轻松。
+    - 但是stl没有对应的upper_bound，它的那个不是二分的语意。
+    - 实现没问题，关键是区间怎么传。
+        - 二分的实现，跟要不要处理异常点没有关系。
+        - 处不处理，就看怎么传递区间了。如果包含异常点，数据合法区间[0, len - 1]
+            - lower_bound，传递0, len
+            - upper_bound，传递-1, len - 1
+        - 最后两种非法情形
+            - 一是异常点‘
+            - 二是在区间内，但是没找到。
 
 #### [35.Search Insert Position](https://leetcode.com/problems/search-insert-position/)
 
