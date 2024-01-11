@@ -246,7 +246,7 @@ eg: become
 - She is in the park. — Verb-plus-predicative-prepositional-phrase predicate.
 - She met him in the park. — Verb-plus-direct-object-plus-adjunct predicate.
 
-**The predicate provides information about the subject, such as what the subject is, what the subject is doing, or what the subject is like.**
+**The predicate provides information about the subject, such as what the subject is, what the subject is doing, or what the subject like.**
 
 - In English, the subject and predicative nominal must be connected by a linking verb, also called a copula.
 - The subject and predicative adjective must also be connected by a copula.
@@ -287,19 +287,44 @@ The most widely acknowledged predicative expressions are adjectives and nominals
 - e. infinitive with 'to'. My purpose here is to see him.
 - f. adj. She is beautiful.
 - g. adj(present participle) The story is interesting.
-- h. adj(past participle) T am interested in the story.
+- h. adj(past participle) I am interested in the story.
 - i. adj(prep phrase) The book is of great value.
 - j. adv. 
     - She is there.
     - They are upstairs.
     - Is he home now?
+- h. adv phrase
+    - She is in town.
+    - They are at home now.
+    - She is in dange.
+
+常见的表语形态总结如上，赖老师紧接着总结了be动词的一些用法区别
+
+- be(linking verb)之后的现在分词(present participle)有两种词性。这里现在分词就是 V-ing的形式。
+    - adj. The girl(s) is(corpula) charming(present participle as adj).
+        - s + v + sc
+    - present continuous. The girl(s) is singing(is singing is present continuous of sing.)
+        - s + v
+    - 这里主要体系be的不同用法，一是做单独的corpula，二是作为 present continuous的一部分。这点要区别开。
+    - 因为这二者的句子结构完全不一致。
+    - 这里我理解，赖老师的意思是，只要V-ing 这种形式，统称为present partiple
+        - 其要么直接做adj
+        - 要么作为present continuous的一部分。
+    - 当然，V-ing的形式，除了present participle，还有gerund
+
+- be(linking verb)之后的过去分词(past participle)同样有两种词性。这里过去分词就是 V-ed的形式
+    - adj. The man(s) is(corpula) tired(past participle as adj).
+    - passive voice. The man(s) was killed(was killed is past voice of kill)
+    - 同上，be动词的不同用法，也是做单独的corpula，二是作为past voice的一部分。
+    - 同上，二者有完全不同的结构。
+    - V-ed，统称为past participle
 
 赖老师的总结，和wiki的一致，主要是n and adj，这两种成分充当主语补足语，后者说是表语。这里还有意外之喜悦，即non-finite verbs的形态，有了进一步认知
 - noun
-    - gerund
+    - gerund(V-ing)
     - infinitive with 'to'
 - adj
-    - present participle
-    - past participle
+    - present participle(V-ing)
+    - past participle(V-end)
 
-他们的形式非常类似，但充当的作用不一样。
+V-ing的形式一致，但充当的作用不一样。这点要注意区别。
