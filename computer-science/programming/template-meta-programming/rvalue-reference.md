@@ -134,9 +134,17 @@ void test() {
 我们看下std::move的实现：
 
 ```cpp
-template<typename T>
+// c++11
+template <typename T>
 typename std::remove_reference<T>::type&& move(T&& t) {
   return static_cast<typename std::remove_reference<T>::type&&>(t);
+}
+
+// c++14
+template <typename T>
+decltype(auto) move(T&& param) {
+  using ReturnType = std::remove_reference_t<T>&&;
+  return static_cast<ReturnType>(param);
 }
 ```
 
@@ -223,7 +231,7 @@ void f(int& v1, int&& v2) {
 void test() {
   int val = 3;
   int& r = val;
-  wrapper(f, r, 5);  // illegal
+  wrapper2(f, r, 5);  // illegal
 }
 ```
 此时，编译失败。因为```f```的第一个形参类型是左值引用，但是```wrapper2```内部对于```t1```做了强制转换，生成了右值引用，从而类型不匹配。
@@ -263,7 +271,7 @@ void test() {
 - 首先，实参可能是左值，也可能是右值。
 - 但是，形参一定是左值，不管它是一个左值引用，还是右值引用。一个变量是左值还是右值，和它是什么类型没有关系。
   - 这里主要的问题就是```T&& rr = sum(1, 2);```这种表达。右值引用自然可以绑定右值。
-  - 但右值引用```rr```本身是一个左值。这就导致参数继续向下传递时，丢失了实参的右值属性。
+  - 但右值引用```rr```本身是一个左值。这就导致参数继续向下传递时，丢失了实参(binding value)的右值属性。
   - 此处并不能使用```std::move```，因为对于```T& r = foo;```左值引用，实参是左值，不能转化为右值引用(不是说真的不能转化，只不过这样就改变了其value category，也不是说不能改变，这里的语意是不希望改变，所以如果改变了，和语意不符)。
   - 所以，需要一个工具，可以将这个左值形参(左值引用或者右值引用)，**自动保持和其实参的value category一致**，即：
     - 形参是左值，类型是通用引用。如果接受左值实参。```std::forward```转化后，
