@@ -207,6 +207,37 @@ cppreference的解释没有问题，只不过我觉得算竞的解释更容易�
 - 朴素枚举也可以解决，最简单的就是一元二次方程求解，别忘了数学
 - 二刷
     - 一开始没有好思路，直接暴力模拟求解。不管也没有一遍写出来，还是要想清楚再写，白板写代码的时候，还是要仔细斟酌。
+- 三刷
+    - 这个题确实非常好，我觉得好的地方在于，其对于二分查找的考察，并不教条，同时提升了我对于二分查找的理解。
+    - 本质是考察二分查找的思路，但是只是套原始的查找又不行。
+        - 向左，向右，两分查找的思路没有变。
+        - 变得是向左，还是向右查找的条件。
+        - 所以，这么看，**二分可以理解为，二分区间的划分 + 向左向右的条件**。
+    - 借助lower_bound/upper_bound的知识，我们很容易知道，这个题是upper_bound
+        - 在一个序列中[1,2,3,...m]，找到一个点k，使得partial_sum <= n，这里相当于找的是最大点k
+        - 所以，是upper_bound的思路。
+    - 同时，这个题又一定有解，所以，参数的传递就是[1,n]，即有效区间，闭区间。不用多传递一个非法点。实现是开区间，不用关心。
+    - 这个题还有一个点，upper_bound的实现，区间划分需要+1
+        - ```if (nums[mid] <= x) low = mid``` 如果此时low == mid，那么会进入dead loop.
+        - 还是满足上面的条件，但是```auto mid = (low + high + 1) >> 1;```这么写没问题
+            - 原因在于，前一次计算，mid会落在high上。
+            - 此时，条件不满足。low = mid，此时low会落在high上。从而不满足循环条件，跳出。
+```cpp
+// 错误写法
+low = 1,high = 5,mid = 3,sum=6
+low = 1,high = 2,mid = 1,sum=1 // mid = 1，这里落在了low上，向右寻找时。low = mid，无法跳出。
+low = 1,high = 2,mid = 1,sum=1
+low = 1,high = 2,mid = 1,sum=1
+low = 1,high = 2,mid = 1,sum=1
+low = 1,high = 2,mid = 1,sum=1
+low = 1,high = 2,mid = 1,sum=1
+low = 1,high = 2,mid = 1,sum=1
+
+// 正确写法
+low = 1,high = 5,mid = 4,sum=10
+low = 1,high = 3,mid = 3,sum=6
+low = 1,high = 2,mid = 2,sum=3 // mid = 2，向右寻找时，避免mid落在low上。因为向右寻找时，对于low的更新是，low = mid. 所以，要避免mid落在low上，否则会dead loop.
+```
 
 #### [367.Valid Perfect Square](https://leetcode.cn/problems/valid-perfect-square/)
 - 并不是直接的两分查找，但是利用了两分查找的思路，快速搜索解空间，试探。本质不是求解，是验证。
