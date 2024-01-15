@@ -319,12 +319,55 @@ The most widely acknowledged predicative expressions are adjectives and nominals
     - 同上，二者有完全不同的结构。
     - V-ed，统称为past participle
 
-赖老师的总结，和wiki的一致，主要是n and adj，这两种成分充当主语补足语，后者说是表语。这里还有意外之喜悦，即non-finite verbs的形态，有了进一步认知
+赖老师的总结，和wiki的一致，主要是n and adj，这两种成分充当主语补足语，后者说是表语。这里还有意外之喜悦，即non-finite verbs的形态，有了进一步认知.
+当然，V-ing还有一种形式是gerund，充当noun.也做一个总结：
 - noun
     - gerund(V-ing)
     - infinitive with 'to'
 - adj
     - present participle(V-ing)
-    - past participle(V-end)
+    - past participle(V-ed)
+- v
+    - present continuous(V-ing)
+    - passive voice(V-end)
 
 V-ing的形式一致，但充当的作用不一样。这点要注意区别。
+
+i.vi，其实就是讲corpula，主要是be verb，当然还有一些其他的形式
+- become
+- turn
+- get
+    - get用于present continouous，接形容词的比较级别，做sc
+        - She is getting more and more beautiful.
+        - Things are getting better and better.
+    - get/be + passive voice.
+        - He was/got killed in the accident.
+        - If you are not careful, you'll be/get hurt.
+- seem
+    - seem + infinitive with 'to'
+        - He seems to know it.
+        - seems + adj/n时，to可以省略
+            - He seems to be happy. = He seems happy.
+            - He seems to be a nice man. = He seems a nice man
+- verbs of perception
+    - look. It looks interesting.
+    - sound. His idea sounds good.
+    - smell. The food smells good.
+    - taste. The cheese taste well.
+    - feel. I feel tired now.
+    - 不可直接接名词，若接名词，需要 + like
+        - It sounds like a good idea.
+        - The material feels like sikl
+        - The food tastes like fish.
+        - feel like + n, 译为感觉像
+            - When Jane said she would marry me, I felt like a newborn baby.
+        - feel like + gerund，译为想要
+            - I feel like taking a walk today. = I would like take a walk today.
+    - feel/taste/smell亦可当c.vt，此时意思改变，不是...起来。直接翻译为对应的感官动作。
+        - The doctor felt my forehead and said I had a fever.
+        - Don't taste that food;it has spoiled.
+        - He smelled sth burning.
+    - look与介词连用时，可形成verb phrase, 视作vt.
+        - He looked at me happily.
+        - He looked into the case carefully.
+        - 可以在i.vt与c.vt之间进行转换
