@@ -255,7 +255,7 @@ low = 1,high = 2,mid = 2,sum=3 // mid = 2，向右寻找时，避免mid落在low
 ```
 
 复习一元二次方程的根:
-$  x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $
+$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
 
 #### [367.Valid Perfect Square](https://leetcode.cn/problems/valid-perfect-square/)
 - 并不是直接的两分查找，但是利用了两分查找的思路，快速搜索解空间，试探。本质不是求解，是验证。
