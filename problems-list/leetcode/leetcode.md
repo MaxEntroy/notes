@@ -282,6 +282,14 @@ $  x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $
 
 - 和上一题思路一致。
 - 也可以使用牛顿法。
+- 二刷
+    - 原始序列：[1,2,3,4,5,...k]
+    - 368序列：[1,3,6,10,15,...(k+1)k/2]
+    - 441序列：[1,4,9,16,25,...k^2]
+    - 69序列：[1,4,9,16,25,...k^2]
+    - 就是在69序列中找到 <= target 的最大数，这点注意，我第一次找反了，用了lower_ground
+    - 采用upper_ground即可
+    - 注意异常点，即x==0的情形。
 
 #### [702.Search in a Sorted Array of Unknown Size](https://grandyang.com/leetcode/702/)
 
