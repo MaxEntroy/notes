@@ -68,7 +68,12 @@ actually runs.
 - 碎片
     - 内部。padding导致。
     - 外部。总和大小够，但是也不能分配。
-    - 少量大块，好于大量小块(没懂)
+    - 少量大块，好于大量小块。大量小块容易造成external fragment.
+
+这里我补充一下，对于allocator，主要平衡的点在于
+- speed
+- utilization
+即分配内存的速度和内存使用率。二者是反比关系，所以需要trade-off.
 
 #### 9.9.5 Implementation Issues
 
@@ -96,7 +101,7 @@ Implicit Free Lists这个方法更多的是从Free block organization角度来�
     - low 3 bits are zero -> 我们可以用低3位存储别的信息
         - 同时，在计算size时需要用mask
 
-关于为什么叫implicit free lists，原因在于相比explicit free lists，这些free block并不是通过pointer显示的连接在一起。allocated和free block按照初始顺序连接在一起，通过标记位来判断是不是free block。
+关于为什么叫implicit free lists，原因在于相比explicit free lists，这些free block并不是通过pointer显示的连接在一起。allocated和free block按照初始顺序连接在一起，通过标记位来判断是不是free block。(Most allocators embed this information in the blocks themselves)
 
 - The advantage of an implicit free list is simplicity.
 - A significant disadvantage is that the cost of any operation that requires a search of the free list, such as placing allocated blocks, will be linear in the total number of allocated and free blocks in the heap.
@@ -106,11 +111,12 @@ Implicit Free Lists这个方法更多的是从Free block organization角度来�
 最后，block是通过implicit lists连接，每一个block的结构header + payload + padding(optional)，并且memory alignment要求minimus block size。比如，8字节对齐，最小的block就是8字节.这意味着
 - auto p = malloc(1)。
 - 但是实际分配了一个最小块，8字节。
+    - one word for header, one word for data(payload + padding).
     - 其中前4个字节for header，(3 for block size and 1 for flag)
-    - 后4个字节for payload，1 for user and 3 for padding
+    - 后4个字节for payload，1 for user and 3 for padding. 
     
 说一下9.36
-- 每个正方形表示4个字节，表示一个字(32bit) or a cache-line.
+- 每个正方形表示4个字节，表示一个字(32bit) or a cache-line(one word).
 - 一个chunk是8个字节，表示2个字。由于是按照double-word对齐，所以其作为最小的分配单位，表示一个chunk
 - block自然是多个chunk构成，具体的大小，在header中给出。
 
