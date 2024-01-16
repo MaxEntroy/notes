@@ -156,7 +156,7 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
     - I dance, you dance, she dances.
     - He laughed.
 
-#### 6.cvt的形态
+#### 6.c.vt的形态
 
 - a. s + cvt + o
     - He wrote a book.
@@ -172,7 +172,7 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
 
 这里我觉得从时态的角度讲，可能好一点。不过基于cvt变化的角度讲也行。
 
-#### 7.cvi的形态
+#### 7.c.vi的形态
 
 - a. s + cvi
     - Something happend.
@@ -371,3 +371,81 @@ i.vi，其实就是讲corpula，主要是be verb，当然还有一些其他的�
         - He looked at me happily.
         - He looked into the case carefully.
         - 可以在i.vt与c.vt之间进行转换
+
+i.vi有一个最大的特点是：**没有past voice**.
+
+#### 11.i.vi的其他重要短语
+
+- fall ill/fall asleep
+- ran short
+- came to be. I don't know how he came to be so pupular.
+- prove to be. The document proved to be a forgery.
+
+#### 12.c.vt
+
+- c.vt具备active voice/past voice，此小节着重讨论active voice.
+- c这里代表加了宾语之后，意思很完整的动词。
+- 常见的结构：S + V + O
+    - Peter loves music.
+    - They want(c.vt) to go dancing(o).
+    - He thinks(c.vt) that the book is good.(o)
+
+#### 13.c.vt的用法
+
+- 1.n as object. He didn't buy(vt) that car.(o)
+- 2.pronoun as object. I don't like john. In fact, I hate him(o).
+- 3.infinitive with 'to' as object. 
+    - I want(vt) to see him now.(o including to)
+    - I hope [to study abroad someday].(o)
+- 4.gerund as object.
+    - He considered [studying abroad].
+    - I once imagined [going on a date with him].
+    - I just can't fancy [getting along with him].
+    - He risked [doing it].
+    - I avoided [seeing him again].
+    - He escaped [being killed in the accident]. gerund, but passive voice.
+    - They suggested [putting off the game].
+    - He recommended [traveling abroad].
+    - I enjoy [dancing ].
+    - I resent [having to do so much].
+    - I practiced [playing the piano].
+    - He stopped/quit [smoking ]
+    - Would you mind [opening the window for me]?
+- 5.infinitive with 'to' vs gerund
+    - I refused [to do it.]/I resisted [doing it].
+    - I expect [to travel around the world with him]./I anticipate [traveling around the world with him].
+    - He stopped writing after he got married/He decided to quit smoking.
+    - stop有两种形式，但是意义不同
+        - He stopped walking when he saw me.
+        - He stopped to talk to me when he saw me.(停下来去做...)
+    - continue/start/begin/like/love/hate，二者均可，且意思不变。
+- 6.content clause as object.
+    - that引导(that可省略)
+        - I believe (that) he is a man of his word.
+        - They feel (that) it is impossible to win the game.
+        - 
+    - whether引导(可与if互换)
+        - I don't know whether(if) the typhoon will come.
+        - I doubt if(whether) the man is competent enough to handle it.
+        - 如下情形，不能替换
+            - a.whether引导的c.c做subject.
+                - Whether he can go is not yet known.
+                - 这里如果想用if，用形式主语，把if放回宾语的位置：It is not yet know if(wheter) he can go.
+            - b.whether引导的c.c做prep的object
+                - He is worried about whether(if is wrong) he can pass the exam.
+                - 确实是宾语，但是跟在prep之后，这个是规则。
+            - c.whether引导的c.c做s.c
+                - The problem is whether(if is wrong) he has enough meney for trip.
+    - 疑问词引导
+        - I don't know where he lives.
+- 7.noun phrase as object.
+    - I don't know how to solve the problem.
+        - 这个为啥不是疑问词引导的c.c？
+        - 因为除去疑问词之后，这不是一个句子。而是一个短语，充当名词成分，所以是名词短语
+    - I don't know whom to talk to.
+
+gerund其实是个动词的变体，为什么可以充当n?这么理解，翻译成汉语，V-ing这件事。
+- I like playing computer games.
+- 打游戏这件事，我喜欢。这件事是名词成分。
+
+不管是n.c还是gerund/infinitive with to，都是尝试扩充句子的结构。
