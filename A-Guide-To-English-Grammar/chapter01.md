@@ -449,3 +449,49 @@ gerund其实是个动词的变体，为什么可以充当n?这么理解，翻译
 - 打游戏这件事，我喜欢。这件事是名词成分。
 
 不管是n.c还是gerund/infinitive with to，都是尝试扩充句子的结构。
+
+#### 14.i.vt.
+
+- 还是及物动词，但是加了宾语之后，语意不完整。
+- 需要加补足语，即object complementary
+
+- He made a kite.(c.vt)
+- He made Marry(wrong, i.vt)
+    - He made Marry happy.(right, c.vt)
+    - He made Marry clean the windown(这是 oc，不是状语)
+
+#### 15.i.vt.的分类及用法
+
+- 1.causative verb.(acting as the cause of something)
+    - make/have sb [do sth].
+        - I made him [wash the car.oc].
+            - He is washing the car because I made him wash the car.
+        - I had [john report to me].
+            - John is reporting to me because I had john report to me.
+    - get sb [to do sth].
+        - I got him to wash the car.
+    - make可用作passive voice，但have/get不行。
+        - He was made to wash the car.
+    - let sb do sth
+        - I let him wash the car.
+        - I let petter try it.
+    - let o + 做副词用的介词
+        - He let me in.
+        - Don't let him out.
+        - His performace let me down.
+        - 上述prep由于其后无宾语，可单独做副词用。因此也称作介副词。
+            - He is in.
+            - He is out.
+            - He is there.
+            - He is here.
+            - He is home.
+            - He is downtown.
+            - He is in the house.
+        - 但在let之后，只能用单介词，而不用用介词短语。
+            - He let me in.(right)
+            - He let me in the house.(wrong)
+        - 更强的causative force sb to do sth.
+            - I forced him [to recite the lesson].
+            - I asked him [to write the letter].
+            - I encouraged him [to work harder].
+            - He told me [to finish the work by ten].
