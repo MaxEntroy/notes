@@ -290,6 +290,8 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
     - 就是在69序列中找到 <= target 的最大数，这点注意，我第一次找反了，用了lower_ground
     - 采用upper_ground即可
     - 注意异常点，即x==0的情形。
+- 三刷
+    - 参见Newton's method
 
 #### [702.Search in a Sorted Array of Unknown Size](https://grandyang.com/leetcode/702/)
 
@@ -300,6 +302,10 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
         - 下标越界，返回2147483647即INT_MAX。证明INT_MAX是非法下标，元素个数肯定不会这么多。
         - 所以，可以设定这个数组有INT_MAX个元素，多余的元素由INT_MAX填充，而不影响查询结果。
     - 注意两分的使用条件，元素可以重复，只不过此时值不唯一。
+- 二刷
+    - 还是没思路，不知道怎么处理上界的问题。
+    - 但是看了之前的题解，觉得分析的非常到位。这些条件不是直接得到的，题目没有直接给。
+    - 而是分析已知的条件，从条件中获得的。这点非常好，进了一步。
 
 #### [33.Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
 
@@ -1952,6 +1958,20 @@ void dfs2(const vector<int>& nums, int target, int start, int sum) {
 - 变换：sqrt(c) -> let x = sqrt(c) -> $x^{2} - c = 0$
 - 求解：令$f(x) = x^{2} - c$，则解为f(x)与坐标轴的交点。
 - 过程：切线逼近
-    - 取f(x)上一点$(x_{n}, f(x_{n}))$作为初始值
-    - 代入迭代公式，进行迭代。其中$f(x) = x^{2} - c$
-    - 有$x_{n + 1} = x_{n} - \frac{x_{n}^{2} - c}{2x_{n}}$
+    - 取f(x)上一点 $(x_{n}, f(x_{n}))$ 作为初始值
+    - 代入迭代公式，进行迭代。其中 $f(x) = x^{2} - c$
+    - 有 $x_{n + 1} = x_{n} - \frac{x_{n}^{2} - c}{2x_{n}}$
+    - 最终的表达式：$x_{n + 1} = \frac{1}{2}(x_{n} + \frac{c}{x_{n}})$
+- 实现：多说一点
+    - 初值的选择，我选的 1.
+    - 变量的迭代，靠自己更新即可，不需借助其他变量。
+    - pre的作用只是保留 上一次的迭代值，用来做条件判断
+
+```c++
+double pre = 0.0, cur = 1.0;
+while (fabs(pre - cur) > 1e-6) {
+    pre = cur;
+    cur = 1.0 / 2 * (1.0/cur*x + cur);
+}
+return (int)cur;
+```
