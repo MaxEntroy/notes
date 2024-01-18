@@ -211,6 +211,24 @@ block by inspecting its footer, which is always one word away from the start of 
 
 ##### Implementation Details
 
+- Block detais
+    - The first word is an unused padding word aligned to a double-word boundary
+    - The padding is followed by a special prologue block, 
+        - which is an 8-byte allocatedblock consisting of only a header and a footer. 
+        - The prologue block is created during initialization and is never freed.
+    - Following the prologue block are zero or more regular blocks that are created by calls to malloc or free
+    - The heap always ends with a special epilogue block,
+        - which is a zero-size allocated block that consists of only a header.
+    - The prologue and epilogue blocks are tricks that eliminate the edge conditions during coalescing.
+
+关于这个trick，我说一下。确实有点意思。
+- regular block没什么说的。
+- prologue block(header + footer)，这里加个footer，我理解是为了对齐，真正起作用的还是header.
+- epilogue block(footer)，这里就是一个word.replica of header.
+- 最后说这个header padding
+    - 作用在于,coalescing的时候，merge也需要对齐。
+    - 此时，padding + epilogue block变成一个regular block。这个是最精妙的地方。
+
 - brk()  and  sbrk()  change the location of the program break, 
     - which defines the end of the process's data segment (i.e., the program break is the first location after the end of the uninitialized datasegment).  
     - Increasing the program break has the effect of allocating memory to the process; 
@@ -225,5 +243,4 @@ SYNOPSIS
        int brk(void *addr);
 
        void *sbrk(intptr_t increment);
-
 ```
