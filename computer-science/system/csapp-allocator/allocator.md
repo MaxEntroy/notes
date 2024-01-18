@@ -155,7 +155,7 @@ the sbrk function.
 
 空闲块merge，不merge可能导致false fragmentation，比如
 - 前一个块4字节
-- 后一个块也4字节，刚才分配，目前释放。如果不merge，两个快看到的都是4个字节。
+- 后一个块也4字节，刚才分配，目前释放。如果不merge，两个块看到的都是4个字节。
 - 加入现在一个请求来，要分配6个字节，子找不到这样的快。所以，需要merge
 
 那么，关于merge的时机是个问题。
@@ -169,7 +169,7 @@ But how would we coalesce the previous block?
 
 笨办法是，每次free的时候，从头开始遍历到当前节点，记住那些free的块，然后merge。显然free操作的时间复杂度是O(N)
 
-- is to add a footer (the boundary tag) at the end of each block, where the footer is a replica of the header.
+- Adding a footer (the boundary tag) at the end of each block, where the footer is a replica of the header.
 - If each block includes such a footer, then the allocator can determine the starting location and status of the previous
 block by inspecting its footer, which is always one word away from the start of the current block.
 
@@ -177,24 +177,53 @@ block by inspecting its footer, which is always one word away from the start of 
 
 说下9.42这个图，这个是最终的结构
 
+##### Data Structure
+
+<img width="600"  src="img/data-structure-of-alloctor.png"/>
+
 - word: 代表图中的一个小块，4bytes.
-- double-workd: 代表图中的两个小块，8bytes, 1 chunk，对齐的单位，最小的分配单位
+- double-word: 代表图中的两个小块，8bytes, 1 block，对齐的单位，最小的分配单位
 - first padding block: The first word is an unused padding word aligned to a double-word boundary.
 - prologue block
     - which is an 8-byte allocated block consisting of only a header and a footer.
-    - which is created during initialization and is never
-- regular blocks
+    - which is created during initialization and is never freed.
+- regular blocks that are created by calls to malloc or free.
 - epilogue block,which is a zero-size allocated block that consists of only a header.
 
 - The prologue and epilogue blocks are tricks that eliminate the edge conditions during coalescing.
 - 由于prologue和epilogue大小不一样，8bytes/4bytes，所以搞了一个first padding block，凑齐aligned to a double-word boundary.
 
-```cpp
-15 /* Read the size and allocated fields from address p */
-16 #define GET_SIZE(p) (GET(p) & ~0x7)
-17 #define GET_ALLOC(p) (GET(p) & 0x1)
-```
+##### General Allocator Design
 
-这两个宏我说一下，32位，高29位为size，低3位自用，其中最低位表示是否分配。
-- 所以，GET_ALLOC好理解，拿最低位
-- GET_SIZE需要拿高29位，低3位是0x7(0000 0000 0000 0000 0000 0000 0000 0111)，这个数取反就是高29位
+- Our allocator uses a model of the memory system provided by the memlib.c
+    - The purpose of the model is to allow us to run our allocator without interfering with the existing system-level malloc package.
+    - Deatails:
+        - The ```MemInit``` function models the virtual memory available to the heap as a large double-word aligned array of bytes.
+        - The bytes between ```mem_heap_``` and ```mem_brk_``` represent allocated virtual memory.
+        - The bytes following ```mem_brk_``` represent unallocated virtual memory.
+        - The allocator requests additional heap memory by calling the ```MemSbrk``` function
+- Our allocator exports 3 functions(API) to application programs
+    - The ```Init``` function initializes the allocator, returing 0 if successful and -1 otherwise.
+    - The ```Malloc``` and ```Free``` functions have the same interfaces and semantics as their system counterparts.
+- Our allocator uses the block format as above.
+    - The minimus block size is double-word.
+    - The free list is organized as an implicit free list.
+
+##### Implementation Details
+
+- brk()  and  sbrk()  change the location of the program break, 
+    - which defines the end of the process's data segment (i.e., the program break is the first location after the end of the uninitialized datasegment).  
+    - Increasing the program break has the effect of allocating memory to the process; 
+    - decreasing the break deallocates memory.
+- brk() sets the end of the data segment to the value specified by addr
+- sbrk() increments the program's data space by increment bytes.
+```c
+// brk, sbrk - change data segment size
+SYNOPSIS
+       #include <unistd.h>
+
+       int brk(void *addr);
+
+       void *sbrk(intptr_t increment);
+
+```

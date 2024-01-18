@@ -17,6 +17,7 @@ bool NaiveAllocator::MemInit() {
 }
 
 void* NaiveAllocator::MemSbrk(int incr) {
+  // sbrk() returns the previous program break.
   auto* old_brk = mem_brk_;
   if (incr < 0 or mem_brk_ + incr > mem_max_addr_) {
     std::cerr << "Sbrk failed. Run out of memory.\n";
