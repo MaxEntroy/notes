@@ -302,6 +302,10 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
         - 下标越界，返回2147483647即INT_MAX。证明INT_MAX是非法下标，元素个数肯定不会这么多。
         - 所以，可以设定这个数组有INT_MAX个元素，多余的元素由INT_MAX填充，而不影响查询结果。
     - 注意两分的使用条件，元素可以重复，只不过此时值不唯一。
+- 二刷
+    - 还是没思路，不知道怎么处理上界的问题。
+    - 但是看了之前的题解，觉得分析的非常到位。这些条件不是直接得到的，题目没有直接给。
+    - 而是分析已知的条件，从条件中获得的。这点非常好，进了一步。
 
 #### [33.Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
 
