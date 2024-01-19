@@ -261,3 +261,13 @@ SYNOPSIS
 
        void *sbrk(intptr_t increment);
 ```
+
+关于宏的实现，收一下怎么根据bp找上一个bp
+- 本质是先拿到上一个块的size，这个怎么拿，取上一个footer. 所以是```(char *)(bp) - DSIZE)```
+- 上面的操作，拿到上一个footer，然后根据footer，计算出上一个块的大小。
+- 最后，当前payload地址减去上一个块的大小，就是上一个块的payload地址。
+```c++
+/* Given block ptr bp, compute address of next and previous blocks */
+#define NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))
+#define PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))
+```
