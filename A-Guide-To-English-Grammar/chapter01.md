@@ -9,7 +9,7 @@
 #### 3.动名词或不定时短语做主语
 
 - finite verbs
-    - a finite verb form shows a particular tense, person and number.
+    - a finite verb form shows a particular tense(时态), person(人称) and number(单数/复数).
 
 所谓体现句子的时间背景，是指该句子所讲述的究竟是过去？还是现在？还是将来？是指这种粗略的时间划分，而不是指明该句子讲述的是哪个具体时间点或时间段。
 
@@ -170,7 +170,14 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
 这里介绍participle的概念
 >In linguistics, a participle (from Latin participium 'a sharing, partaking'; abbr. ptcp) is a nonfinite verb form that has some of the characteristics and functions of both verbs and adjectives.[1] More narrowly, participle has been defined as "a word derived from a verb and used as an adjective, as in a laughing face"
 
-这里我觉得从时态的角度讲，可能好一点。不过基于cvt变化的角度讲也行。
+下面看一下对比：
+
+- participle vs gerund
+    - Present participles and gerunds look identical, but they have different grammatical functions:
+    - Present participles are used in various verb tenses (e.g., “I have been eating”) and as adjectives (e.g., “a laughing child”).
+    - Gerunds function as nouns (e.g., “I enjoy jogging”).
+
+我觉得这里少强调了一点，participle是一个non-finite verb，所以可以体现动词的tense，进行时态都可以用present participle，过去时态都可以用past participle。同时，present participle兼做adj.而gerund功能非常单一，就是做名词。主要他们的形式看起来都是V-ing.
 
 #### 7.c.vi的形态
 
@@ -495,3 +502,25 @@ gerund其实是个动词的变体，为什么可以充当n?这么理解，翻译
             - I asked him [to write the letter].
             - I encouraged him [to work harder].
             - He told me [to finish the work by ten].
+- 2.verbs of perception
+    - 视觉 see/observe/watch/look at/notice
+    - 听觉 listen to/hear
+    - 感觉 feel
+    - 可做c.vt.
+        - Did you see him?
+        - He [was listening to] music.
+        - I felt a pain in my back
+    - 亦可做i.vt.
+        - 表事实，用原型动词做补语，译成'......了'
+            - I saw him dance. 我看见
+            - I heard him sing. 我听见他唱歌了
+            - I felt him move. 我感觉他动了
+        - 表进行状态时，用present participle做oc，译成正在......
+            - I saw him dancing when I walked in.
+            - As I pushed the door open, I heard him singing.
+            - When the doorbell ring, I felt my legs trembling.
+        - 表被动状态时(不是被动语态)，要用past participe做oc，译成'...被...'
+            - I saw him killed.
+            - I heard the door closed.
+            - I felt myself lifted.
+        
