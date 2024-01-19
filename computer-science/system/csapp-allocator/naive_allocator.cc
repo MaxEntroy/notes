@@ -5,6 +5,39 @@
 
 namespace csapp {
 
+namespace {
+// Manipulating the headers and footers in the free list can be troublesome
+// because it demands extensive use of casting and pointer arithmetic.
+// Thus, we find it helpful to define a small set of macros for accessing and
+// traversing the free list
+
+// Pack a size and allocated bit into a word
+#define PACK(size, alloc) ((size) | (alloc))
+
+// Deference address p based on specific type
+#define CAST(p, Type) (static_cast<Type*>(p))
+#define DEFER(p, Type) (*CAST(p, Type))
+
+// Read and write a word at address p
+#define GET(p) (DEFER(p, NaiveAllocator::Word))
+#define PUT(p, val) (DEFER(p, NaiveAllocator::Word) = (val))
+
+// Read the size and allocated bits from address p
+#define GET_SIZE(p) (GET(p) & ~0x7)
+#define GET_ALLOC(p) (GET(p) & 0x1)
+
+  // Given block ptr bp, compute address of its header and footer.
+#define HEADER(bp) (CAST(bp, NaiveAllocator::Byte) - NaiveAllocator::kWordSize)
+#define FOOTER(bp) (CAST(bp, NaiveAllocator::Byte) + GET_SIZE(HEADER(bp)) - NaiveAllocator::kDoubleWordSize)
+
+// Given block ptr br, compute address of next and previous blocks.
+#define NEXT_BLK(bp) (CAST(bp, NaiveAllocator::Byte) + GET_SIZE(HEADER(bp)))
+#define PREV_BLK(bp)                                                           \
+  (CAST(bp, NaiveAllocator::Byte) -                                            \
+   GET_SIZE(                                                                   \
+       (CAST(bp, NaiveAllocator::Byte) - NaiveAllocator::kDoubleWordSize)))
+}
+
 bool NaiveAllocator::MemInit() {
   mem_heap_ = new (std::nothrow) Byte[kMaxHeap];
   if (!mem_heap_) {

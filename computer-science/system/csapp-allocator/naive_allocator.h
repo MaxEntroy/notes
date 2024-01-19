@@ -7,6 +7,10 @@ namespace csapp {
 // It is implemented based on implicit free list.
 class NaiveAllocator {
  public:
+  // type alias for Byte and Word
+  using Byte = char;
+  using Word = unsigned int;
+
   NaiveAllocator() = default;
 
   NaiveAllocator(const NaiveAllocator&) = delete;
@@ -25,8 +29,6 @@ class NaiveAllocator {
   void* MemSbrk(int incr);
 
  private:
-  // type alias for byte
-  using Byte = char;
 
   // Points to first byte of heap
   Byte* mem_heap_ = nullptr;
@@ -41,27 +43,14 @@ class NaiveAllocator {
   static constexpr size_t kMaxHeap = (1 << 20);
 
  private:
-  /// Word and header/foot size(bytes)
+  // Word and header/foot size(bytes)
   static constexpr int kWordSize = 4;
 
-  /// Double-word size(bytes)
+  // Double-word size(bytes)
   static constexpr int kDoubleWordSize = 8;
 
-  /// Extend heap by this amount(bytes)
+  // Extend heap by this amount(bytes)
   static constexpr int kChunkSize = (1 << 12);
 };
-
-#define MAX(x, y) ((x) > (y) ? (x) : (y))
-
-// Pack a size and allocated bit into a word
-#define PACK(size, alloc) ((size) | (alloc))
-
-// Read and write a word at address p
-#define GET(p) (*(unsigned int*)(p))
-#define PUT(p, val) (*(unsigned int*)(p) = (val))
-
-// Read the size and allocated bits from address p
-#define GET_SIZE(p) (GET(p) & )
-#define GET_ALLOC(p) (GET(p) & )
 
 }  // namespace csapp

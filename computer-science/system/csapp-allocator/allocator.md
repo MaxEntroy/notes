@@ -183,9 +183,20 @@ block by inspecting its footer, which is always one word away from the start of 
 
 <img width="600"  src="img/format-of-block.png"/>
 
+这个数据结构，footer is a replica of header. 这个其实很重要。
+- header/footer的大小都是固定的。
+- 当前block，可以拿到当前的size。自然可以拿到下一个块的size.
+- 问题是怎么拿到上一个块的size呢？这个footer就起作用了。
+    - 这个footer的设计，背后还体现着一个特别的设计思路：就是冗余。
+    - 以极小的代价，换来了，操作的便利性。这样给出一个块的header或者payload
+        - 可以向前找
+        - 也可以向后找
+        - 这里header/footer是不是和explist free list当中的双向指针对应。
+        - 设计上是完全对应的，It's beatutiful.
+
 - free list数据结构
 
-<img width="600"  src="img/data-structure-of-alloctor.png"/>
+<img width="900"  src="img/data-structure-of-alloctor.png"/>
 
 - word: 代表图中的一个小块，4bytes.
 - double-word: 代表图中的两个小块，8bytes, 1 block，对齐的单位，最小的分配单位
