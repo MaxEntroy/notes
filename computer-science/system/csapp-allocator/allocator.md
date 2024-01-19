@@ -179,6 +179,12 @@ block by inspecting its footer, which is always one word away from the start of 
 
 ##### Data Structure
 
+- block 数据结构
+
+<img width="600"  src="img/format-of-block.png"/>
+
+- free list数据结构
+
 <img width="600"  src="img/data-structure-of-alloctor.png"/>
 
 - word: 代表图中的一个小块，4bytes.
