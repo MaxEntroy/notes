@@ -334,6 +334,11 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
         - [3,1] is an edge case.
             - ```low = 0, high = 1, mid = 0``` at this moment, the left part is sorted, but the judegement gets the wrong conclusion.
         - we update the judgement to: ```if (nums[0] <= nums[mid])```
+- 四刷
+    - 发现三刷的办法，其实有问题。莫名其妙的居然过了。
+    - 三刷的问题是，在区间判断的时候，没有使用low/high，而是直接和 0 以及上界比。
+    - 这么做能过的原因，我还没有仔细思考。也可能思路不对，只是碰巧过了test case。我看的题解，没有一个这样做的。
+    - 正解是，区间判断用low/high去做。
 
 #### [81.Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
 
@@ -351,6 +356,9 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
         - 说明，不管33/81，都无法直接利用二分查找，因为这不符合二分适用的条件。
         - 实际的做法只是借鉴二分查找的思路，寻找pivot。
         - 但是，这个办法在序列中存在重复元素时，会失效。
+    - 参考了网上主流的做法，采用了常见的二分查找思路，没有使用liyudong的做法，因为序列不满足有序。
+        - 在 33 四刷解法的基础上，处理了```nums[low] == nums[mid]```的情形
+        - 这里其实用了2 pointers的思路，自增即可。这也是2 pointers常见的做法。
 
 #### [153.Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
 
