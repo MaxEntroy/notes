@@ -324,12 +324,33 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
         - 对于两个有序序列拼接成的序列，使用二分。
         - 二分的关键如上总结到，区间的划分+向左向右的条件。
         - 一开始的顺序向右，以次作为主条件。
+    - 这个题最后强调下，能用二分，只是借鉴二分的思路，并不是标准的二分查找。因为后者需要数组有序。
+- 三刷
+    - 用了大部分答主的通用解法
+        - 即，从mid划分，两边至少有一个区间是有序的。
+        - 任务就是找到这个有序的区间，办法是compare nums[0] and nums[mid]
+        - ```if (nums[0] < nums[mid])```left part is sorted. otherwise, the right part.
+        - 但是，这个判断有一个问题。就是在edge case，mid的计算会落在low上，因为算术平均，向下取整。
+        - [3,1] is an edge case.
+            - ```low = 0, high = 1, mid = 0``` at this moment, the left part is sorted, but the judegement gets the wrong conclusion.
+        - we update the judgement to: ```if (nums[0] <= nums[mid])```
 
 #### [81.Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
 
 - 我在找pivot时，用了遍历算法，因为没法二分找会跳过pivot
 - grandyang的做法在33的基础上，巧妙的发现，如果nums[mid] < nums[high]时，右边区间有序，这个条件不完备。nums[mid] == nums[high]时，也有可能有序
 - 所以，在这个基础上，还是去寻找nums[mid] < nums[high]的情形。
+- 二刷
+    - 直接用了和33一样的做法，发现有问题。  
+        - [1,1,1,1,1,1,1,2,1,1,1,1,1]
+        - 上面这个数组，用二分定位pivot是错误的。
+        - 因为存在可能重复的元素，导致如果mid在2的右侧，无法向左查询。
+        - 如果条件写成```if(nums[mid] > target) low = mid + 1```
+            - 又无法向右。
+        - 所以，有重复元素，不能借鉴二分的思路。
+        - 说明，不管33/81，都无法直接利用二分查找，因为这不符合二分适用的条件。
+        - 实际的做法只是借鉴二分查找的思路，寻找pivot。
+        - 但是，这个办法在序列中存在重复元素时，会失效。
 
 #### [153.Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
 
