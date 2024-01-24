@@ -177,9 +177,11 @@ block by inspecting its footer, which is always one word away from the start of 
 
 说下9.42这个图，这个是最终的结构
 
+It's an application-level allocator, not a system-level allocator.
+
 ##### Data Structure
 
-- block 数据结构
+- core data structure1: block
 
 <img width="600"  src="img/format-of-block.png"/>
 
@@ -194,21 +196,23 @@ block by inspecting its footer, which is always one word away from the start of 
         - 这里header/footer是不是和explist free list当中的双向指针对应。
         - 设计上是完全对应的，It's beatutiful.
 
-- free list数据结构
+- core data structure2: free list
 
 <img width="900"  src="img/data-structure-of-alloctor.png"/>
 
-- word: 代表图中的一个小块，4bytes.
-- double-word: 代表图中的两个小块，8bytes, 1 block，对齐的单位，最小的分配单位
+- word: 代表图中的一个小块，8bytes.
+- double-word: 代表图中的两个小块，16bytes, 2 block，对齐的单位，最小的分配单位.
 - first padding block: The first word is an unused padding word aligned to a double-word boundary.
 - prologue block
     - which is an 8-byte allocated block consisting of only a header and a footer.
     - which is created during initialization and is never freed.
 - regular blocks that are created by calls to malloc or free.
 - epilogue block,which is a zero-size allocated block that consists of only a header.
-
 - The prologue and epilogue blocks are tricks that eliminate the edge conditions during coalescing.
 - 由于prologue和epilogue大小不一样，8bytes/4bytes，所以搞了一个first padding block，凑齐aligned to a double-word boundary.
+- The minimum block size is 16 bytes.
+    - header/footer are is 8 bytes.
+    - the minimum payload+padding is 8 bytes.
 
 ##### General Allocator Design
 

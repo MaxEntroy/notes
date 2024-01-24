@@ -60,4 +60,16 @@ void* NaiveAllocator::MemSbrk(int incr) {
   return old_brk;
 }
 
+bool NaiveAllocator::Init() {
+  // Create the initial empty heap.
+  if (!(mem_heap_prologue_ = MemSbrk(2 * kDoubleWordSize))) {
+    return false;
+  }
+
+  PUT(mem_heap_prologue_, 0);
+  // PUT(mem_heap_prologue_ + (1 * kWordSize), PACK(kDoubleWordSize, 1));
+  // PUT(mem_heap_prologue_ + (2 * kWordSize), PACK(kDoubleWordSize, 1));
+  return true;
+}
+
 }  // namespace csapp
