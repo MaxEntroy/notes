@@ -19,6 +19,10 @@ class NaiveAllocator {
   NaiveAllocator(NaiveAllocator&&) = delete;
   NaiveAllocator& operator=(NaiveAllocator&&) = delete;
 
+  // Before calling Malloc or free functions, the application must initialize the heap
+  // by calling the Init function.
+  bool Init();
+
  private:
   // Initialize the memory system model
   bool MemInit();
@@ -29,7 +33,6 @@ class NaiveAllocator {
   void* MemSbrk(int incr);
 
  private:
-
   // Points to first byte of heap
   Byte* mem_heap_ = nullptr;
 
@@ -38,6 +41,9 @@ class NaiveAllocator {
 
   // Max legal heap addr plus 1
   Byte* mem_max_addr_ = nullptr;
+
+  // Points to first byte of heap
+  void* mem_heap_prologue_ = nullptr;
 
   // The maximum block size
   static constexpr size_t kMaxHeap = (1 << 20);
