@@ -177,8 +177,19 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
     - Present participles are used in various verb tenses (e.g., “I have been eating”) and as adjectives (e.g., “a laughing child”).
     - Gerunds function as nouns (e.g., “I enjoy jogging”).
 
-我觉得这里少强调了一点，participle是一个non-finite verb，所以可以体现动词的tense，进行时态都可以用present participle，过去时态都可以用past participle。同时，present participle兼做adj.而gerund功能非常单一，就是做名词。主要他们的形式看起来都是V-ing.
+我觉得这里少强调了一点，participle是一个non-finite verb，所以可以体现动词的tense，进行时态都可以用present participle，过去时态都可以用past participle。同时，present/past participle兼做adj.而gerund功能非常单一，就是做名词。主要他们的形式看起来都是V-ing.
 
+V-ing
+    - present participle(both verb and adj)
+        - tense of verb
+        - adj.
+    - gerund(n)
+V-ed
+    - past participle(both verb and adj)
+        - tense of verb
+        - past voice
+        - adj
+        
 #### 7.c.vi的形态
 
 - a. s + cvi
@@ -523,4 +534,20 @@ gerund其实是个动词的变体，为什么可以充当n?这么理解，翻译
             - I saw him killed.
             - I heard the door closed.
             - I felt myself lifted.
+- 3.verbs of appointment(任命动词)
+    - We elected him[o] chairman[oc] of the committee.
+    - The colonel assigned him platoon leader.
+- 4.verbs of regarding(认定动词)
+    - 此类动词，表示"视......为"
+    - 1.与prep连用
+        - We regard/look upon/think of/see/view him[o] as a genius[oc]
+        - I mistook the long-haired boy[o] for a girl.
+        - John works hard, so I take it for granted that he'll be successful someday.
+    - 2.与to be连用(to be 可省略)
+        - We consider him[o] to be a genius[oc] 
+        - We consider him a genius
+    - 什么时候加as，什么时候不加，取决于动词搭配。
+        - regard as/think of as，这种需要加
+        - think/consider就不用。
+    -
         
