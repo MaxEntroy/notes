@@ -195,13 +195,18 @@ It's an application-level allocator, not a system-level allocator.
         - 也可以向后找
         - 这里header/footer是不是和explist free list当中的双向指针对应。
         - 设计上是完全对应的，It's beatutiful.
+- block遵循 2-word alignment
+    - 1 word = 4bytes, 2 words = 8bytes, 2 words alignment means the size of block is multiple of 8 bytes.
+    - The remaining 3 bits are always zero which can ecode other information.
 
 - core data structure2: free list
 
 <img width="900"  src="img/data-structure-of-alloctor.png"/>
 
-- word: 代表图中的一个小块，8bytes.
-- double-word: 代表图中的两个小块，16bytes, 2 block，对齐的单位，最小的分配单位.
+- word: 代表图中的一个小块，4bytes
+- double-word: 代表图中的两个小块，16bytes, 2 block，对齐的单位，最小的分配单位. 2-words alignment
+    - 好处在于，大小都是8bytes的整数倍，低3位都是0
+    - 低三位可以用来存储allocated tag.
 - first padding block: The first word is an unused padding word aligned to a double-word boundary.
 - prologue block
     - which is an 8-byte allocated block consisting of only a header and a footer.
