@@ -365,6 +365,12 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
 - 33题的简化题，找pivot，保持思路一致即可。
 - 方法一：我说下我的办法，我还是找了一个target，即nums[0]，用它找到一个两个相邻点，一个大于它，一个小于它，此时insertion point没有问题(不管使用哪种两分查找)。小心high + 1越界的问题
 - 方法二：但是，使用grandyang的方法，即不固定target，每次比较nums[mid] and nums[right]，此时不行。只能用开区间的写法，这个我有点不太理解，暂时先记住。
+- 二刷
+    - 有了之前的基础，这个题很好做。就是找pivot即可。
+    - 两个边界条件
+        - 数组长度是 1 的情形。
+        - 数组本来就是升序的情形。
+    - 同时，只有没有重复元素的时候，才可以这么找pivot.
 
 #### [154.Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
 
