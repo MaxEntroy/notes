@@ -22,4 +22,17 @@
 
 员工认股制度（或员工持股计划，Employee stock ownership plan，ESOP）就是借由让员工认购公司的股票，成为公司的股东之一。 由于股东可以参与公司的分红，当公司赚愈多，股东也分得愈多，因此员工就会被激励更努力工作，为公司及自己同时创造财富。
 
+#### Broker
+
+- a person who buys and sells foreign money, shares in companies, etc., for other people
+- a person who talks to opposing sides, especially governments, making arrangements for them or bringing disagreements to an end
+
+中介，但是根据我对stellar视屏的了解，broker貌似还有更多的工作，帮你厘清要选的背景信息，推荐最准确的东西给你。促成一笔交易。
+人肉推荐系统。
+
+#### Stock
+
+- Stocks (also capital stock, or sometimes interchangeably, shares) consist of all the shares[a] by which ownership of a corporation or company is divided.
+- A single share of the stock means fractional ownership of the corporation in proportion to the total number of shares.
+
 [ESOP](https://zh.wikipedia.org/zh-cn/%E5%93%A1%E5%B7%A5%E8%AA%8D%E8%82%A1%E5%88%B6%E5%BA%A6)<br>
