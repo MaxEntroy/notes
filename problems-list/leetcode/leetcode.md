@@ -371,6 +371,14 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
         - 数组长度是 1 的情形。
         - 数组本来就是升序的情形。
     - 同时，只有没有重复元素的时候，才可以这么找pivot.
+- 三刷
+    - 学到里lyd的二分在此处的应用，我之前一直想统一，看样子是统一了。
+    - 还是只能借鉴算法思路，不能照搬。
+    - 之前就有疑惑，为什么常见的二分可以借鉴，并求解。而lyd的就不行，看样子不是lyd的方法不行，是我没用对。
+    - 因为pivot肯定在右边
+        - 所以，nums[mid]需要和nums[high]进行比较即可。
+        - 同时，不管是普通的二分还是lyd的二分，都有一个通用的理解： **二分mid更新 + 二分条件判断(向左/向右) + 二分边界更新**
+        - 这个题，条件的写法简单。但是，二分区间的划分变了，和标准的lyd的写法有区别了。
 
 #### [154.Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
 
