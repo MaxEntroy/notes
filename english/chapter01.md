@@ -13,6 +13,16 @@
 
 所谓体现句子的时间背景，是指该句子所讲述的究竟是过去？还是现在？还是将来？是指这种粗略的时间划分，而不是指明该句子讲述的是哪个具体时间点或时间段。
 
+>tense: any of the forms of a verb that show the time, continuace, or completion of an action for state that is expressed by the verb.
+
+- 'I am' is the present tense.
+- 'I was' is past tense.
+- 'I will be' is future tense.
+
+tense is any of the forms of a verb that show the time and state.
+- 过去？现在？将来？
+- 是在进行？还是完成了？
+
 eg:
 ```
 I ate apples.
