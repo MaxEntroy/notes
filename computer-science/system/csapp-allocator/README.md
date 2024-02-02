@@ -281,3 +281,29 @@ SYNOPSIS
 #define NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))
 #define PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))
 ```
+
+- ```MemSbrk```这个函数我再说一下，我一直感觉语意不是搞得很明白。
+    - 1st, 这个函数移动brk指针。brk是size的范围。max_heap是capacity范围
+    - 2nd，这个函数返回的是本次申请内存的首地址。之前总是强调previous sbrk，其实很容易忽略这点。
+```cpp
+void* NaiveAllocator::MemSbrk(int incr) {
+  // sbrk() returns the previous program break.
+  auto* old_brk = mem_brk_;
+  if (incr < 0 or mem_brk_ + incr > mem_max_addr_) {
+    std::cerr << "Sbrk failed. Run out of memory.\n";
+    return nullptr;
+  }
+  mem_brk_ += incr;
+  return old_brk;
+}
+```
+
+- ```ExtendHeap```这个函数有点东西(somewhat subtle)，它做了如下的变化。
+    - 分配出来的内存地址，其实不是payload地址。
+    - 但是，合并了上一个epilogue block
+        - epilgue block只有header没有footer
+        - 所以刚好是一个word.
+    - 同时，自己分配出来的最后一个word，充当epilogue block。
+    - 从而让分配出来的内存首地址，变成了payload.
+    - 从而，可以进行任何基于payload地址计算的操作。
+    - That's god damn awesome!!!
