@@ -26,12 +26,12 @@ using Word = NaiveAllocator::Word;
 #define GET_ALLOC(p) (GET(p) & 0x1)
 
   // Given block ptr bp, compute address of its header and footer.
-#define HEADER(bp) (reinterpret_cast<Btye*>(bp) - kWordSize)
-#define FOOTER(bp) (reinterpret_cast<Btye*>(bp) + GET_SIZE(bp) - kDoubleWordSize)
+#define HEADER(bp) (reinterpret_cast<Byte*>(bp) - kWordSize)
+#define FOOTER(bp) (reinterpret_cast<Byte*>(bp) + GET_SIZE(bp) - kDoubleWordSize)
 
 // Given block ptr br, compute address of next and previous blocks.
-#define NEXT_BLK(bp) (reinterpret_cast<Btye*>(bp) + GET_SIZE(HEADER(bp)))
-#define PREV_BLK(bp) (reinterpret_cast<Btye*>(bp) + GET_SIZE((reinterpret_cast<Btye*>(bp) - DSIZE)))
+#define NEXT_BLK(bp) (reinterpret_cast<Byte*>(bp) + GET_SIZE(HEADER(bp)))
+#define PREV_BLK(bp) (reinterpret_cast<Byte*>(bp) + GET_SIZE((reinterpret_cast<Byte*>(bp) - DSIZE)))
 }  // anonymous namespace
 
 bool NaiveAllocator::Init() {
@@ -88,8 +88,14 @@ void* NaiveAllocator::ExtendHeap(size_t nwords) {
   }
 
   // Initialize free block header/footer and the epilogue header
-  return nullptr;
+  PUT(HEADER(bp), PACK(size, 0));  // free block header
+  PUT(FOOTER(bp), PACK(size, 0));  // free block footer
+  PUT(HEADER(NEXT_BLK(bp)), PACK(0, 1));  // New epilogue header
+  return Coalesce(bp);
 }
 
+void* NaiveAllocator::Coalesce(void* bp) {
+  return bp;
+}
 
 }  // namespace csapp

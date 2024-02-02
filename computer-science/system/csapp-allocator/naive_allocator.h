@@ -23,6 +23,9 @@ class NaiveAllocator {
   // by calling the Init function.
   bool Init();
 
+  // Free a previously allocated block.
+  void Free(void* bp);
+
  private:
   // Initialize the memory system model
   bool MemInit();
@@ -34,6 +37,10 @@ class NaiveAllocator {
 
   // Extend the heap and create the initial free block.
   void* ExtendHeap(size_t nwords);
+
+  // Merge the two free blocks and return the block pointer
+  // of the merged blocks.
+  void* Coalesce(void* bp);
 
  private:
   // Points to first byte of heap
