@@ -204,7 +204,7 @@ It's an application-level allocator, not a system-level allocator.
 <img width="900"  src="img/data-structure-of-alloctor.png"/>
 
 - word: 代表图中的一个小块，4bytes
-- double-word: 代表图中的两个小块，16bytes, 2 block，对齐的单位，最小的分配单位. 2-words alignment
+- double-word: 代表图中的两个小块，8 bytes, 2 blocks，对齐的单位，最小的分配单位. 2-words alignment
     - 好处在于，大小都是8bytes的整数倍，低3位都是0
     - 低三位可以用来存储allocated tag.
 - first padding block: The first word is an unused padding word aligned to a double-word boundary.
@@ -261,6 +261,7 @@ It's an application-level allocator, not a system-level allocator.
     - decreasing the break deallocates memory.
 - brk() sets the end of the data segment to the value specified by addr
 - sbrk() increments the program's data space by increment bytes.
+
 ```c
 // brk, sbrk - change data segment size
 SYNOPSIS
@@ -271,7 +272,7 @@ SYNOPSIS
        void *sbrk(intptr_t increment);
 ```
 
-关于宏的实现，收一下怎么根据bp找上一个bp
+关于宏的实现，说一下怎么根据当前bp找上一个bp
 - 本质是先拿到上一个块的size，这个怎么拿，取上一个footer. 所以是```(char *)(bp) - DSIZE)```
 - 上面的操作，拿到上一个footer，然后根据footer，计算出上一个块的大小。
 - 最后，当前payload地址减去上一个块的大小，就是上一个块的payload地址。

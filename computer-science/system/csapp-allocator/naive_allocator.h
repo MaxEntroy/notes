@@ -32,6 +32,9 @@ class NaiveAllocator {
   // In this model, the heap cannot be shrunk.
   void* MemSbrk(int incr);
 
+  // Extend the heap and create the initial free block.
+  void* ExtendHeap(size_t nwords);
+
  private:
   // Points to first byte of heap
   Byte* mem_heap_ = nullptr;
@@ -43,7 +46,7 @@ class NaiveAllocator {
   Byte* mem_max_addr_ = nullptr;
 
   // Points to first byte of heap
-  void* mem_heap_prologue_ = nullptr;
+  Byte* mem_heap_prologue_ = nullptr;
 
   // The maximum block size
   static constexpr size_t kMaxHeap = (1 << 20);

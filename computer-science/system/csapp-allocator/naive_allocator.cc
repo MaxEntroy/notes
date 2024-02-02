@@ -11,31 +11,49 @@ namespace {
 // Thus, we find it helpful to define a small set of macros for accessing and
 // traversing the free list
 
+using Byte = NaiveAllocator::Byte;
+using Word = NaiveAllocator::Word;
+
 // Pack a size and allocated bit into a word
 #define PACK(size, alloc) ((size) | (alloc))
 
-// Deference address p based on specific type
-#define CAST(p, Type) (static_cast<Type*>(p))
-#define DEFER(p, Type) (*CAST(p, Type))
-
 // Read and write a word at address p
-#define GET(p) (DEFER(p, NaiveAllocator::Word))
-#define PUT(p, val) (DEFER(p, NaiveAllocator::Word) = (val))
+#define GET(p) (*reinterpret_cast<Word*>(p))
+#define PUT(p, val) (GET(p) = (val))
 
 // Read the size and allocated bits from address p
 #define GET_SIZE(p) (GET(p) & ~0x7)
 #define GET_ALLOC(p) (GET(p) & 0x1)
 
   // Given block ptr bp, compute address of its header and footer.
-#define HEADER(bp) (CAST(bp, NaiveAllocator::Byte) - NaiveAllocator::kWordSize)
-#define FOOTER(bp) (CAST(bp, NaiveAllocator::Byte) + GET_SIZE(HEADER(bp)) - NaiveAllocator::kDoubleWordSize)
+#define HEADER(bp) (reinterpret_cast<Btye*>(bp) - kWordSize)
+#define FOOTER(bp) (reinterpret_cast<Btye*>(bp) + GET_SIZE(bp) - kDoubleWordSize)
 
 // Given block ptr br, compute address of next and previous blocks.
-#define NEXT_BLK(bp) (CAST(bp, NaiveAllocator::Byte) + GET_SIZE(HEADER(bp)))
-#define PREV_BLK(bp)                                                           \
-  (CAST(bp, NaiveAllocator::Byte) -                                            \
-   GET_SIZE(                                                                   \
-       (CAST(bp, NaiveAllocator::Byte) - NaiveAllocator::kDoubleWordSize)))
+#define NEXT_BLK(bp) (reinterpret_cast<Btye*>(bp) + GET_SIZE(HEADER(bp)))
+#define PREV_BLK(bp) (reinterpret_cast<Btye*>(bp) + GET_SIZE((reinterpret_cast<Btye*>(bp) - DSIZE)))
+}  // anonymous namespace
+
+bool NaiveAllocator::Init() {
+  // Create the initial empty heap.
+  mem_heap_prologue_ = static_cast<Byte*>(MemSbrk(4 * kWordSize));
+  if (!mem_heap_prologue_) {
+    return false;
+  }
+
+  PUT(mem_heap_prologue_, 0);  // Alignment padding.
+  PUT(mem_heap_prologue_ + (1 * kWordSize), PACK(kDoubleWordSize, 1));  // Prologue header.
+  PUT(mem_heap_prologue_ + (2 * kWordSize), PACK(kDoubleWordSize, 1));  // Prologue header.
+  PUT(mem_heap_prologue_ + (3 * kWordSize), PACK(0, 1));  // Epilogue header.
+
+  mem_heap_prologue_ += (2 * kWordSize); // why?
+
+  // Extend the empty heap with a free block of CHUNKSIZE bytes.
+  if (ExtendHeap(kChunkSize / kWordSize)) {
+    return false;
+  }
+
+  return true;
 }
 
 bool NaiveAllocator::MemInit() {
@@ -60,16 +78,18 @@ void* NaiveAllocator::MemSbrk(int incr) {
   return old_brk;
 }
 
-bool NaiveAllocator::Init() {
-  // Create the initial empty heap.
-  if (!(mem_heap_prologue_ = MemSbrk(2 * kDoubleWordSize))) {
-    return false;
+void* NaiveAllocator::ExtendHeap(size_t nwords) {
+  // Allocate an even number of words to maintain alignment.
+  auto size = (nwords % 2) ? (nwords + 1) * kWordSize : nwords * kWordSize;
+  auto* bp = static_cast<Byte*>(MemSbrk(size));
+  if (!bp) {
+    std::cerr << "Sbrk failed. Run out of memery.\n";
+    return nullptr;
   }
 
-  PUT(mem_heap_prologue_, 0);
-  PUT(mem_heap_prologue_ + (1 * kWordSize), PACK(kDoubleWordSize, 1));
-  PUT(mem_heap_prologue_ + (2 * kWordSize), PACK(kDoubleWordSize, 1));
-  return true;
+  // Initialize free block header/footer and the epilogue header
+  return nullptr;
 }
+
 
 }  // namespace csapp

@@ -1,5 +1,5 @@
-CXX= g++ -std=c++17
-CXXFLAGS= -g -O3 -Wall -Wextra
+CXX= g++ -std=c++17 -Wall -Wextra
+CXXFLAGS= -g -O3
 LDFLAGS=
 LIBS= -pthread 
 
