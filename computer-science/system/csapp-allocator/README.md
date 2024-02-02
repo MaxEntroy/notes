@@ -307,3 +307,5 @@ void* NaiveAllocator::MemSbrk(int incr) {
     - 从而让分配出来的内存首地址，变成了payload.
     - 从而，可以进行任何基于payload地址计算的操作。
     - That's god damn awesome!!!
+
+<img width="900"  src="img/extend-heap.png"/>
