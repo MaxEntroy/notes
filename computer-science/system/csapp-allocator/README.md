@@ -138,7 +138,8 @@ is a good chance that we will find a fit the next time in the remainder of the b
 #### 9.9.8 Splitting Free Blocks(allocating in a free block:splitting)
 
 这块我理解错了，之前理解成，分配出去之后，剩余块怎么组织。其实不是，比如我们现在找到了一个block(不管用什么策略，假如first fit)
-此时有个问题，就是需要的字节可能比这个块小很多。怎么处理？可以全分配出去，造成internal fragment。也可以把这个block分解了，再分配出去给user，提升使用率。
+此时有个问题，就是分配剩下的块大小，如果小于对齐块大小。此时，不能做split，否则后者无法对齐。应该整体一起分配出去。
+如果剩余块满足对齐大小，则需要做split.将一个整块分割成已分配块和剩余块。
 
 这里主要是针对header做出初始化的调整。
 #### 9.9.9 Getting Additional Heap Memory
@@ -309,3 +310,23 @@ void* NaiveAllocator::MemSbrk(int incr) {
     - That's god damn awesome!!!
 
 <img width="900"  src="img/extend-heap.png"/>
+
+##### Summary
+
+- 虽然我用cpp写了代码，但整体风格还是c-style.
+  - 因为并没有用到oo的东西, 抽象，封装，继承都没有。
+  - 只是用了一些cpp的语法，诸如named cast来避免c-style cast
+- c-style的代码可读性还是很差。
+  - 没有显示数据结构的封装。
+  - 通过地址重解析(reinterpret_cast)来表明对应的数据结构，非常难于理解。
+  - 大量的地址操作，宏使用。
+- 核心还是对于逻辑结构的操作。
+  - Header/Footer
+  - 以及prev_block/next block对应header/footer的修改。
+  - 物理内存就是在那里，用或不用，都在那里。操作的本质是逻辑结构，由逻辑结构来表明是否在用。
+- Malloc的核心操作
+  - Search(如何高效实现)
+  - Place
+- Free的核心操作
+  - coalescing(boundry tag，核心中的核心)
+  - 使得常量时间复杂度完成了merge操作。

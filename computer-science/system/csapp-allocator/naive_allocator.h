@@ -23,6 +23,9 @@ class NaiveAllocator {
   // by calling the Init function.
   bool Init();
 
+  // An applicaton requests a block of size bytes of memory by calling Malloc.
+  void* Malloc(size_t size);
+
   // Free a previously allocated block.
   void Free(void* bp);
 
@@ -37,6 +40,16 @@ class NaiveAllocator {
 
   // Extend the heap and create the initial free block.
   void* ExtendHeap(size_t nwords);
+
+  // First fit search of implicit free list.
+  // asize has been adjusted to include overhead and alignmnet reqs.
+  void* FindFit(size_t asize);
+
+  // Place the requested block at the beginning of the free block,
+  // splitting only if the size of the remainder would equal or
+  // exceed the minimus block size.
+  // asize has been adjusted to include overhead and alignmnet reqs.
+  void Place(void* bp, size_t asize);
 
   // Merge the two free blocks and return the block pointer
   // of the merged blocks.
@@ -60,13 +73,13 @@ class NaiveAllocator {
 
  private:
   // Word and header/foot size(bytes)
-  static constexpr int kWordSize = 4;
+  static constexpr size_t kWordSize = 4;
 
-  // Double-word size(bytes)
-  static constexpr int kDoubleWordSize = 8;
+  // Double-word size(bytes)/Alignment size(minimus block size)
+  static constexpr size_t kDoubleWordSize = 8;
 
   // Extend heap by this amount(bytes)
-  static constexpr int kChunkSize = (1 << 12);
+  static constexpr size_t kChunkSize = (1 << 12);
 };
 
 }  // namespace csapp
