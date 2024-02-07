@@ -31,7 +31,7 @@ using Word = NaiveAllocator::Word;
 
 // Given block ptr br, compute address of next and previous blocks.
 #define NEXT_BLK(bp) (reinterpret_cast<Byte*>(bp) + GET_SIZE(HEADER(bp)))
-#define PREV_BLK(bp) (reinterpret_cast<Byte*>(bp) + GET_SIZE((reinterpret_cast<Byte*>(bp) - DSIZE)))
+#define PREV_BLK(bp) (reinterpret_cast<Byte*>(bp) + GET_SIZE((reinterpret_cast<Byte*>(bp) - kDoubleWordSize)))
 }  // anonymous namespace
 
 bool NaiveAllocator::Init() {
@@ -54,6 +54,15 @@ bool NaiveAllocator::Init() {
   }
 
   return true;
+}
+
+void NaiveAllocator::Free(void* bp) {
+  size_t size = GET_SIZE(HEADER(bp));
+
+  PUT(HEADER(bp), PACK(size, 0));
+  PUT(FOOTER(bp), PACK(size, 0));
+
+  Coalesce(bp);
 }
 
 bool NaiveAllocator::MemInit() {
@@ -95,6 +104,13 @@ void* NaiveAllocator::ExtendHeap(size_t nwords) {
 }
 
 void* NaiveAllocator::Coalesce(void* bp) {
+  size_t prev_alloc = GET_ALLOC(FOOTER(PREV_BLK(bp)));
+  size_t next_alloc = GET_ALLOC(HEADER(NEXT_BLK(bp)));
+
+  if (!prev_alloc and !next_alloc) {
+    return bp;
+  }
+
   return bp;
 }
 
