@@ -330,3 +330,12 @@ void* NaiveAllocator::MemSbrk(int incr) {
 - Free的核心操作
   - coalescing(boundry tag，核心中的核心)
   - 使得常量时间复杂度完成了merge操作。
+
+- API 设计
+    - kernel level
+        - ```MemInit``` models the virtual memory available to the heap as a
+large double-word aligned array of bytes.
+        - The bytes between ```mem_heap_``` and ```mem_brk_``` represent allocated virtual memory.
+        - The bytes following  ```mem_brk``` represent unallocated virtual memory.
+        - The allocator requests additional heap memory by calling the ```MemSbrk``` function
+    - app level

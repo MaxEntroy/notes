@@ -35,6 +35,12 @@ using Word = NaiveAllocator::Word;
 }  // anonymous namespace
 
 bool NaiveAllocator::Init() {
+  // Initialize the memory system model
+  bool is_init_succ = MemInit();
+  if (!is_init_succ) {
+    std::cerr << "MemInit failed.\n";
+  }
+
   // Create the initial empty heap.
   mem_heap_prologue_ = static_cast<Byte*>(MemSbrk(4 * kWordSize));
   if (!mem_heap_prologue_) {
