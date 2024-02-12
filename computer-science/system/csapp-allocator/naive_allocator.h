@@ -30,6 +30,7 @@ class NaiveAllocator {
   void Free(void* bp);
 
  private:
+  // Kernel-level helper.
   // Initialize the memory system model
   bool MemInit();
 
@@ -38,6 +39,8 @@ class NaiveAllocator {
   // In this model, the heap cannot be shrunk.
   void* MemSbrk(int incr);
 
+ private:
+  // App-level helper.
   // Extend the heap and create the initial free block.
   void* ExtendHeap(size_t nwords);
 

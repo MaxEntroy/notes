@@ -313,13 +313,34 @@ void* NaiveAllocator::MemSbrk(int incr) {
 
 ##### Summary
 
-- 虽然我用cpp写了代码，但整体风格还是c-style.
-  - 因为并没有用到oo的东西, 抽象，封装，继承都没有。
-  - 只是用了一些cpp的语法，诸如named cast来避免c-style cast
-- c-style的代码可读性还是很差。
-  - 没有显示数据结构的封装。
-  - 通过地址重解析(reinterpret_cast)来表明对应的数据结构，非常难于理解。
-  - 大量的地址操作，宏使用。
+关于接口设计一些方面的心得
+- API 设计
+    - kernel level
+        - ```MemInit``` models the virtual memory available to the heap as a
+large double-word aligned array of bytes.
+        - The bytes between ```mem_heap_``` and ```mem_brk_``` represent allocated virtual memory.
+        - The bytes following  ```mem_brk``` represent unallocated virtual memory.
+        - The allocator requests additional heap memory by calling the ```MemSbrk``` function
+    - app level
+        - The ```Init``` function initializes the allocator.
+        - The ```Malloc``` and ```Free``` functions have the same interfaces and semantics as their system counterparts.
+
+整体的心得
+- 整体思路
+    - 物理申请一大片内存
+    - 逻辑上管理，提供app allocator的作用。
+        - 好处就是避免了kernel级别的申请和释放
+        - 实际的申请/释放，可能只是一些指针操作，非常轻量。
+- 实现细节
+    - 代码层面用cpp写，但实际是c-style的思路。
+    - 因为并没有用到oo的东西, 抽象，封装，继承都没有。
+    - 只是用了一些cpp的语法，诸如named cast来避免c-style cast
+- 可读性差
+    - 主要是因为没有用到封装，整体还是基于c-style来写
+    - 没有显示数据结构的封装，通过地址重解析(reinterpret_cast)来表明对应的数据结构，非常难于理解。
+        - 指针操作也是基于地址重解析之后的操作
+        - 移动的实际字节数，取决于转换后的类型。
+    - 个人以为，地址重解析，体现了整个数据结构的设计。同时，以为它不好理解。也导致数据结构难于理解。
 - 核心还是对于逻辑结构的操作。
   - Header/Footer
   - 以及prev_block/next block对应header/footer的修改。
@@ -330,12 +351,3 @@ void* NaiveAllocator::MemSbrk(int incr) {
 - Free的核心操作
   - coalescing(boundry tag，核心中的核心)
   - 使得常量时间复杂度完成了merge操作。
-
-- API 设计
-    - kernel level
-        - ```MemInit``` models the virtual memory available to the heap as a
-large double-word aligned array of bytes.
-        - The bytes between ```mem_heap_``` and ```mem_brk_``` represent allocated virtual memory.
-        - The bytes following  ```mem_brk``` represent unallocated virtual memory.
-        - The allocator requests additional heap memory by calling the ```MemSbrk``` function
-    - app level
