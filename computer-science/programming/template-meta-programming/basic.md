@@ -94,6 +94,10 @@ The episode is related to last episode.
 
 There can be **more than one definition** in a program of each of the following: class type, enumeration type, **inline function**, **inline variable(since C++17),** templated entity (template or member of template, but not full template specialization).
 
-The reason why someone believes that it does make sense to use ```inline``` with template is that it doesn't violate ODR. Because it's an inline template which means there can be more that one definition.
+The reason why someone believes that it does make sense to use ```inline``` with template is that it doesn't violate ODR. Because it's an inline template which means there can be more than one definition.
 
-But, the real code shows that it doesn't matter.
+But explicit declaration with ```inline``` doesn't mean the template will be inlining. No ```inline``` declaration doesn't mean the template will not be inlining too. 
+
+That ```inline``` template can violate ODR is true, but ```inline``` declaration has nothing to do with it.
+
+Write inline if you mean it and just be consistent. That's all.
