@@ -508,6 +508,15 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
         - 每个元素判断。如果是一个hole，累加counter.
         - 否则，向前覆盖即可。
     - 2 pointers的解法也是直观好理解，不过元素的计数还是没有第一次就做出来。
+- 三刷
+    - 复习了一下二刷的办法。
+
+#### [26. Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/)
+
+- 一刷
+    - 有了 27 题的基础，做起来发现虽然题面不一样，但是做法一样。
+    - 增加计数器```counter```用来统计当前元素和前序的相同个数。
+    - 即使是不同的元素也没有问题，可以放在一起统计。
 
 ### 链表
 
