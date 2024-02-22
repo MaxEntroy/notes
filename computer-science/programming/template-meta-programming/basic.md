@@ -34,7 +34,7 @@ expand it.
 Expanding a pack separates the pack into its constituent elements,
 applying the pattern to each element as it does so.
 
-#### inline with tempalte
+### inline with tempalte
 
 According to [Does it make any sense to use inline keyword with templates?](https://stackoverflow.com/questions/10535667/does-it-make-any-sense-to-use-inline-keyword-with-templates)
 
@@ -85,7 +85,7 @@ So, I think it's ok to use ```inline``` keyword with templates just as other sce
 [Explicit (full) template specialization](https://en.cppreference.com/w/cpp/language/template_specialization)<br>
 [Does it make any sense to use inline keyword with templates?](https://stackoverflow.com/questions/10535667/does-it-make-any-sense-to-use-inline-keyword-with-templates)
 
-#### ODR.
+### ODR.
 
 The episode is related to last episode.
 
@@ -101,3 +101,52 @@ But explicit declaration with ```inline``` doesn't mean the template will be inl
 That ```inline``` template can violate ODR is true, but ```inline``` declaration has nothing to do with it.
 
 Write inline if you mean it and just be consistent. That's all.
+
+### Constraining templates
+
+- ```std::enable_if``` gives you a way to force compilers to behave as if a particular tem‐
+plate didn’t exist. Such templates are said to be disabled. 
+- By default, all templates are enabled, but a template using std::enable_if is enabled only if the condition speci‐
+fied by std::enable_if is satisfied. 
+
+If a template is not enabled, template initialization will not be performed and the corresponding function will not be generated.
+
+Obviously, there is no corresponding function label. The subsequent function call will fail and we'll get an error messasge ```no matching function for call to XXX```.
+
+```cpp
+#include <iostream>
+
+template<
+  typename T,
+  typename = std::enable_if_t<
+    !std::is_same_v<std::string, T>
+    and
+    !std::is_same_v<bool, T>
+  >
+>
+void Print(T param) {
+  if constexpr (std::is_same_v<int, T>) {
+    std::cout << "This is an intergal value:" << param << std::endl;
+  } else if constexpr (std::is_same_v<double, T>) {
+    std::cout << "This is a double value:" << param << std::endl;
+  } else {
+    std::cout << "Mismatch type value:" << param << std::endl;
+  }
+}
+
+int main(void) {
+  int val = 3;
+  double pi = 3.14;
+  float e = 2.718;
+  Print(val);
+  Print(pi);
+  Print(e);
+
+  // bool flag = false;
+  // Print(flag);
+
+  // std::string str = "hello";
+  // Print(str);
+  return 0;
+}
+```
