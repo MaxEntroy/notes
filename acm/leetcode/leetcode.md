@@ -518,6 +518,11 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
     - 增加计数器```counter```用来统计当前元素和前序的相同个数。
     - 即使是不同的元素也没有问题，可以放在一起统计。
 
+#### [283. Move Zeroes](https://leetcode.com/problems/move-zeroes/description/)
+
+- 一刷
+    - 这套题目，本质是想讲双指针。但是，我觉得计数法做这类题目最简单。
+
 ### 链表
 
 这里整体比较熟悉，所以不特别介绍方法论。
