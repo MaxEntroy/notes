@@ -8,12 +8,15 @@
 
 #### 3.动名词或不定时短语做主语
 
-- finite verbs
-    - a finite verb form shows a particular tense(时态), person(人称) and number(单数/复数).
+下面先补充一些背景知识
+
+##### finite verbs
+
+A finite verb form shows a particular tense(时态), person(人称) and number(单数/复数).
 
 所谓体现句子的时间背景，是指该句子所讲述的究竟是过去？还是现在？还是将来？是指这种粗略的时间划分，而不是指明该句子讲述的是哪个具体时间点或时间段。
 
->tense: any of the forms of a verb that show the time, continuace, or completion of an action for state that is expressed by the verb.
+Tense is any of the forms of a verb that show the time, continuace, or completion of an action for state that is expressed by the verb.
 
 - 'I am' is the present tense.
 - 'I was' is past tense.
@@ -36,6 +39,15 @@ I will eat apples.
 
 再来看 finite verb 体现主语的人称和数这个功能。
 
+- I like/you like/he likes/she likes
+    - 对于tense来说，都是present tense.
+    - I/you/he/she，都是单数，一个人。
+    - 那么，谓语动词的区别(+s or not)体现在人称上。
+- Tom likes play football, but most of his friends prefer basketball.
+    - 这句话，都是present tense.
+    - 人称，没有直接的体现，因为没有代词。
+    - 数量，tom是一个人，他的大部分同学不止一个人。所以，前者likes，后者like
+
 eg:
 ```
 I am strong. 
@@ -47,14 +59,17 @@ It is strong.
 They are strong.
 ```
 
-上面这些句子中加粗加下划线的斜体字，之所以形式不一样，是因为主语的人称和数不一样。当主语是第一人称单数时，我们用了 am; 当主语是第二人称时，我们用来 are; 当主语是第三人称单数时，我们用了 is; 当主语是第三人称复数时，我们用了 are. 也就是说 finite verb 在形式上要受到主语的人称和数的限制，要和主语的人称和数保持一致。这就是所谓的 subject verb agreement (主谓一致)
+上面这些句子中加粗加下划线的斜体字，之所以形式不一样，是因为主语的人称和数不一样。当主语是第一人称单数时，我们用了 am; 当主语是第二人称时，我们用来 are; 当主语是第三人称单数时，我们用了 is; 当主语是第三人称复数时，我们用了 are. 
+
+也就是说 finite verb 在形式上要受到主语的人称和数的限制，要和主语的人称和数保持一致。这就是所谓的 subject verb agreement (主谓一致)
 
 讲finite verbs主要目的是给gerund做铺垫，后者是infinite verbs
 
+##### infinite verbs
+
 - gerund
-    - a word ending in "-ing" that is made from a verb and used like a noun
-    - infinite verb
-    - 不反应tense,person,number，没有主谓一致。
+    - a word ending in "-ing" that is made from a verb and used like a noun(反之不成立，以-ing结尾的单词，不一定是gerund)
+    - 不反映tense,person,number，没有主谓一致。
     - 但是他们能够表达状态
 
 ```
