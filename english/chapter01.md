@@ -65,7 +65,13 @@ They are strong.
 
 讲finite verbs主要目的是给gerund做铺垫，后者是infinite verbs
 
-##### infinite verbs
+##### nonfinite verbs
+
+In English, a nonfinite verb may constitute:
+
+- an infinitive verb, including the auxiliary verb have as it occurs within a verb phrase that is predicated by a modal verb.
+- a participle.
+- a gerund.
 
 - gerund
     - a word ending in "-ing" that is made from a verb and used like a noun(反之不成立，以-ing结尾的单词，不一定是gerund)
@@ -86,6 +92,8 @@ Passing an rvalue container to the function is an edge case.
 To study abroad is my greatest desire.
 To go to Japan for a visit is my plan for this year.
 ```
+
+participle留在下一小节讲解。
 
 [finite verb 和 non-finite verb](https://www.aaaaenglish.com/index.php/fudaojilu/cz/7/finite-verb-n-nonfinite-verb)
 
@@ -147,7 +155,7 @@ When to go home is not decided by people in the meeting.
 >transitive: able to take a direct object 
 dataive: the form of a noun, pronoun, or adjective that in some languages marks the indirect object of a verb that has two objects
 
-及物这个翻译有点抽象，可带宾语动词。其中，这个dative也比较特殊，双宾语。
+及物这个翻译有点抽象，可带宾语动词。其中，这个dative也比较特殊，间接宾语。
 
 当然，从上一小节得知，从另一个角度来说，即一个句子的动词是否反应tense/person/number又可以分为
 - finite verbs
@@ -203,18 +211,19 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
     - Present participles are used in various verb tenses (e.g., “I have been eating”) and as adjectives (e.g., “a laughing child”).
     - Gerunds function as nouns (e.g., “I enjoy jogging”).
 
-我觉得这里少强调了一点，participle是一个non-finite verb，所以可以体现动词的tense，进行时态都可以用present participle，过去时态都可以用past participle。同时，present/past participle兼做adj.而gerund功能非常单一，就是做名词。主要他们的形式看起来都是V-ing.
+这里要注意，大家形式一样，所以要注意区分。上面是从作用的角度来说，下面从形式来划分
 
 V-ing
     - present participle(both verb and adj)
-        - tense of verb
-        - adj.
-    - gerund(n)
+        - tense of verb.(I am going to school.)
+        - adj.(A launghing face.)
+    - gerund(n) 
+        - Passing an rvalue to a container is an edge case.
 V-ed
     - past participle(both verb and adj)
-        - tense of verb
-        - past voice
-        - adj
+        - tense of verb(I liked(+ed) dancing when I was in primary school.)
+        - past voice(The man is killed(+ed).)
+        - adj(My bike is broken(+ed))
         
 #### 7.c.vi的形态
 
