@@ -543,6 +543,15 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
             - 我需要的是大于零，只能写成```if (val > 0)```
             - ```a and (b or c)```，不能写成```a and b or c``` 前者需要a永真，后者不需要
 
+#### [977. Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/description/)
+
+- 一刷
+    - 方法一：常规操作，平方后，排序。trivial solution.
+    - 方法二：2 pointers
+        - 因为原来的序列有序，只不过负数的平方可能更大。
+        - 一开始我是想单独处理，全小于0，全大于0，以及有小于0和大于0的三种情形。
+        - 后来发现，直接2 pointers前后遍历即可。
+
 ### 链表
 
 这里整体比较熟悉，所以不特别介绍方法论。
