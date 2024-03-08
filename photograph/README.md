@@ -12,7 +12,7 @@
 - Focal length
     - The focal length of an optical system is a measure of how strongly the system converges or diverges light.
     - it is the inverse of the system's optical power.
-    
+
 ### 摄影入门课
 
 - EP03
@@ -20,4 +20,5 @@
     - 同时，影响景深。景深一浅，也就达到虚化的效果了。
 - EP04
     - 焦段也可以影响景深，越小，景深约大。
-    - 同时，好处在于。大光圈，进光量够，但是周围都虚了。配合小焦段，可以排出大光圈，但是周围不虚的照片
+    - 同时，好处在于。大光圈，进光量够，但是周围都虚了。配合小焦段，可以排出大光圈，但是周围不虚的照片.
+    - 焦段/焦距，focal length，透镜中心到焦点的距离。这个值越小，视角越大。
