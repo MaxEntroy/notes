@@ -72,6 +72,7 @@ In English, a nonfinite verb may constitute:
 - an infinitive verb, including the auxiliary verb have as it occurs within a verb phrase that is predicated by a modal verb.
 - a participle.
 - a gerund.
+- an infinitive with 'to'
 
 - gerund
     - a word ending in "-ing" that is made from a verb and used like a noun(反之不成立，以-ing结尾的单词，不一定是gerund)
@@ -218,11 +219,11 @@ V-ing
         - tense of verb.(I am going to school.)
         - adj.(A launghing face.)
     - gerund(n) 
-        - Passing an rvalue to a container is an edge case.
+        - Passing an rvalue to a function is an edge case.
 V-ed
     - past participle(both verb and adj)
         - tense of verb(I liked(+ed) dancing when I was in primary school.)
-        - past voice(The man is killed(+ed).)
+        - past voice(The man was killed(+ed) last night.)
         - adj(My bike is broken(+ed))
         
 #### 7.c.vi的形态
