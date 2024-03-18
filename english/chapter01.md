@@ -70,8 +70,9 @@ They are strong.
 In English, a nonfinite verb may constitute:
 
 - an infinitive verb, including the auxiliary verb have as it occurs within a verb phrase that is predicated by a modal verb.
-- a participle.
-- a gerund.
+    - a participle.
+    - a gerund.
+    - an infinitive with 'to'
 
 - gerund
     - a word ending in "-ing" that is made from a verb and used like a noun(反之不成立，以-ing结尾的单词，不一定是gerund)
@@ -196,10 +197,10 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
     - He wrote a book.
 - b. s + be verb + cvt-ing(present participle) + o
     - He was writing a book.
-- c. s + be verb + cvt-ed(past participle) + o
+- c. s + be verb + cvt-ed(past participle + passive voice) + o
     - The book was written by him.
 - d. s + be verb + being + cvt-ed + o
-    - A book was being written by him.
+    - A book was being written by him.(is written, past voice. past continuous participle is-> was being )
 
 这里介绍participle的概念
 >In linguistics, a participle (from Latin participium 'a sharing, partaking'; abbr. ptcp) is a nonfinite verb form that has some of the characteristics and functions of both verbs and adjectives.[1] More narrowly, participle has been defined as "a word derived from a verb and used as an adjective, as in a laughing face"
@@ -218,11 +219,11 @@ V-ing
         - tense of verb.(I am going to school.)
         - adj.(A launghing face.)
     - gerund(n) 
-        - Passing an rvalue to a container is an edge case.
+        - Passing an rvalue to a function is an edge case.
 V-ed
     - past participle(both verb and adj)
         - tense of verb(I liked(+ed) dancing when I was in primary school.)
-        - past voice(The man is killed(+ed).)
+        - past voice(The man was killed(+ed) last night.)
         - adj(My bike is broken(+ed))
         
 #### 7.c.vi的形态
@@ -264,7 +265,7 @@ V-ed
 
 所以，正因为它是i.vi，才特别强调这个连接的作用。否则，vt就没有连接这样的语意，因为它是很自然的。
 
-i.vi，以copula为基础，连接subject以及subject complementary.
+i.vi，以copula为基础，连接subject以及subject complementary. i.vi主要指linking verb及其变体。
 
 - n. He looks happy.
 - adj. He became a good student.
