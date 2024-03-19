@@ -307,6 +307,14 @@ eg: become
 
 [Predicate (grammar)](https://en.wikipedia.org/wiki/Predicate_(grammar))
 
+上面是wikipedia的解释，我觉得剑桥的解释更加简单，直接：
+
+>in grammar, the part of a sentence that contains the verb and gives information about the subject.
+
+In the sentence "We went to the airport", "went to the airport" is the predicate.
+
+所以，对于Predicate以及predicative不妨理解为，对主语具有说明性，修饰性的成分。
+
 这里讲解了一些谓语的基础，其次提到了copula(linking verb)，紧接着，引出下面的内容。
 
 - A predicative expression (or just predicative) is part of a clause predicate, and is an expression that typically follows a copula or linking verb
