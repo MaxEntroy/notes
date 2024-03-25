@@ -443,6 +443,17 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
             - 其二，对于异常情形的处理，比如序列全部的和都小于target.
     - 简言之，这个题是非常经典的sliding window.需要反复做做看。
 
+#### [904. Fruit Into Baskets](https://leetcode.com/problems/fruit-into-baskets/description/)
+    - 一刷：这个题给自己点个赞，先别想什么优雅的做法，先解决了再说，自己几次想放弃，但是都还是坚持下来了，最后做出来了。
+        - 心得
+            - 一定要明确，自己卡在哪？这样，及时你真的不会做，再看题解时，也会有更明确的目的。
+            - 先不管优雅，先实现。
+        - 思路  
+            - 和 209 一样，sliding window，只不过操作起来有点难度。
+            - 我是使用了一个hashmap来关联不同的key和其出现次数，暂时没有想到更好的办法。
+            - 更新的时机，和上个题不一样。209只要是大于target，都可以更新。而这个题是小于一定条件，才可以更新。所以，更新的时机不一样。
+            - 整体还是非常经典的sliding window.
+
 ### 暴力搜索
 
 #### [363.Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
