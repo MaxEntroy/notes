@@ -5,19 +5,19 @@
 namespace csapp {
 
 // It is implemented based on implicit free list.
-class NaiveAllocator {
+class SimpleAllocator {
  public:
   // type alias for Byte and Word
   using Byte = char;
   using Word = unsigned int;
 
-  NaiveAllocator() = default;
+  SimpleAllocator() = default;
 
-  NaiveAllocator(const NaiveAllocator&) = delete;
-  NaiveAllocator& operator=(const NaiveAllocator&) = delete;
+  SimpleAllocator(const SimpleAllocator&) = delete;
+  SimpleAllocator& operator=(const SimpleAllocator&) = delete;
 
-  NaiveAllocator(NaiveAllocator&&) = delete;
-  NaiveAllocator& operator=(NaiveAllocator&&) = delete;
+  SimpleAllocator(SimpleAllocator&&) = delete;
+  SimpleAllocator& operator=(SimpleAllocator&&) = delete;
 
   // Before calling Malloc or free functions, the application must initialize the heap
   // by calling the Init function.
@@ -54,7 +54,7 @@ class NaiveAllocator {
   // asize has been adjusted to include overhead and alignmnet reqs.
   void Place(void* bp, size_t asize);
 
-  // Merge the two free blocks and return the block pointer
+  // Merge adjacent free blocks and return the block pointer
   // of the merged blocks.
   void* Coalesce(void* bp);
 

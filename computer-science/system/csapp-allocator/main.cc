@@ -1,7 +1,8 @@
-#include "naive_allocator.h"
+#include "simple_allocator.h"
 using namespace csapp;
+
 int main(void) {
-  NaiveAllocator alloctor;
+  SimpleAllocator alloctor;
   alloctor.Init();
   return 0;
 }

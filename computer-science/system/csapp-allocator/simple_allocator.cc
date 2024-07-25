@@ -1,4 +1,4 @@
-#include "naive_allocator.h"
+#include "simple_allocator.h"
 
 #include <iostream>
 #include <new>
@@ -11,8 +11,8 @@ namespace {
 // Thus, we find it helpful to define a small set of macros for accessing and
 // traversing the free list
 
-using Byte = NaiveAllocator::Byte;
-using Word = NaiveAllocator::Word;
+using Byte = SimpleAllocator::Byte;
+using Word = SimpleAllocator::Word;
 
 // Pack a size and allocated bit into a word
 #define PACK(size, alloc) ((size) | (alloc))
@@ -34,7 +34,7 @@ using Word = NaiveAllocator::Word;
 #define PREV_BLK(bp) (reinterpret_cast<Byte*>(bp) + GET_SIZE((reinterpret_cast<Byte*>(bp) - kDoubleWordSize)))
 }  // anonymous namespace
 
-bool NaiveAllocator::Init() {
+bool SimpleAllocator::Init() {
   // Initialize the memory system model
   bool is_init_succ = MemInit();
   if (!is_init_succ) {
@@ -49,7 +49,7 @@ bool NaiveAllocator::Init() {
 
   PUT(mem_heap_prologue_, 0);  // Alignment padding.
   PUT(mem_heap_prologue_ + (1 * kWordSize), PACK(kDoubleWordSize, 1));  // Prologue header.
-  PUT(mem_heap_prologue_ + (2 * kWordSize), PACK(kDoubleWordSize, 1));  // Prologue header.
+  PUT(mem_heap_prologue_ + (2 * kWordSize), PACK(kDoubleWordSize, 1));  // Prologue footer.
   PUT(mem_heap_prologue_ + (3 * kWordSize), PACK(0, 1));  // Epilogue header.
 
   // Regard the second prologue as the payload of the first prologue.
@@ -66,7 +66,7 @@ bool NaiveAllocator::Init() {
   return true;
 }
 
-void* NaiveAllocator::Malloc(size_t size) {
+void* SimpleAllocator::Malloc(size_t size) {
   // ignore spurious size
   if (!size)
     return nullptr;
@@ -74,7 +74,7 @@ void* NaiveAllocator::Malloc(size_t size) {
   // Adjust block size to include overhead and alignment reqs.
   auto actual_size = size;
   if (size < kDoubleWordSize) {
-    actual_size = kDoubleWordSize << 1;
+    actual_size = kDoubleWordSize << 1;  // 8 bytes for head/footer, 8 bytes for payload.
   } else {
     actual_size = kDoubleWordSize * (kDoubleWordSize + size + (kDoubleWordSize - 1) / kDoubleWordSize);
   }
@@ -99,7 +99,7 @@ void* NaiveAllocator::Malloc(size_t size) {
   return bp;
 }
 
-void NaiveAllocator::Free(void* bp) {
+void SimpleAllocator::Free(void* bp) {
   // Free frees a block and uses boundary-tag coalescing to merge it
   // with any adjacent free blocks in constant time.
   size_t size = GET_SIZE(HEADER(bp));
@@ -110,7 +110,7 @@ void NaiveAllocator::Free(void* bp) {
   Coalesce(bp);
 }
 
-bool NaiveAllocator::MemInit() {
+bool SimpleAllocator::MemInit() {
   mem_heap_ = new (std::nothrow) Byte[kMaxHeap];
   if (!mem_heap_) {
     std::cerr << "Allocation returned nullptr.\n";
@@ -121,7 +121,7 @@ bool NaiveAllocator::MemInit() {
   return true;
 }
 
-void* NaiveAllocator::MemSbrk(int incr) {
+void* SimpleAllocator::MemSbrk(int incr) {
   // sbrk() returns the previous program break.
   auto* old_brk = mem_brk_;
   if (incr < 0 or mem_brk_ + incr > mem_max_addr_) {
@@ -132,7 +132,7 @@ void* NaiveAllocator::MemSbrk(int incr) {
   return old_brk;
 }
 
-void* NaiveAllocator::ExtendHeap(size_t nwords) {
+void* SimpleAllocator::ExtendHeap(size_t nwords) {
   // Allocate an even number of words to maintain alignment.
   auto size = (nwords % 2) ? (nwords + 1) * kWordSize : nwords * kWordSize;
   auto* bp = static_cast<Byte*>(MemSbrk(size));
@@ -149,7 +149,7 @@ void* NaiveAllocator::ExtendHeap(size_t nwords) {
   return Coalesce(bp);
 }
 
-void* NaiveAllocator::FindFit(size_t asize) {
+void* SimpleAllocator::FindFit(size_t asize) {
   for (Byte* bp = NEXT_BLK(mem_heap_prologue_); GET_SIZE(HEADER(bp)); bp = NEXT_BLK(bp)) {
     size_t alloc = GET_ALLOC(HEADER(bp));
     if (!alloc and GET_SIZE(HEADER(bp)) >= asize) {
@@ -159,7 +159,7 @@ void* NaiveAllocator::FindFit(size_t asize) {
   return nullptr;
 }
 
-void NaiveAllocator::Place(void* bp, size_t asize) {
+void SimpleAllocator::Place(void* bp, size_t asize) {
   size_t remainder = GET_SIZE(HEADER(bp)) - asize;
   if (remainder < kDoubleWordSize * 2) { // why not kDoubleWordSize?
     // Allocate the whole block.
@@ -176,7 +176,7 @@ void NaiveAllocator::Place(void* bp, size_t asize) {
   }
 }
 
-void* NaiveAllocator::Coalesce(void* bp) {
+void* SimpleAllocator::Coalesce(void* bp) {
   size_t prev_alloc = GET_ALLOC(FOOTER(PREV_BLK(bp)));
   size_t next_alloc = GET_ALLOC(HEADER(NEXT_BLK(bp)));
   size_t size = GET_SIZE(HEADER(bp));

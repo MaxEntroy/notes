@@ -4,7 +4,7 @@ LDFLAGS=
 LIBS= -pthread 
 
 ALL_T= main
-ALL_O= main.o naive_allocator.o
+ALL_O= main.o simple_allocator.o
 
 RM= rm -rf
 
@@ -20,5 +20,5 @@ clean:
 
 .PHONY: t clean
 
-main.o: main.cc naive_allocator.h
-naive_allocator.o: naive_allocator.cc naive_allocator.h
+main.o: main.cc simple_allocator.h
+simple_allocator.o: simple_allocator.cc simple_allocator.h
