@@ -151,6 +151,7 @@ void* SimpleAllocator::ExtendHeap(size_t nwords) {
 
 void* SimpleAllocator::FindFit(size_t asize) {
   for (Byte* bp = NEXT_BLK(mem_heap_prologue_); GET_SIZE(HEADER(bp)); bp = NEXT_BLK(bp)) {
+    // The first fit algorithm
     size_t alloc = GET_ALLOC(HEADER(bp));
     if (!alloc and GET_SIZE(HEADER(bp)) >= asize) {
       return bp;
@@ -160,8 +161,10 @@ void* SimpleAllocator::FindFit(size_t asize) {
 }
 
 void SimpleAllocator::Place(void* bp, size_t asize) {
+  // splitting only if the size of the remainder would equal or exceed
+  // the minimum block size.
   size_t remainder = GET_SIZE(HEADER(bp)) - asize;
-  if (remainder < kDoubleWordSize * 2) { // why not kDoubleWordSize?
+  if (remainder < kMinimumRegularBlockSize) { //
     // Allocate the whole block.
     PUT(HEADER(bp), PACK(GET_SIZE(HEADER(bp)), 1));
     PUT(FOOTER(bp), PACK(GET_SIZE(HEADER(bp)), 1));
@@ -171,6 +174,7 @@ void SimpleAllocator::Place(void* bp, size_t asize) {
     PUT(FOOTER(bp), PACK(asize, 1));
 
     // Change the size of remainder block.
+    // Splitting operation looks very smooth(just set some flags of data block.).
     PUT(HEADER(NEXT_BLK(bp)), PACK(remainder, 0));
     PUT(FOOTER(NEXT_BLK(bp)), PACK(remainder, 0));
   }

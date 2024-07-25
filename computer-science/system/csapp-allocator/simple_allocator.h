@@ -81,6 +81,10 @@ class SimpleAllocator {
   // Double-word size(bytes)/Alignment size(minimus block size)
   static constexpr size_t kDoubleWordSize = 8;
 
+  // Header/Footer 8 bytes.
+  // Minimum payload 8 bytes.
+  static constexpr size_t kMinimumRegularBlockSize = 16;
+
   // Extend heap by this amount(bytes)
   static constexpr size_t kChunkSize = (1 << 12);
 };
