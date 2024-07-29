@@ -30,23 +30,14 @@ class SimpleAllocator {
   void Free(void* bp);
 
  private:
-  // Kernel-level helper.
-  // Initialize the memory system model
-  bool MemInit();
-
-  // Simple model of the sbrk function.
-  // Extends the heap by incr bytes and returns the start address of the new area.
-  // In this model, the heap cannot be shrunk.
-  void* MemSbrk(int incr);
-
- private:
   // App-level helper.
-  // Extend the heap and create the initial free block.
-  void* ExtendHeap(size_t nwords);
 
   // First fit search of implicit free list.
   // asize has been adjusted to include overhead and alignmnet reqs.
   void* FindFit(size_t asize);
+
+  // Extend the heap and create the initial free block.
+  void* ExtendHeap(size_t nwords);
 
   // Place the requested block at the beginning of the free block,
   // splitting only if the size of the remainder would equal or
@@ -57,6 +48,16 @@ class SimpleAllocator {
   // Merge adjacent free blocks and return the block pointer
   // of the merged blocks.
   void* Coalesce(void* bp);
+
+ private:
+  // Kernel-level helper.
+  // Initialize the memory system model
+  bool MemInit();
+
+  // Simple model of the sbrk function.
+  // Extends the heap by incr bytes and returns the start address of the new area.
+  // In this model, the heap cannot be shrunk.
+  void* MemSbrk(int incr);
 
  private:
   // Points to first byte of heap
@@ -71,9 +72,6 @@ class SimpleAllocator {
   // Points to first byte of heap
   Byte* mem_heap_prologue_ = nullptr;
 
-  // The maximum block size
-  static constexpr size_t kMaxHeap = (1 << 20);
-
  private:
   // Word and header/foot size(bytes)
   static constexpr size_t kWordSize = 4;
@@ -85,8 +83,11 @@ class SimpleAllocator {
   // Minimum payload 8 bytes.
   static constexpr size_t kMinimumRegularBlockSize = 16;
 
-  // Extend heap by this amount(bytes)
+  // Extend heap by this amount(4K bytes)
   static constexpr size_t kChunkSize = (1 << 12);
+
+  // The maximum block size(1M bytes)
+  static constexpr size_t kMaxHeap = (1 << 20);
 };
 
 }  // namespace csapp

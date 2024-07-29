@@ -110,26 +110,15 @@ void SimpleAllocator::Free(void* bp) {
   Coalesce(bp);
 }
 
-bool SimpleAllocator::MemInit() {
-  mem_heap_ = new (std::nothrow) Byte[kMaxHeap];
-  if (!mem_heap_) {
-    std::cerr << "Allocation returned nullptr.\n";
-    return false;
+void* SimpleAllocator::FindFit(size_t asize) {
+  for (Byte* bp = NEXT_BLK(mem_heap_prologue_); GET_SIZE(HEADER(bp)); bp = NEXT_BLK(bp)) {
+    // The first fit algorithm
+    size_t alloc = GET_ALLOC(HEADER(bp));
+    if (!alloc and GET_SIZE(HEADER(bp)) >= asize) {
+      return bp;
+    }
   }
-  mem_brk_ = mem_heap_;
-  mem_max_addr_ = mem_brk_ + kMaxHeap;
-  return true;
-}
-
-void* SimpleAllocator::MemSbrk(int incr) {
-  // sbrk() returns the previous program break.
-  auto* old_brk = mem_brk_;
-  if (incr < 0 or mem_brk_ + incr > mem_max_addr_) {
-    std::cerr << "Sbrk failed. Run out of memory.\n";
-    return nullptr;
-  }
-  mem_brk_ += incr;
-  return old_brk;
+  return nullptr;
 }
 
 void* SimpleAllocator::ExtendHeap(size_t nwords) {
@@ -147,17 +136,6 @@ void* SimpleAllocator::ExtendHeap(size_t nwords) {
 
   PUT(HEADER(NEXT_BLK(bp)), PACK(0, 1));  // New epilogue header
   return Coalesce(bp);
-}
-
-void* SimpleAllocator::FindFit(size_t asize) {
-  for (Byte* bp = NEXT_BLK(mem_heap_prologue_); GET_SIZE(HEADER(bp)); bp = NEXT_BLK(bp)) {
-    // The first fit algorithm
-    size_t alloc = GET_ALLOC(HEADER(bp));
-    if (!alloc and GET_SIZE(HEADER(bp)) >= asize) {
-      return bp;
-    }
-  }
-  return nullptr;
 }
 
 void SimpleAllocator::Place(void* bp, size_t asize) {
@@ -210,6 +188,28 @@ void* SimpleAllocator::Coalesce(void* bp) {
   }
 
   return bp;
+}
+
+bool SimpleAllocator::MemInit() {
+  mem_heap_ = new (std::nothrow) Byte[kMaxHeap];
+  if (!mem_heap_) {
+    std::cerr << "Allocation returned nullptr.\n";
+    return false;
+  }
+  mem_brk_ = mem_heap_;
+  mem_max_addr_ = mem_brk_ + kMaxHeap;
+  return true;
+}
+
+void* SimpleAllocator::MemSbrk(int incr) {
+  // sbrk() returns the previous program break.
+  auto* old_brk = mem_brk_;
+  if (incr < 0 or mem_brk_ + incr > mem_max_addr_) {
+    std::cerr << "Sbrk failed. Run out of memory.\n";
+    return nullptr;
+  }
+  mem_brk_ += incr;
+  return old_brk;
 }
 
 }  // namespace csapp
