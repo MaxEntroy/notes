@@ -602,6 +602,10 @@ $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$
 #### [203.Remove Linked List Elements](https://leetcode.com/problems/remove-linked-list-elements/description/)
 
 - 一刷：没太多好说的，处理好head的情形即可
+- 二刷：虽然过了，但是没有一遍过。
+    - 确实，主要处理好head的情形。
+    - 我做的好的地方在于，上来先分了各种情况。没有找一种情况来做。
+    - 但是，这个题容易错的地方在于，delete的时机以及pointer，不要搞错。
 
 #### [707.Design Linked List](https://leetcode.com/problems/design-linked-list/description/)
 
