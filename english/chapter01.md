@@ -214,13 +214,13 @@ dataive: the form of a noun, pronoun, or adjective that in some languages marks 
 
 这里要注意，大家形式一样，所以要注意区分。上面是从作用的角度来说，下面从形式来划分
 
-V-ing
+- V-ing
     - present participle(both verb and adj)
         - tense of verb.(I am going to school.)
         - adj.(A launghing face.)
     - gerund(n) 
         - Passing an rvalue to a function is an edge case.
-V-ed
+- V-ed
     - past participle(both verb and adj)
         - tense of verb(I liked(+ed) dancing when I was in primary school.)
         - past voice(The man was killed(+ed) last night.)
