@@ -16,6 +16,40 @@ wikipedia的定义有3个点，分别是
 [Adverb](https://en.wikipedia.org/wiki/Adverb)<br>
 [](https://en.wikipedia.org/wiki/Adverbial)
 
+## Phrase
+
+wikipedia的解释
+>A phrase is a group of words that adds meaning to a sentence. A phrase is not a sentence because it is not a complete idea with a subject, verb and a predicate.
+
+这里有一个强调是，不是句子。虽然是一个语法单元，但是没有构成句子的基本结构，及时最简单的也没有。简单说，没有构成主谓结构。
+
+>In English there are five different kinds of phrases, one for each of the main parts of speech. In a phrase, the main word, or the word that is what the phrase is about, is called the head. In these examples, it is printed in bold. The other words in the phrase do the work of changing or modifying the head.
+
+这里讲了phrase的表现形式，本质是为了说head，然后增加了修饰语，构成了这样一个结构。
+
+- In a 'Noun phrase', one or more words work together to give more information about a noun.[source?]
+  - all my dear children
+  - the information age
+  - seventeen hungry lions in the rocks
+
+- In an Adjective phrase, one or more words work together to give more information about an adjective.
+  - so very sweet
+  - earnest in her desire
+  - very happy with his work
+
+- In a Verb phrase, one or more words work together to give more meaning to a verb. In English, the verb phrase is very complex, but a good description of its many forms can be found here.[better source needed]
+
+- In an Adverb phrase, one or more words work together to give more information about an adverb.
+  - especially softly
+  - formerly of the city of Perth
+  - much too quickly to see clearly
+
+- In a Prepositional phrase, one or more words work together to give information about time, location, or possession, or condition. The preposition always appears at the front of the phrase (preposition = pre-position).
+  - after a very long walk
+  - behind the old building
+  - for all the hungry children
+  - in case it should happen again
+
 ## Conjuct
 
 我看了wikipedia关于conjuct的讲解，我觉得非常清晰，反而比书里清晰。
