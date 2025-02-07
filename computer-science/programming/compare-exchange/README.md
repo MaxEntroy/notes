@@ -237,3 +237,87 @@ if (cur_state = State::Ready) {
 - Typical Pattern B使用strong form without while loop
 - weak form只能搭配while-loop使用(因为fail spuriously的原因)，strong from可以搭配while-loop使用，也可以不搭配。更进一步，weak form返回失败的情形，可能是真的不一致(atomic变量的值在上一次读取和当前发生了变化)，也有可能是假的不一致(即值是一致的，但是返回了false)，由于返回失败的情形我们不能判断真假，所以只能依赖它返回true的情形，这就是为什么它一定要搭配while-loop
 - strong form也会更新失败，所以Typical Pattern A如果使用strong form，也需要搭配while-loop。只不过这种场景weak form的性能可能会更好，所以使用weak form with while loop.
+
+### Update(2025.02.07)
+
+```cpp
+#include <atomic>
+#include <mutex>
+#include <iostream>
+#include <thread>
+
+constexpr int kThres = 10;
+std::atomic<int> counter{9};
+
+std::mutex io_mtx;
+
+void producer() {
+  if (counter < kThres)
+    ++counter;
+
+  std::scoped_lock lock(io_mtx);
+  std::cout << "thread:" << std::this_thread::get_id() << ", counter=" << counter << std::endl;
+}
+
+void test() {
+  std::thread t1(producer);
+  std::thread t2(producer);
+
+  t1.join();
+  t2.join();
+}
+
+int main(void) {
+  test();
+  return 0;
+}
+
+/* posible result:
+thread:0x16f8bf000, counter=11
+thread:0x16f94b000, counter=11
+
+thread:0x16f84b000, counter=10
+thread:0x16f7bf000, counter=10
+*/
+```
+
+回到这段代码，它的问题是compare(couter < kThres) and swap(++counter)不是原子的。导致两个线程可能同时过了判断。这一段代码其实都是critical region. 原子指令无法保护这段临界区。
+
+```cpp
+#include <atomic>
+#include <iostream>
+#include <thread>
+
+constexpr int kThres = 10;
+std::atomic<int> counter{9};
+
+std::mutex io_mtx;
+void producer() {
+  auto cur = counter.load(std::memory_order_relaxed);
+  while (cur < kThres and not counter.compare_exchange_weak(cur, cur + 1));
+}
+
+void test() {
+  std::thread t1(producer);
+  std::thread t2(producer);
+
+  t1.join();
+  t2.join();
+
+  std::cout << "counter=" << counter << std::endl;
+}
+
+int main(void) {
+  test();
+  return 0;
+}
+```
+
+我们再看下优化的代码。
+- ```cur < kThres```这段是compare的代码，看起来还是不在临界区。还是有可能都进入。
+- 紧急着，有一个判断。这个判断不可能所有线程都能执行。因为它是原子的。这里面的cas本质是cur和当前值相比，如果没有变化。证明没有其他其它线程更新。然后更新。这个compare and swap是原子的。
+- 此时，另一个线程判断失败后，即有线程更新。abort。更新失败。该线程再次执行while循环时，被第一个条件挡住。
+
+非常典型的有条件更新，逻辑也没问题的。至于第一个先更新的线程执行完毕后。它是否还能继续执行？这个是不确定的，看操作系统的调度。没有确定性。所以，这后面的操作不能依赖其原子性。
+
+所以，cas操作(原子变量的条件更新)看起来类似于double check.
